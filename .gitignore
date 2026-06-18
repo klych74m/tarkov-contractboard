@@ -1,0 +1,20 @@
+# 다른 사람이 만든 별개 프로젝트 (이 트래커와 무관, 용량도 큼)
+/Tarkov-Helper-main/
+/Tarkov-Helper-main.zip
+/TarkovHelper_v1.5.7/
+/TarkovHelper_v1.5.7.zip
+
+# 백업/임시 파일 및 개인 작업 노트(배포 사이트에는 불필요)
+/Tarkov_Tracker.zip
+/.tmp/
+/quest_data_temp.txt
+/quest_output.txt
+/To_Do_List.txt
+/fetch_tour_quests.sh
+
+# 트래커와 무관한 이미지
+/I_Bear_Loot_poster_image.png
+/I_Bear_Loot_poster_image.webp
+/What_You_Seek_image.png
+/What_You_Seek_poster_image.png
+/What_You_Seek_poster_image.webp
