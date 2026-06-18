@@ -1,4 +1,4 @@
-# Tarkov Tracker — 프로젝트 지침
+# Tarkov ContractBoard — 프로젝트 지침
 
 ## 데이터 출처 원칙
 
@@ -104,6 +104,6 @@
 
 ## 프로젝트 구조
 
-- 단일 파일: `tarkov_tracker.html` (HTML + CSS + JS 전부 포함)
+- 단일 파일: `index.html` (HTML + CSS + JS 전부 포함, GitHub Pages 배포용)
 - 빌드 도구 없음 — 파일 하나만 수정하면 됨
 - 상태: `localStorage` 키 `tarkov_tracker_v2`
