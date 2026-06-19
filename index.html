@@ -105,7 +105,7 @@
   .btn-reset:hover{border-color:var(--danger);color:var(--danger)}
 
   /* ── 메인 탭 (아이템 트래커 / 퀘스트 트래커) ── */
-  .main-tabs{display:flex;background:var(--surface);border-bottom:2px solid var(--border);padding:0 24px}
+  .main-tabs{display:flex;background:var(--surface);border-bottom:2px solid var(--border);padding:0 24px;overflow-x:auto}
   .main-tab{padding:14px 24px;cursor:pointer;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:15px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text);border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .15s;user-select:none}
   .main-tab:hover{color:var(--accent)}
   .main-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
@@ -558,10 +558,13 @@
   .mode-btn.arena.active{border-color:#9b7fd4;color:#9b7fd4;background:#1a1428}
 
   @media (max-width:700px) {
-    header{height:auto;min-height:52px;padding:10px 12px;gap:10px}
+    header{height:auto;min-height:52px;padding:10px 12px;gap:10px;flex-wrap:wrap}
     header h1{font-size:18px}
-    .header-right{gap:8px}
+    .header-right{gap:6px;flex-wrap:wrap;justify-content:flex-end}
+    .data-freshness-label{display:none}
     .progress-bar-wrap{width:70px}
+    .btn-reset{padding:5px 8px;white-space:nowrap}
+    .btn-label{display:none}
     .main-tabs,.sub-tabs{padding:0 8px}
     .main-tab{padding:12px 10px;font-size:13px;letter-spacing:.5px;white-space:nowrap}
     .sub-tab{padding:9px 10px}
@@ -589,12 +592,12 @@
       <span id="overall-label">-</span>
       <div class="progress-bar-wrap"><div class="progress-bar-fill" id="overall-bar" style="width:0%"></div></div>
     </div>
-    <button class="btn-reset" onclick="exportData()" title="현재 진행 상황을 JSON 파일로 저장">📥 내보내기</button>
-    <button class="btn-reset" onclick="document.getElementById('import-file-input').click()" title="JSON 백업 파일에서 진행 상황 복원">📤 불러오기</button>
+    <button class="btn-reset" onclick="exportData()" title="현재 진행 상황을 JSON 파일로 저장">📥<span class="btn-label"> 내보내기</span></button>
+    <button class="btn-reset" onclick="document.getElementById('import-file-input').click()" title="JSON 백업 파일에서 진행 상황 복원">📤<span class="btn-label"> 불러오기</span></button>
     <input type="file" id="import-file-input" accept="application/json" style="display:none" onchange="importData(event)">
-    <button class="btn-reset" id="theme-toggle-btn" onclick="toggleTheme()" title="라이트/다크 모드 전환">🌙 다크</button>
-    <button class="btn-reset" onclick="openOnboarding()" title="시작 안내 다시 보기">❓ 도움말</button>
-    <button class="btn-reset" onclick="confirmReset()">초기화</button>
+    <button class="btn-reset" id="theme-toggle-btn" onclick="toggleTheme()" title="라이트/다크 모드 전환">🌙<span class="btn-label"> 다크</span></button>
+    <button class="btn-reset" onclick="openOnboarding()" title="시작 안내 다시 보기">❓<span class="btn-label"> 도움말</span></button>
+    <button class="btn-reset" onclick="confirmReset()" title="모든 진행 상황 초기화">🔄<span class="btn-label"> 초기화</span></button>
   </div>
 </header>
 
@@ -5310,7 +5313,7 @@ function toggleExclStart() {
 function applyTheme(theme) {
   document.body.classList.toggle('light-mode', theme === 'light');
   const btn = document.getElementById('theme-toggle-btn');
-  if (btn) btn.textContent = theme === 'light' ? '🌙 다크' : '☀ 라이트';
+  if (btn) btn.innerHTML = theme === 'light' ? '🌙<span class="btn-label"> 다크</span>' : '☀<span class="btn-label"> 라이트</span>';
 }
 
 function toggleTheme() {
