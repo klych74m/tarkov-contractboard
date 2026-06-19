@@ -1114,6 +1114,9 @@ function aggregateQuestItems(tasks, mode, excludeStartRewards = false) {
   const map = {};
   for (const task of tasks) {
     if (!isQuestAvailableForEdition(task)) continue;
+    // 완료한 퀘스트는 아이템을 이미 제출했으므로 "필요 수량" 집계에는 더 이상 더하지 않지만,
+    // 완료 탭에서 무엇이 끝났는지 보이도록 카드 자체는 계속 남겨둔다(아래 isTaskDone 분기).
+    const isTaskDone = !!state.questDone?.[task.id];
     // 반대 진영 전용 퀘스트(예: BEAR의 Counteraction ↔ USEC의 Our Own Land)는 내 진영에서
     // 절대 받을 일이 없으므로 아이템 트래커의 "필요 아이템" 집계에서도 제외한다.
     if (task.factionName && task.factionName !== 'Any') {
@@ -1214,18 +1217,24 @@ function aggregateQuestItems(tasks, mode, excludeStartRewards = false) {
         key, id: itemId, name: effectiveObj.item.name,
         shortName: effectiveObj.item.shortName, iconLink: effectiveObj.item.iconLink,
         needed: 0, neededFir: 0, neededNofir: 0,
+        totalNeeded: 0, totalNeededFir: 0, totalNeededNofir: 0,
         hasFir: false, hasNofir: false, tasks: [],
         source: mode === 'kappa' ? 'kappa' : 'quests',
         alternativeNames: effectiveObj.alternativeNames || null,
         categoryRequirement: effectiveObj.categoryRequirement || null
       };
-      map[key].needed += count;
-      if (effectiveObj.foundInRaid) {
-        map[key].neededFir += count;
-        map[key].hasFir = true;
-      } else {
-        map[key].neededNofir += count;
-        map[key].hasNofir = true;
+      // FIR/일반 분류와 "원래 필요했던 총량(totalNeeded)"은 완료 여부와 무관하게 항상 누적해서,
+      // 완료된 항목도 "몇 개였는지"를 계속 보여줄 수 있게 한다. 반면 "남은 필요 수량(needed)"에는
+      // 완료한 퀘스트의 요구량을 더하지 않는다(실제로 더 모을 필요가 없으므로).
+      if (effectiveObj.foundInRaid) map[key].hasFir = true;
+      else map[key].hasNofir = true;
+      map[key].totalNeeded += count;
+      if (effectiveObj.foundInRaid) map[key].totalNeededFir += count;
+      else map[key].totalNeededNofir += count;
+      if (!isTaskDone) {
+        map[key].needed += count;
+        if (effectiveObj.foundInRaid) map[key].neededFir += count;
+        else map[key].neededNofir += count;
       }
       map[key].tasks.push({
         trader: traderLabel(task.trader),
@@ -1233,7 +1242,8 @@ function aggregateQuestItems(tasks, mode, excludeStartRewards = false) {
         taskId: task.id,
         wikiLink: task.wikiLink,
         count, fir: effectiveObj.foundInRaid,
-        conditionKind: effectiveObj.categoryRequirement?.kind || null
+        conditionKind: effectiveObj.categoryRequirement?.kind || null,
+        done: isTaskDone
       });
     }
   }
@@ -1243,11 +1253,11 @@ function aggregateQuestItems(tasks, mode, excludeStartRewards = false) {
 function aggregateHideoutItems(stations) {
   const map = {};
   for (const st of stations) {
-    const stationName = (st.name || '').toLowerCase();
-    if (state.edition === 'unheard' && stationName === 'cultist circle') continue;
+    const builtLevel = getHideoutLevel(st);
     for (const lv of st.levels) {
-      if ((state.edition === 'eod' || state.edition === 'unheard') &&
-          stationName === 'stash' && lv.level <= 4) continue;
+      // 이미 건설한 레벨은 재료를 이미 제출한 것이므로 "남은 필요 수량"에는 더하지 않지만,
+      // 완료 탭에서 무엇을 지었는지 보이도록 카드 자체는 계속 남겨둔다.
+      const levelDone = lv.level <= builtLevel;
       for (const req of lv.itemRequirements) {
         const key = req.item.id;
         const foundInRaid = (req.attributes || []).some(attr =>
@@ -1255,18 +1265,25 @@ function aggregateHideoutItems(stations) {
         );
         if (!map[key]) map[key] = {
           key, id:req.item.id, name:req.item.name, shortName:req.item.shortName, iconLink:req.item.iconLink,
-          needed:0, neededFir:0, neededNofir:0, hasFir:false, hasNofir:false,
+          needed:0, neededFir:0, neededNofir:0,
+          totalNeeded:0, totalNeededFir:0, totalNeededNofir:0,
+          hasFir:false, hasNofir:false,
           stations:[], source:'hideout'
         };
-        map[key].needed += req.count;
-        if (foundInRaid) {
-          map[key].neededFir += req.count;
-          map[key].hasFir = true;
-        } else {
-          map[key].neededNofir += req.count;
-          map[key].hasNofir = true;
+        // FIR/일반 분류와 "원래 필요했던 총량(totalNeeded)"은 완료 여부와 무관하게 항상 누적해서,
+        // 완료된 항목도 "몇 개였는지"를 계속 보여줄 수 있게 한다. 반면 "남은 필요 수량(needed)"에는
+        // 이미 건설한 레벨의 요구량을 더하지 않는다.
+        if (foundInRaid) map[key].hasFir = true;
+        else map[key].hasNofir = true;
+        map[key].totalNeeded += req.count;
+        if (foundInRaid) map[key].totalNeededFir += req.count;
+        else map[key].totalNeededNofir += req.count;
+        if (!levelDone) {
+          map[key].needed += req.count;
+          if (foundInRaid) map[key].neededFir += req.count;
+          else map[key].neededNofir += req.count;
         }
-        map[key].stations.push({ label: `${hideoutStationLabel(st.name)} Lv${lv.level}`, count: req.count, fir: foundInRaid });
+        map[key].stations.push({ label: `${hideoutStationLabel(st.name)} Lv${lv.level}`, count: req.count, fir: foundInRaid, done: levelDone });
       }
     }
   }
@@ -1337,7 +1354,11 @@ function setHideoutLevel(stationKey, level) {
   const min = station ? defaultHideoutLevel(station) : 0;
   state.hideoutLevels[stationKey] = Math.max(min, Math.min(max, Number(level) || 0));
   saveState();
+  // 건설(완료)한 레벨의 재료가 아이템 트래커의 "필요 아이템" 집계에서 즉시 빠지도록 다시 계산
+  refreshItemAggregation();
+  renderItemTab(currentItemTab);
   renderHideoutTab();
+  updateProgress();
 }
 
 function adjustHideoutLevel(stationKey, delta) {
@@ -1677,6 +1698,9 @@ function addCombinedItem(map, item, sourceKey, sourceLabel) {
       needed: 0,
       neededFir: 0,
       neededNofir: 0,
+      totalNeeded: 0,
+      totalNeededFir: 0,
+      totalNeededNofir: 0,
       hasFir: false,
       hasNofir: false,
       tasks: [],
@@ -1691,10 +1715,13 @@ function addCombinedItem(map, item, sourceKey, sourceLabel) {
   combined.needed += item.needed || 0;
   combined.neededFir += item.neededFir || 0;
   combined.neededNofir += item.neededNofir || 0;
+  combined.totalNeeded += item.totalNeeded || 0;
+  combined.totalNeededFir += item.totalNeededFir || 0;
+  combined.totalNeededNofir += item.totalNeededNofir || 0;
   combined.hasFir = combined.hasFir || !!item.hasFir;
   combined.hasNofir = combined.hasNofir || !!item.hasNofir;
   combined.sourceCounts[sourceKey] += item.needed || 0;
-  combined.sourceDetails.push({ key: sourceKey, label: sourceLabel, count: item.needed || 0 });
+  combined.sourceDetails.push({ key: sourceKey, label: sourceLabel, count: item.needed || 0, totalCount: item.totalNeeded || 0 });
 
   if (!combined.iconLink && item.iconLink) combined.iconLink = item.iconLink;
   if (!combined.shortName && item.shortName) combined.shortName = item.shortName;
@@ -1711,9 +1738,11 @@ function buildCombinedItems() {
   for (const item of allData.hideout) addCombinedItem(map, item, 'hideout', '하이드아웃건설');
   return Object.values(map)
     .map(item => {
+      // 완료로 전부 충족된 아이템은 0개짜리 출처만 남으므로, 원래 필요했던 총량 기준으로 보여준다.
+      const forcedDone = isItemFullyDoneViaCompletion(item);
       item.sourceSummary = item.sourceDetails
-        .filter(detail => detail.count > 0)
-        .map(detail => `${detail.label} ${detail.count}개`)
+        .filter(detail => (forcedDone ? detail.totalCount : detail.count) > 0)
+        .map(detail => `${detail.label} ${forcedDone ? detail.totalCount : detail.count}개`)
         .join(' · ');
       return item;
     })
@@ -1724,6 +1753,10 @@ function buildCombinedItems() {
 //  ITEM RENDERING
 // ══════════════════════════════════════════════════════
 function getCount(key) { return state.counts[key]||0; }
+// 연관된 퀘스트/하이드아웃 레벨이 전부 완료되어 "남은 필요 수량"이 0이 된 아이템은
+// 수동 수집 수량과 무관하게 완료로 취급한다(이미 제출되어 더 모을 필요가 없으므로).
+function isItemFullyDoneViaCompletion(item) { return item.needed === 0 && (item.totalNeeded || 0) > 0; }
+function isItemDone(item) { return isItemFullyDoneViaCompletion(item) || getCount(item.key) >= item.needed; }
 function setCount(key, val, needed) {
   const maxNeeded = Math.max(
     needed || 0,
@@ -1734,6 +1767,8 @@ function setCount(key, val, needed) {
   state.counts[key] = Math.max(0, Math.min(val, maxNeeded));
   saveState();
   document.querySelectorAll(`[id^="card-${key}"]`).forEach(card => {
+    // 완료 처리로 고정 표시 중인 카드는 다른 탭에서의 수동 수집 변경에 영향받지 않아야 한다.
+    if (card.dataset.forcedDone === '1') return;
     const cur = getCount(key);
     const cardNeeded = Number(card.dataset.needed) || needed;
     card.querySelector('.counter-display').innerHTML = `<span>${cur}</span><span class="divider">/</span><span class="needed">${cardNeeded}</span>`;
@@ -1744,7 +1779,14 @@ function setCount(key, val, needed) {
 }
 
 function itemCardHtml(item, suffix) {
-  const cur = getCount(item.key), done = cur >= item.needed;
+  const cur = getCount(item.key);
+  const forcedDone = isItemFullyDoneViaCompletion(item);
+  const done = forcedDone || cur >= item.needed;
+  // 완료로 충족된 아이템은 수동 수집 수량(0일 수 있음) 대신, 원래 필요했던 총량을 그대로 보여준다.
+  const displayCur = forcedDone ? item.totalNeeded : cur;
+  const displayNeeded = forcedDone ? item.totalNeeded : item.needed;
+  const displayFir = forcedDone ? item.totalNeededFir : item.neededFir;
+  const displayNofir = forcedDone ? item.totalNeededNofir : item.neededNofir;
 
   const isQuest = Array.isArray(item.tasks) && item.tasks.length > 0 && typeof item.tasks[0] === 'object';
   let metaStr = '', metaTitle = '';
@@ -1752,23 +1794,23 @@ function itemCardHtml(item, suffix) {
     metaStr = item.sourceSummary;
     metaTitle = item.sourceSummary;
   } else if (isQuest) {
-    const names = [...new Set(item.tasks.map(t => `${t.trader}: ${t.name}`))];
+    const names = [...new Set(item.tasks.map(t => `${t.done ? '✅ ' : ''}${t.trader}: ${t.name}`))];
     metaTitle = names.join(', ');
     metaStr = names.slice(0,2).join(', ') + (names.length>2 ? ` +${names.length-2}` : '');
   } else if (item.stations) {
-    const labels = item.stations.map(s => s.label);
+    const labels = item.stations.map(s => `${s.done ? '✅ ' : ''}${s.label}`);
     metaTitle = labels.join(', ');
     metaStr = labels.slice(0,2).join(', ') + (labels.length>2 ? ` +${labels.length-2}` : '');
   }
 
   const requirementBadges = [];
   if (item.hasFir && item.hasNofir) {
-    requirementBadges.push(`<span class="fir-badge">FIR ${item.neededFir}개</span>`);
-    requirementBadges.push(`<span class="nofir-badge">일반 ${item.neededNofir}개</span>`);
+    requirementBadges.push(`<span class="fir-badge">FIR ${displayFir}개</span>`);
+    requirementBadges.push(`<span class="nofir-badge">일반 ${displayNofir}개</span>`);
   } else if (item.hasFir) {
-    requirementBadges.push(`<span class="fir-badge">FIR ${item.neededFir || item.needed}개</span>`);
+    requirementBadges.push(`<span class="fir-badge">FIR ${displayFir || displayNeeded}개</span>`);
   } else if (item.hasNofir) {
-    requirementBadges.push(`<span class="nofir-badge">일반 ${item.neededNofir || item.needed}개</span>`);
+    requirementBadges.push(`<span class="nofir-badge">일반 ${displayNofir || displayNeeded}개</span>`);
   }
   if (item.categoryRequirement) {
     const label = item.categoryRequirement.kind === 'sale' ? '판매조건' : '조건';
@@ -1782,9 +1824,18 @@ function itemCardHtml(item, suffix) {
     ? `<div class="item-requirements">${requirementBadges.join('')}</div>`
     : '';
 
+  // 완료로 충족된 아이템은 더 모을 필요가 없으므로 +/- 버튼을 비활성화한다.
+  const counterButtons = forcedDone
+    ? `<button class="counter-btn minus" disabled>−</button>
+       <div class="counter-display" title="퀘스트/하이드아웃 완료로 충족됨"><span>${displayCur}</span><span class="divider">/</span><span class="needed">${displayNeeded}</span></div>
+       <button class="counter-btn plus" disabled>+</button>`
+    : `<button class="counter-btn minus" onclick="setCount('${item.key}',getCount('${item.key}')-1,${item.needed})">−</button>
+       <div class="counter-display"><span>${cur}</span><span class="divider">/</span><span class="needed">${item.needed}</span></div>
+       <button class="counter-btn plus" onclick="setCount('${item.key}',getCount('${item.key}')+1,${item.needed})">+</button>`;
+
   // 아이콘 클릭 → 상세 모달
   const cardId = `card-${item.key}${suffix?'-'+suffix:''}`;
-  return `<div class="item-card ${done?'completed':''}" id="${cardId}" data-needed="${item.needed}" style="cursor:pointer" onclick="openItemModal('${item.source}','${item.key}')">
+  return `<div class="item-card ${done?'completed':''}" id="${cardId}" data-needed="${displayNeeded}" data-forced-done="${forcedDone?'1':''}" style="cursor:pointer" onclick="openItemModal('${item.source}','${item.key}')">
     ${item.iconLink?`<img class="item-icon" src="${escapeHtml(item.iconLink)}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:``}
     <div class="item-icon-placeholder" style="${item.iconLink?'display:none':''}">📦</div>
     <div class="item-info">
@@ -1792,9 +1843,7 @@ function itemCardHtml(item, suffix) {
       ${requirementsHtml}
       <div class="item-meta" title="${escapeHtml(metaTitle)}">${escapeHtml(metaStr||item.name)}</div>
       <div class="counter" onclick="event.stopPropagation()">
-        <button class="counter-btn minus" onclick="setCount('${item.key}',getCount('${item.key}')-1,${item.needed})">−</button>
-        <div class="counter-display"><span>${cur}</span><span class="divider">/</span><span class="needed">${item.needed}</span></div>
-        <button class="counter-btn plus" onclick="setCount('${item.key}',getCount('${item.key}')+1,${item.needed})">+</button>
+        ${counterButtons}
       </div>
     </div>
   </div>`;
@@ -1802,7 +1851,7 @@ function itemCardHtml(item, suffix) {
 
 function sectionHtml(title, items, suffix) {
   if (!items.length) return '';
-  const done = items.filter(i=>getCount(i.key)>=i.needed).length;
+  const done = items.filter(isItemDone).length;
   const pct = items.length ? done/items.length*100 : 0;
   return `<div class="section-header">${title}<span class="sec-badge">${items.length}종</span>
     <div class="section-progress">${done}/${items.length}<div class="mini-bar"><div class="mini-bar-fill" style="width:${pct}%"></div></div></div></div>
@@ -1813,8 +1862,7 @@ function filterItems(items) {
   const q = document.getElementById('item-search').value.toLowerCase();
   return items.filter(i => {
     if (q && !i.name.toLowerCase().includes(q) && !(i.shortName||'').toLowerCase().includes(q)) return false;
-    const cur = getCount(i.key);
-    const done = cur >= i.needed;
+    const done = isItemDone(i);
     if (itemFilter === 'complete' && !done) return false;
     if (itemFilter === 'incomplete' && done) return false;
     if (itemFilter === 'fir' && !i.hasFir) return false;
@@ -1979,6 +2027,9 @@ function toggleQuestFailed(id) {
   updateLevelFromQuests();
   refreshTraderTabs();
   renderTraderLevelControls();
+  // 분기 실패 처리로 평판 복구 퀘스트의 관련성/완료 상태가 바뀌므로 아이템 탭도 다시 계산
+  refreshItemAggregation();
+  renderItemTab(currentItemTab);
   renderCurrentQuestTab();
   updateProgress();
 }
@@ -2970,6 +3021,9 @@ function setQuestCompletion(id, done) {
   updateLevelFromQuests(); // XP → 레벨 자동 갱신
   refreshTraderTabs();
   renderTraderLevelControls();
+  // 완료/취소된 퀘스트의 아이템이 "필요 아이템" 집계에 즉시 반영되도록 아이템 탭도 다시 계산
+  refreshItemAggregation();
+  renderItemTab(currentItemTab);
   if (currentQuestTab === 'active-quests' && state.questDone[id]) {
     const card = document.getElementById('qcard-'+id);
     if (card) { card.style.transition='opacity .2s'; card.style.opacity='0'; setTimeout(()=>renderCurrentQuestTab(), 200); }
@@ -3705,7 +3759,7 @@ function switchQuestTab(tab) {
 function updateProgress() {
   // 아이템 진행률
   const unique = allData.all?.length ? allData.all : [...allData.quests,...allData.hideout,...allData.kappa];
-  const itemsDone = unique.filter(i=>getCount(i.key)>=i.needed).length;
+  const itemsDone = unique.filter(isItemDone).length;
   const questsDone = allData.questList.filter(q=>isQuestDone(q.id)).length;
   const total = unique.length + allData.questList.length;
   const done = itemsDone + questsDone;
@@ -3713,11 +3767,11 @@ function updateProgress() {
   document.getElementById('overall-bar').style.width = total ? (done/total*100)+'%' : '0%';
 
   // 아이템 탭 카운트
-  const allDone = unique.filter(i=>getCount(i.key)>=i.needed).length;
+  const allDone = unique.filter(isItemDone).length;
   document.getElementById('tc-all').textContent = `${allDone}/${unique.length}`;
   ['kappa','quests','hideout'].forEach((key,i) => {
     const subId = ['kappa','quest-items','hideout'][i];
-    const d = allData[key].filter(x=>getCount(x.key)>=x.needed).length;
+    const d = allData[key].filter(isItemDone).length;
     document.getElementById('tc-'+subId).textContent = `${d}/${allData[key].length}`;
   });
 
@@ -5125,27 +5179,34 @@ function openItemModal(source, key) {
 
   let body = '';
 
-  // 수집 현황
-  const pct = item.needed ? Math.round(cur/item.needed*100) : 0;
+  // 수집 현황 — 퀘스트/하이드아웃 완료로 전부 충족된 경우, 0/0 대신 원래 필요했던 총량을 보여준다.
+  const forcedDone = isItemFullyDoneViaCompletion(item);
+  const displayCur = forcedDone ? item.totalNeeded : cur;
+  const displayNeeded = forcedDone ? item.totalNeeded : item.needed;
+  const pct = displayNeeded ? Math.round(displayCur/displayNeeded*100) : 0;
   body += `<div class="modal-section-title">수집 현황</div>
-    <div style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:${cur>=item.needed?'var(--accent2)':'var(--text)'}">
-      ${cur} <span style="font-size:14px;color:var(--muted);font-weight:400">/ ${item.needed}</span>
+    <div style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:${isItemDone(item)?'var(--accent2)':'var(--text)'}">
+      ${displayCur} <span style="font-size:14px;color:var(--muted);font-weight:400">/ ${displayNeeded}</span>
     </div>
     <div class="modal-progress-bar"><div class="modal-progress-fill" style="width:${pct}%"></div></div>`;
 
   // FIR 조건 표시
   if (item.hasFir || item.hasNofir) {
+    const displayFir = forcedDone ? item.totalNeededFir : item.neededFir;
+    const displayNofir = forcedDone ? item.totalNeededNofir : item.neededNofir;
     body += `<div style="margin-top:8px;font-size:12px;display:flex;gap:8px;flex-wrap:wrap">`;
-    if (item.hasFir)   body += `<span><span class="modal-fir-badge">FIR</span> <span style="color:var(--text)">${item.neededFir}개 필요</span></span>`;
-    if (item.hasNofir) body += `<span style="color:var(--muted)">일반 ${item.neededNofir}개 필요</span>`;
+    if (item.hasFir)   body += `<span><span class="modal-fir-badge">FIR</span> <span style="color:var(--text)">${displayFir}개 필요</span></span>`;
+    if (item.hasNofir) body += `<span style="color:var(--muted)">일반 ${displayNofir}개 필요</span>`;
     body += `</div>`;
   }
 
   if (item.sourceDetails?.length) {
     body += `<div class="modal-section-title">출처별 필요 수량</div>`;
-    for (const detail of item.sourceDetails.filter(detail => detail.count > 0)) {
+    const sourceDetails = forcedDone ? item.sourceDetails.filter(d => d.totalCount > 0) : item.sourceDetails.filter(d => d.count > 0);
+    for (const detail of sourceDetails) {
+      const count = forcedDone ? detail.totalCount : detail.count;
       body += `<div class="modal-task-row">
-        <span class="modal-task-count">×${detail.count}</span>
+        <span class="modal-task-count">×${count}</span>
         <div class="modal-task-name">${escapeHtml(detail.label)}</div>
       </div>`;
     }
@@ -5196,10 +5257,11 @@ function openItemModal(source, key) {
       const firTag = tg.firCount > 0 ? `<span class="modal-fir-badge" style="margin-left:4px">FIR×${tg.firCount}</span>` : '';
       const nofirTag = tg.nofirCount > 0 ? `<span style="font-size:10px;color:var(--muted);margin-left:4px">일반×${tg.nofirCount}</span>` : '';
       const saleTag = tg.hasSaleCondition ? `<span class="modal-sale-badge" style="margin-left:4px">판매조건</span>` : '';
+      const doneTag = tg.done ? `<span class="modal-fir-badge" style="margin-left:4px;background:var(--accent2);color:#fff;border-color:var(--accent2)">✅ 완료</span>` : '';
       body += `<div class="modal-task-row">
         <span class="modal-task-count">×${tg.totalCount}</span>
         <div style="flex:1;min-width:0">
-          <div class="modal-task-name">${escapeHtml(tg.name)}${firTag}${nofirTag}${saleTag}</div>
+          <div class="modal-task-name">${escapeHtml(tg.name)}${firTag}${nofirTag}${saleTag}${doneTag}</div>
           <div class="modal-task-trader">${escapeHtml(tg.trader)}</div>
         </div>
         <a href="${escapeHtml(taskWiki)}" target="_blank" rel="noopener noreferrer" class="modal-wiki-link">위키</a>
@@ -5212,7 +5274,8 @@ function openItemModal(source, key) {
     body += `<div class="modal-section-title">하이드아웃</div>`;
     for (const s of item.stations) {
       const firTag = s.fir ? `<span class="modal-fir-badge" style="margin-left:4px">FIR</span>` : '';
-      body += `<div class="modal-task-row"><span class="modal-task-count">×${s.count}</span><div class="modal-task-name">${escapeHtml(s.label)}${firTag}</div></div>`;
+      const doneTag = s.done ? `<span class="modal-fir-badge" style="margin-left:4px;background:var(--accent2);color:#fff;border-color:var(--accent2)">✅ 완료</span>` : '';
+      body += `<div class="modal-task-row"><span class="modal-task-count">×${s.count}</span><div class="modal-task-name">${escapeHtml(s.label)}${firTag}${doneTag}</div></div>`;
     }
   }
 
@@ -5245,15 +5308,22 @@ function syncFactionButtons() {
   document.getElementById('faction-usec-items')?.classList.toggle('active', f === 'usec');
 }
 
+// 퀘스트/하이드아웃 완료 상태, 진영, 에디션, 지급아이템 제외 설정이 바뀔 때마다
+// 아이템 트래커의 "필요 아이템" 집계(퀘스트·카파·하이드아웃·전체)를 다시 계산한다.
+function refreshItemAggregation() {
+  allData.quests = aggregateQuestItems(allData._rawItemTasks, 'quests', excludeStartEnabled);
+  allData.kappa = aggregateQuestItems(allData._rawItemTasks, 'kappa', excludeStartEnabled);
+  allData.hideout = aggregateHideoutItems(allData._rawHideoutStations);
+  allData.all = buildCombinedItems();
+  buildItemMap();
+}
+
 function setFaction(faction) {
   state.faction = faction;
   saveState();
   syncFactionButtons();
   // 반대 진영 전용 퀘스트의 아이템이 "필요 아이템" 집계에서 빠지도록 아이템 탭도 다시 계산
-  allData.quests = aggregateQuestItems(allData._rawItemTasks, 'quests', excludeStartEnabled);
-  allData.kappa = aggregateQuestItems(allData._rawItemTasks, 'kappa', excludeStartEnabled);
-  allData.all = buildCombinedItems();
-  buildItemMap();
+  refreshItemAggregation();
   renderItemTab(currentItemTab);
   renderCurrentQuestTab();
   updateProgress();
@@ -5276,11 +5346,7 @@ function recalculateEditionData() {
       allData.questDependents.get(requirement.task.id).push(quest);
     }
   }
-  allData.quests = aggregateQuestItems(allData._rawItemTasks, 'quests', excludeStartEnabled);
-  allData.kappa = aggregateQuestItems(allData._rawItemTasks, 'kappa', excludeStartEnabled);
-  allData.hideout = aggregateHideoutItems(allData._rawHideoutStations);
-  allData.all = buildCombinedItems();
-  buildItemMap();
+  refreshItemAggregation();
 }
 
 // 아이템 탭/퀘스트 탭에 각각 있는 에디션 선택 select를 항상 같은 값으로 동기화
@@ -5322,10 +5388,7 @@ function toggleExclStart() {
   state.excludeStart = excludeStartEnabled;
   saveState();
   document.getElementById('if-excl-start').classList.toggle('active', excludeStartEnabled);
-  allData.quests = aggregateQuestItems(allData._rawItemTasks, 'quests', excludeStartEnabled);
-  allData.kappa  = aggregateQuestItems(allData._rawItemTasks, 'kappa',  excludeStartEnabled);
-  allData.all = buildCombinedItems();
-  buildItemMap();
+  refreshItemAggregation();
   renderItemTab(currentItemTab);
   updateProgress();
 }
