@@ -4630,6 +4630,26 @@ function getSelectedStoryChoice(chapter, group) {
   return choices.find(choice => !!state.storyChoices?.[choice.id])?.id || null;
 }
 
+// consequence 텍스트는 "기본 설명. ▶A 영향: ... ▶B 영향: ..." 형태로 한 문장에 다 이어붙어 있어서,
+// ▶ 단위로 줄을 나눠 각각 따로 보여준다.
+function formatConsequence(text) {
+  if (!text) return '';
+  const parts = String(text).split('▶').map(s => s.trim()).filter(Boolean);
+  if (!parts.length) return '';
+  let html = `<div>${escapeHtml(parts[0])}</div>`;
+  for (let i = 1; i < parts.length; i++) {
+    const colonIdx = parts[i].indexOf(':');
+    if (colonIdx === -1) {
+      html += `<div style="margin-top:3px;padding-left:10px">▶ ${escapeHtml(parts[i])}</div>`;
+    } else {
+      const label = parts[i].slice(0, colonIdx).trim();
+      const detail = parts[i].slice(colonIdx + 1).trim();
+      html += `<div style="margin-top:3px;padding-left:10px">▶ <b>${escapeHtml(label)}</b>: ${escapeHtml(detail)}</div>`;
+    }
+  }
+  return html;
+}
+
 function storyChoiceGroupLabel(chapterId, group) {
   const labels = {
     'falling-skies:case-result': '방탄 케이스 처리 결과',
@@ -4826,7 +4846,7 @@ function renderStory() {
             onclick="pickEnding('${e.id}')">
             <div style="font-family:'Rajdhani',sans-serif;font-weight:700;color:${e.color};font-size:13px;margin-bottom:3px">${picked?'✓ ':''}${e.name}</div>
             <div style="font-size:11px;color:var(--muted);margin-bottom:2px">조건: ${e.condition}</div>
-            <div style="font-size:11px;color:${e.color}aa">${e.consequence}</div>
+            <div style="font-size:11px;color:${e.color}aa">${formatConsequence(e.consequence)}</div>
           </div>`;
         }).join('') + '</div>';
     }
@@ -4844,7 +4864,7 @@ function renderStory() {
               return `<div style="border:1px solid ${picked?'var(--accent2)':'var(--border)'};border-radius:4px;padding:7px 10px;cursor:pointer;background:${picked?'#1a2814':'var(--card)'}"
                 onclick="pickChoice('${ch.id}','${c.id}','${group}')">
                 <div style="font-size:12px;color:${picked?'var(--accent2)':'var(--text)'};font-weight:${picked?'600':'400'}">${picked?'✓ ':''}${c.text}</div>
-                <div style="font-size:11px;color:var(--muted);margin-top:2px">${c.consequence}</div>
+                <div style="font-size:11px;color:var(--muted);margin-top:2px">${formatConsequence(c.consequence)}</div>
               </div>`;
             }).join('')}
           </div>`).join('');
@@ -4956,7 +4976,7 @@ function showStoryChoiceModal(chapterId, group) {
     const picked = getSelectedStoryChoice(chapter, group) === c.id;
     return `<div class="choice-option-card${picked?' selected':''}" style="text-align:left;cursor:pointer" onclick="pickChoice('${escapeHtml(chapterId)}','${escapeHtml(c.id)}','${escapeHtml(group)}');closeTraderUnlockModal()">
       <div class="choice-option-title" style="font-size:13px">${picked?'✓ ':''}${escapeHtml(c.text)}</div>
-      <div style="font-size:11px;color:var(--muted);margin-top:4px">${escapeHtml(c.consequence)}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px">${formatConsequence(c.consequence)}</div>
     </div>`;
   }).join('');
 
