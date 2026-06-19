@@ -3,6 +3,7 @@
 /Tarkov-Helper-main.zip
 /TarkovHelper_v1.5.7/
 /TarkovHelper_v1.5.7.zip
+/타르코프 헬퍼/
 
 # 백업/임시 파일 및 개인 작업 노트(배포 사이트에는 불필요)
 /Tarkov_Tracker.zip
@@ -11,6 +12,12 @@
 /quest_output.txt
 /To_Do_List.txt
 /fetch_tour_quests.sh
+
+# build_barter_hashes.py가 만드는 검토용 부산물 — 실제 데이터는 index.html에 직접 들어있음
+/barter-item-hashes.json
+
+# 스크린샷 인식 기능 테스트용으로 받은 개인 인벤토리 스크린샷
+/hga0cs6hj06g1.png
 
 # 트래커와 무관한 이미지
 /I_Bear_Loot_poster_image.png

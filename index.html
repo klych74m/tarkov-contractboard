@@ -12,14 +12,15 @@
     --text:#d4d8d0; --muted:#6a7068; --complete:#2a3828;
   }
   body.light-mode {
-    --bg:#f0f2ef; --surface:#ffffff; --card:#e8ebe7; --border:#c4c8c3;
-    --accent:#8a6a10; --accent2:#3a7a20; --danger:#c03010;
-    --text:#1a1f19; --muted:#5a6258; --complete:#d4edda;
+    --bg:#eceeec; --surface:#ffffff; --card:#fafbfa; --border:#d7dbd6;
+    --accent:#92710f; --accent2:#3f8a28; --danger:#c0392b;
+    --text:#1c1f1c; --muted:#6a6f68; --complete:#d4edda;
   }
   body.light-mode header { box-shadow:0 1px 4px rgba(0,0,0,.1); }
   body.light-mode .filter-btn:hover,
   body.light-mode .filter-btn.active { background:#f5e8b0; border-color:var(--accent); }
   body.light-mode .sub-tab.active .tc { background:#f5e8b0; }
+  body.light-mode .toolbar-divider { background:#1a1f19; opacity:.3; }
   body.light-mode .quest-card:hover { border-color:#a0a8a0; }
   body.light-mode .quest-card.quest-done { background:#d4edda; border-color:#80b870; }
   body.light-mode .quest-card.quest-done .quest-status-btn { color:#f0f2ef; }
@@ -64,6 +65,30 @@
   body.light-mode .hideout-node.complete .hideout-node-dot { background:var(--accent2); border-color:#ffffff; }
   body.light-mode .hideout-node.locked .hideout-node-dot { background:#c07070; border-color:#ffffff; }
   body.light-mode .tic-btn { background:var(--card); }
+  body.light-mode .quest-status-btn:hover { background:#eaf4e2; }
+  body.light-mode .faction-btn.bear.active { background:#e0f0f8; border-color:#5a9ab8; color:#1a5878; }
+  body.light-mode .faction-btn.usec.active { background:#f5eecc; border-color:#c8a84b; color:#7a5800; }
+  body.light-mode .mode-btn.pve.active { background:#eaf4e2; }
+  body.light-mode .mode-btn.arena.active { background:#ede8f5; border-color:#9a7fd4; color:#5a3a9a; }
+  body.light-mode .choice-btn.selected { background:#eaf4e2; }
+  body.light-mode .choice-option-card.selected { background:#f2f8ee; }
+  body.light-mode .choice-selected-badge { background:#eaf4e2; }
+  body.light-mode .choice-option-list div { border-bottom-color:#e2e5e1; }
+  body.light-mode .choice-confirm-btn { background:#eaf4e2; }
+  body.light-mode .choice-confirm-btn:hover { background:#d8ecc8; }
+  body.light-mode .choice-confirm-btn.selected-btn:hover { background:#fbe4e0; }
+  body.light-mode .error-box { background:#fbe4e0; }
+  body.light-mode .chapter-unlock-info { background:#e0f0f8; border-color:#70b8d0; color:#1a6880; }
+  body.light-mode .obj-item:hover { background:#eef0ee; }
+  body.light-mode .ch-reward-chip { background:#f5eecc; border-color:#c8a84b; }
+  body.light-mode .ch-choice { background:#faf0e2; border-color:#d8b888; color:#8a5010; }
+  body.light-mode .unlock-badge { background:#eaf4e2; border-color:#a8c890; }
+  body.light-mode .recovery-notice { background:#faf0e2; border-color:#d8b888; }
+  body.light-mode .recovery-notice-title { color:#8a5010; }
+  body.light-mode .recovery-notice-item { color:#8a5818; border-bottom-color:#e8d8c0; }
+  body.light-mode .recovery-none-notice { background:#eaf4e2; border-color:#a8c890; color:#3a5a2a; }
+  body.light-mode .modal-fir-badge { background:#fdf0e0; color:#8a4808; border-color:#c88838; }
+  body.light-mode .modal-sale-badge { background:#e0e8f8; color:#1a4890; border-color:#88a8d8; }
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;font-size:14px;min-height:100vh}
 
@@ -86,10 +111,14 @@
   .main-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
 
   /* ── 서브 탭 ── */
+  .sub-tabs-stack{display:flex;flex-direction:column}
   .sub-tabs{display:flex;background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;overflow-x:auto}
   .sub-tab{padding:10px 18px;cursor:pointer;font-family:'Rajdhani',sans-serif;font-weight:600;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--text);border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s;user-select:none}
   .sub-tab:hover{color:var(--accent)}
   .sub-tab.trader-locked{opacity:.5}
+  .trader-tabs-row .sub-tab{padding:8px 14px;display:inline-flex;align-items:center;gap:6px}
+  .trader-tabs-row .sub-tab .tc{display:none}
+  .trader-tab-icon{width:18px;height:18px;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--border)}
 
   /* ── 미해금 상인 패널 ── */
   .locked-trader-banner{background:#1a1010;border:1px solid #4a2828;border-radius:6px;padding:10px 16px;margin-bottom:12px;color:#bb8888;font-size:12px;display:flex;align-items:center;gap:8px}
@@ -128,6 +157,7 @@
 
   /* ── 툴바 ── */
   .toolbar{padding:12px 24px;display:flex;gap:10px;align-items:center;border-bottom:1px solid var(--border);background:var(--surface);flex-wrap:wrap}
+  .toolbar-divider{width:1px;align-self:stretch;background:#fff;margin:0 4px;flex-shrink:0;opacity:.6}
   .search-input{background:var(--card);border:1px solid var(--border);color:var(--text);padding:7px 12px;border-radius:4px;font-size:13px;font-family:'Inter',sans-serif;width:220px;outline:none;transition:border-color .15s}
   .search-input:focus{border-color:var(--accent)}
   .search-input::placeholder{color:var(--muted)}
@@ -492,6 +522,33 @@
   .modal-progress-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:4px}
   .modal-progress-fill{height:100%;background:var(--accent2);border-radius:2px;transition:width .3s}
 
+  /* ── 시작 안내(온보딩) 모달 ── */
+  .onboarding-modal-box{max-width:560px}
+  .onboarding-p{font-size:13px;color:var(--text);line-height:1.7;margin-bottom:4px}
+  .onboarding-tab-row{display:flex;flex-direction:column;gap:1px;padding:7px 0;border-bottom:1px solid var(--border);font-size:12px}
+  .onboarding-tab-row:last-of-type{border-bottom:none}
+  .onboarding-tab-row b{font-family:'Rajdhani',sans-serif;font-size:14px;color:var(--accent)}
+  .onboarding-tab-row span{color:var(--muted);line-height:1.5}
+
+  /* ── 스크린샷 인식 모달 ── */
+  .scan-modal-box{max-width:760px}
+  .scan-step-desc{font-size:13px;color:var(--text);margin-bottom:10px;line-height:1.6}
+  .scan-step-desc b{color:var(--accent)}
+  .scan-dropzone{border:2px dashed var(--border);border-radius:8px;padding:40px 20px;text-align:center;color:var(--muted);cursor:pointer;transition:border-color .15s,color .15s;font-size:13px}
+  .scan-dropzone:hover,.scan-dropzone.dragover{border-color:var(--accent);color:var(--accent)}
+  .scan-canvas-wrap{overflow:auto;max-height:60vh;border:1px solid var(--border);border-radius:6px;background:#000}
+  .scan-canvas-wrap canvas{display:block;cursor:crosshair;max-width:100%}
+  .scan-grid-controls{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap}
+  .scan-actions{display:flex;gap:8px;margin-top:12px;justify-content:flex-end}
+  .scan-result-list{display:flex;flex-direction:column;gap:6px;max-height:50vh;overflow-y:auto}
+  .scan-result-row{display:flex;align-items:center;gap:10px;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:6px}
+  .scan-result-icon{width:36px;height:36px;object-fit:contain;background:#111;border-radius:4px;flex-shrink:0}
+  .scan-result-name{flex:1;font-size:13px;color:var(--text)}
+  .scan-result-count{font-family:'Rajdhani',sans-serif;font-weight:700;color:var(--accent);font-size:14px;display:flex;align-items:center;gap:6px}
+  .scan-result-remove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:2px 6px}
+  .scan-result-remove:hover{color:var(--danger)}
+  .scan-empty-state{text-align:center;color:var(--muted);padding:30px;font-size:13px}
+
   /* ── 진영 선택 ── */
   .faction-btn{background:var(--card);border:2px solid var(--border);color:var(--muted);padding:4px 12px;border-radius:4px;cursor:pointer;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:12px;letter-spacing:1px;transition:all .15s}
   .faction-btn.bear.active{border-color:#4a8aaa;color:#4a9abe;background:#0d1e28}
@@ -510,6 +567,7 @@
     .sub-tab{padding:9px 10px}
     .toolbar{padding:10px 12px;gap:7px}
     .search-input{width:100%;flex:1 0 100%}
+    .toolbar-divider{display:none}
     .main-content{padding:14px 12px}
     .items-grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
     .story-grid{grid-template-columns:1fr}
@@ -535,6 +593,7 @@
     <button class="btn-reset" onclick="document.getElementById('import-file-input').click()" title="JSON 백업 파일에서 진행 상황 복원">📤 불러오기</button>
     <input type="file" id="import-file-input" accept="application/json" style="display:none" onchange="importData(event)">
     <button class="btn-reset" id="theme-toggle-btn" onclick="toggleTheme()" title="라이트/다크 모드 전환">🌙 다크</button>
+    <button class="btn-reset" onclick="openOnboarding()" title="시작 안내 다시 보기">❓ 도움말</button>
     <button class="btn-reset" onclick="confirmReset()">초기화</button>
   </div>
 </header>
@@ -557,6 +616,7 @@
   </div>
   <div class="toolbar">
     <input class="search-input" type="text" id="item-search" placeholder="아이템 검색..." oninput="renderCurrentItemTab()">
+    <div class="toolbar-divider"></div>
     <div class="level-input-wrap">
       <span>에디션</span>
       <select class="trader-level-select" id="game-edition" onchange="setEdition(this.value)">
@@ -570,11 +630,15 @@
       <button class="faction-btn bear active" id="faction-bear-items" onclick="setFaction('bear')">BEAR</button>
       <button class="faction-btn usec" id="faction-usec-items" onclick="setFaction('usec')">USEC</button>
     </div>
-    <button class="filter-btn active" id="if-all" onclick="setItemFilter('all')" style="margin-left:10px">전체</button>
+    <div class="toolbar-divider"></div>
+    <button class="filter-btn active" id="if-all" onclick="setItemFilter('all')">전체</button>
     <button class="filter-btn" id="if-fir" onclick="setItemFilter('fir')">FIR만</button>
     <button class="filter-btn" id="if-incomplete" onclick="setItemFilter('incomplete')">미완료</button>
     <button class="filter-btn" id="if-complete" onclick="setItemFilter('complete')">완료</button>
+    <div class="toolbar-divider"></div>
     <button class="filter-btn active" id="if-excl-start" onclick="toggleExclStart()" title="퀘스트 시작 시 지급되는 아이템 제외">지급아이템 제외</button>
+    <div class="toolbar-divider"></div>
+    <button class="filter-btn" onclick="openScanModal()" title="Lucky Scav Junkbox 스크린샷에서 잡템 수량을 자동으로 인식합니다">📷 스크린샷 인식 (베타)</button>
   </div>
   <div class="main-content">
     <div id="loader-items" class="loader"><div class="spinner"></div><div class="loader-text">데이터 로딩 중...</div></div>
@@ -590,8 +654,10 @@
 <div class="main-panel" id="main-hideout">
   <div class="toolbar">
     <input class="search-input" type="text" id="hideout-search" placeholder="시설/재료 검색..." oninput="renderHideoutTab()">
+    <div class="toolbar-divider"></div>
     <button class="filter-btn active" id="hv-map" onclick="setHideoutView('map')">맵 보기</button>
     <button class="filter-btn" id="hv-list" onclick="setHideoutView('list')">목록 보기</button>
+    <div class="toolbar-divider"></div>
     <button class="filter-btn active" id="hf-all" onclick="setHideoutFilter('all')">전체</button>
     <button class="filter-btn" id="hf-next" onclick="setHideoutFilter('next')">건설 가능</button>
     <button class="filter-btn" id="hf-missing" onclick="setHideoutFilter('missing')">재료 부족</button>
@@ -604,14 +670,19 @@
 
 <!-- ── 퀘스트 트래커 패널 ── -->
 <div class="main-panel" id="main-quests">
-  <div class="sub-tabs" id="trader-tabs">
-    <div class="sub-tab active" data-sub="active-quests" onclick="switchQuestTab('active-quests')">진행중 <span class="tc" id="qtc-active-quests">-</span></div>
-    <div class="sub-tab" data-sub="all-quests" onclick="switchQuestTab('all-quests')">전체 <span class="tc" id="qtc-all-quests">-</span></div>
-    <div class="sub-tab" data-sub="story-quests" onclick="switchQuestTab('story-quests')">스토리 <span class="tc" id="qtc-story-quests">-</span></div>
-    <!-- 상인 탭은 동적으로 생성 -->
+  <div class="sub-tabs-stack" id="trader-tabs">
+    <div class="sub-tabs">
+      <div class="sub-tab active" data-sub="active-quests" onclick="switchQuestTab('active-quests')">진행중 <span class="tc" id="qtc-active-quests">-</span></div>
+      <div class="sub-tab" data-sub="all-quests" onclick="switchQuestTab('all-quests')">전체 <span class="tc" id="qtc-all-quests">-</span></div>
+      <div class="sub-tab" data-sub="story-quests" onclick="switchQuestTab('story-quests')">스토리 <span class="tc" id="qtc-story-quests">-</span></div>
+    </div>
+    <div class="sub-tabs trader-tabs-row" id="trader-tabs-traders">
+      <!-- 상인 탭은 동적으로 생성 -->
+    </div>
   </div>
   <div class="toolbar">
     <input class="search-input" type="text" id="quest-search" placeholder="퀘스트 검색..." oninput="renderCurrentQuestTab()">
+    <div class="toolbar-divider"></div>
     <div class="level-input-wrap">
       <span>레벨</span>
       <input class="level-input" type="number" id="player-level" min="1" max="79" value="1" oninput="onLevelChange()">
@@ -621,6 +692,7 @@
       <input class="level-input" type="number" id="prestige-level" min="0" max="3" value="0" oninput="onPrestigeChange()">
     </div>
     <div id="xp-display" style="font-size:11px;color:var(--muted);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+    <div class="toolbar-divider"></div>
     <div class="level-input-wrap">
       <span>에디션</span>
       <select class="trader-level-select" id="game-edition-quests" onchange="setEdition(this.value)">
@@ -633,6 +705,7 @@
     <button class="faction-btn usec" id="faction-usec" onclick="setFaction('usec')">USEC</button>
     <button class="mode-btn pve active" id="mode-pve" onclick="setGameMode('pve')" title="PVE 모드: 일반 퀘스트 + [PVE ZONE] 아레나 퀘스트">PVE</button>
     <button class="mode-btn arena" id="mode-arena" onclick="setGameMode('pvp')" title="PVP 모드: 일반 퀘스트 + [PVP ZONE] 아레나 퀘스트">PVP</button>
+    <div class="toolbar-divider"></div>
     <div class="level-input-wrap">
       <span>펜스 우호도 <span style="font-size:10px;opacity:.6">(Scav karma)</span></span>
       <button class="tic-btn" onclick="adjustScavKarma(-0.01)">−</button>
@@ -646,6 +719,7 @@
         <div class="trader-level-grid" id="trader-level-grid"></div>
       </div>
     </details>
+    <div class="toolbar-divider"></div>
     <button class="filter-btn active" id="qf-all" onclick="setQuestFilter('all')">전체</button>
     <button class="filter-btn" id="qf-locked" onclick="setQuestFilter('locked')">잠김</button>
     <button class="filter-btn" id="qf-done" onclick="setQuestFilter('done')">완료</button>
@@ -667,7 +741,7 @@
 //  STATE
 // ══════════════════════════════════════════════════════
 const STORAGE_KEY = 'tarkov_tracker_v2';
-let state = { counts: {}, questDone: {}, questCompletedAt: {}, questFailed: {}, traderLevels: {}, traderStandingAdj: {}, hideoutLevels: {}, playerLevel: 1, prestigeLevel: 0, scavKarma: 0, storyObj: {}, storyEnding: null, storyChoices: {}, collapsedSections: {}, manualXP: 0, faction: 'bear', edition: 'standard', excludeStart: true, gameMode: 'pve', theme: 'dark' };
+let state = { counts: {}, questDone: {}, questCompletedAt: {}, questFailed: {}, traderLevels: {}, traderStandingAdj: {}, hideoutLevels: {}, playerLevel: 1, prestigeLevel: 0, scavKarma: 0, storyObj: {}, storyEnding: null, storyChoices: {}, collapsedSections: {}, manualXP: 0, faction: 'bear', edition: 'standard', excludeStart: true, gameMode: 'pve', theme: 'dark', onboarded: false };
 
 // 저장된(또는 가져온) 데이터를 정식 state 형태로 정규화 — loadState()와 importData()가 공유
 function normalizeState(parsed) {
@@ -691,7 +765,8 @@ function normalizeState(parsed) {
     edition: ['standard','eod','unheard'].includes(parsed.edition) ? parsed.edition : 'standard',
     excludeStart: parsed.excludeStart !== undefined ? parsed.excludeStart : true,
     gameMode: ['pve','pvp'].includes(parsed.gameMode) ? parsed.gameMode : 'pve',
-    theme: ['dark','light'].includes(parsed.theme) ? parsed.theme : 'dark'
+    theme: ['dark','light'].includes(parsed.theme) ? parsed.theme : 'dark',
+    onboarded: !!parsed.onboarded
   };
 }
 
@@ -2333,6 +2408,23 @@ function traderLabel(trader) {
   return ko ? `${ko}(${en})` : en;
 }
 
+// 상인 탭 내부 콘텐츠(아이콘 + 한글 이름) — 전체 이름·진행도는 title 툴팁으로 제공
+function traderTabContent(trader, unlocked) {
+  const icon = trader?.imageLink ? `<img class="trader-tab-icon" src="${escapeHtml(trader.imageLink)}" alt="" onerror="this.style.display='none'">` : '';
+  const shortName = TRADER_KO[trader?.normalizedName] || traderLabel(trader);
+  const lockIcon = unlocked ? '' : ' 🔒';
+  return `${icon}${escapeHtml(shortName)}${lockIcon}`;
+}
+
+// 상인 탭 title 툴팁(전체 이름 + 진행도 + 잠금 조건)
+function traderTabTitle(trader, unlocked, countText) {
+  const cond = TRADER_UNLOCK_CONDITIONS[trader?.normalizedName];
+  const parts = [traderLabel(trader)];
+  if (countText) parts.push(countText);
+  if (!unlocked && cond?.desc) parts.push(cond.desc);
+  return parts.join(' — ');
+}
+
 // ── 퀘스트 목표 텍스트 한국어 번역 (API 미번역분 패턴 기반 처리) ──
 function translateObjectiveDesc(desc, type) {
   if (!desc) return desc;
@@ -2899,16 +2991,15 @@ function refreshTraderTabs() {
     const tab = document.getElementById('tradertab-'+t.normalizedName);
     if (!tab) return;
     const unlocked = isTraderUnlocked(t.normalizedName);
-    const cond = TRADER_UNLOCK_CONDITIONS[t.normalizedName];
-    const lockIcon = unlocked ? '' : ' 🔒';
 
     tab.className = `sub-tab${currentQuestTab === t.normalizedName ? ' active' : ''}${unlocked ? '' : ' trader-locked'}`;
     tab.onclick = () => switchQuestTab(t.normalizedName);
-    tab.title = (!unlocked && cond?.desc) ? cond.desc : '';
 
     // 해금됐는데 잠금 표시가 남아있으면 제거
     const tcEl = tab.querySelector('.tc');
-    tab.innerHTML = `${escapeHtml(traderLabel(t))}${lockIcon} <span class="tc" id="qtc-${t.normalizedName}">${tcEl?.textContent||'-'}</span>`;
+    const countText = tcEl?.textContent && tcEl.textContent !== '-' ? tcEl.textContent : null;
+    tab.title = traderTabTitle(t, unlocked, countText);
+    tab.innerHTML = `${traderTabContent(t, unlocked)} <span class="tc" id="qtc-${t.normalizedName}">${tcEl?.textContent||'-'}</span>`;
 
     // 방금 해금된 경우 해금 알림
     if (unlocked && tab.classList.contains('trader-locked')) {
@@ -3640,7 +3731,10 @@ function updateProgress() {
     if (!el) return;
     const tq = allData.questList.filter(q=>q.trader?.normalizedName===t.normalizedName && !isQuestEffectivelyUnchosen(q.id) && !isRecoveryQuest(q));
     const td = tq.filter(q=>isQuestDone(q.id)).length;
-    el.textContent = `${td}/${tq.length}`;
+    const countText = `${td}/${tq.length}`;
+    el.textContent = countText;
+    const tab = document.getElementById('tradertab-'+t.normalizedName);
+    if (tab) tab.title = traderTabTitle(t, isTraderUnlocked(t.normalizedName), countText);
   });
 }
 
@@ -4708,7 +4802,7 @@ function renderStory() {
         <div style="display:flex;flex-direction:column;gap:3px">` +
         ch.mapUnlocks.map(m => `
           <div style="display:flex;gap:8px;align-items:flex-start;font-size:11px">
-            <span style="background:#102028;border:1px solid #1a3a48;color:#4a9abe;border-radius:3px;padding:1px 7px;flex-shrink:0">🗺 ${mapLabel(m.map)}</span>
+            <span class="badge-map" style="flex-shrink:0">🗺 ${mapLabel(m.map)}</span>
             <span style="color:var(--muted);line-height:1.5">${m.how}</span>
           </div>`).join('') + '</div>';
     }
@@ -5109,6 +5203,15 @@ function closeItemModal(e) {
   }
 }
 
+// ── 첫 방문 시작 안내 모달 ──
+function openOnboarding() {
+  document.getElementById('onboarding-modal')?.classList.remove('hidden');
+}
+function closeOnboarding() {
+  document.getElementById('onboarding-modal')?.classList.add('hidden');
+  if (!state.onboarded) { state.onboarded = true; saveState(); }
+}
+
 // ── 진영 선택 (8번) ──
 // 아이템 탭/퀘스트 탭에 각각 있는 진영 선택 버튼을 항상 같은 상태로 동기화
 function syncFactionButtons() {
@@ -5270,6 +5373,16 @@ async function init() {
   document.getElementById('mode-arena')?.classList.toggle('active', gm === 'pvp');
   applyTheme(state.theme || 'dark');
   renderTraderLevelControls();
+  // onboarding-modal 엘리먼트는 이 <script> 아래쪽 HTML에 있어서, 페이지 파싱이
+  // 끝난 다음(다음 tick)에 띄워야 한다. (사용자가 직접 여는 다른 모달들은 이미
+  // DOM이 다 만들어진 뒤에 클릭해서 열리므로 이 문제가 없다.)
+  if (!state.onboarded) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', openOnboarding);
+    } else {
+      openOnboarding();
+    }
+  }
 
   try {
     const { regularItemsData, pveItemsData, regularQuestsData, pveQuestsData, hideoutData, startRewardItemIds, tradersLoyaltyData, craftsData, categoryCraftItemsData } = await fetchAllData();
@@ -5316,7 +5429,7 @@ async function init() {
     renderTraderLevelControls();
 
     // 상인 탭 동적 생성
-    const traderTabsEl = document.getElementById('trader-tabs');
+    const traderTabsEl = document.getElementById('trader-tabs-traders');
     const questPanelsEl = document.getElementById('quest-panels');
 
     questPanelsEl.innerHTML = `
@@ -5326,17 +5439,13 @@ async function init() {
 
     traders.forEach(t => {
       const unlocked = isTraderUnlocked(t.normalizedName);
-      const cond = TRADER_UNLOCK_CONDITIONS[t.normalizedName];
       const tab = document.createElement('div');
       tab.className = `sub-tab${unlocked ? '' : ' trader-locked'}`;
       tab.id = `tradertab-${t.normalizedName}`;
       tab.dataset.sub = t.normalizedName;
       tab.onclick = () => switchQuestTab(t.normalizedName);
-      const lockIcon = unlocked ? '' : ' 🔒';
-      tab.innerHTML = `${escapeHtml(traderLabel(t))}${lockIcon} <span class="tc" id="qtc-${t.normalizedName}">-</span>`;
-      if (!unlocked && cond?.desc) {
-        tab.title = cond.desc;
-      }
+      tab.innerHTML = `${traderTabContent(t, unlocked)} <span class="tc" id="qtc-${t.normalizedName}">-</span>`;
+      tab.title = traderTabTitle(t, unlocked, null);
       traderTabsEl.appendChild(tab);
 
       const panel = document.createElement('div');
@@ -5365,6 +5474,428 @@ async function init() {
   }
 }
 
+// ══════════════════════════════════════════════════════
+//  스크린샷 인식 (베타) — Lucky Scav Junkbox 잡템 자동 카운트
+//  file://로 직접 열거나 다른 origin에서 쓸 때 fetch()가 CORS로 막히는 걸 피하려고,
+//  잡템 아이콘 해시는 build_barter_hashes.py로 미리 계산해 이 파일 안에 직접 박아둔다.
+//  게임에 새 잡템이 추가/변경되면 build_barter_hashes.py를 다시 실행하면
+//  아래 BARTER_HASH_DB 블록이 자동으로 갱신된다 (직접 수정하지 말 것).
+// BARTER_HASH_DB:START
+const BARTER_HASH_DB = [{"id":"5672cb124bdc2d1a0f8b4568","name":"AA Battery","hash":"8cb3e38e3c3a36c8","colors":[29,40,46,11,24,30,62,66,70,57,65,69,16,30,36,90,81,85,161,151,149,48,59,61,81,87,90,152,155,155,35,51,55,15,26,33,40,53,57,32,47,51,15,25,32,26,37,43]},{"id":"5672cb304bdc2dc2088b456a","name":"D Size battery","hash":"98a6c70f3e1c9ac4","colors":[24,35,43,20,30,38,89,90,84,36,45,48,25,37,37,143,146,136,198,197,189,47,54,52,50,66,59,132,152,126,51,64,67,20,32,38,24,37,44,22,40,40,18,29,34,24,35,41]},{"id":"5672cb724bdc2dc2088b456b","name":"Geiger-Muller counter","hash":"ea8c9e8e8e86ceb8","colors":[21,34,46,92,86,39,74,70,31,20,33,46,12,24,32,194,177,94,158,145,94,8,22,32,7,20,31,154,146,97,171,155,104,11,23,33,18,30,41,59,66,45,73,76,45,21,32,42]},{"id":"56742c284bdc2d98058b456d","name":"Crickent lighter","hash":"a893a7ce9c3a2688","colors":[31,40,46,15,31,40,54,50,49,48,51,53,11,29,39,67,54,49,144,91,61,37,39,39,69,50,43,144,85,54,37,38,36,16,30,39,60,48,42,40,38,36,13,29,38,26,36,41]},{"id":"56742c2e4bdc2d95058b456d","name":"Zibbo lighter","hash":"8bb3c31e781a3a64","colors":[26,37,43,19,29,35,44,54,58,47,58,62,35,45,49,55,68,67,53,76,82,31,44,50,62,85,92,75,116,124,22,36,43,20,30,37,37,61,69,36,61,70,21,31,36,25,36,42]},{"id":"56742c324bdc2d150f8b456d","name":"Broken GPhone smartphone","hash":"cec39b96a62e0c8c","colors":[24,36,42,46,52,56,65,68,73,40,49,54,23,34,40,64,67,72,80,81,85,39,47,52,40,48,53,94,94,98,79,83,87,19,30,36,35,46,51,69,78,83,49,58,63,19,31,37]},{"id":"5733279d245977289b77ec24","name":"Car battery","hash":"f806272b0b0ba3d4","colors":[29,42,53,45,57,70,49,59,68,27,38,45,60,58,56,110,115,128,112,126,146,54,61,66,70,61,44,118,113,89,113,128,119,63,67,57,27,38,45,36,42,41,39,43,40,30,39,42]},{"id":"573474f924597738002c6174","name":"Chainlet","hash":"8c92a5add9966cce","colors":[28,39,45,25,36,42,35,45,51,30,41,47,21,33,39,26,37,43,39,50,54,41,52,57,28,39,45,41,52,57,47,57,61,35,46,51,37,48,53,40,50,55,45,56,60,19,30,36]},{"id":"5734758f24597738025ee253","name":"Golden neck chain","hash":"9ca3cd9993066c92","colors":[27,38,45,25,36,42,52,55,51,36,44,47,20,33,41,70,64,53,91,81,63,81,79,70,41,46,45,78,69,54,70,67,57,49,55,55,36,42,44,27,36,40,30,38,41,19,31,38]},{"id":"573475fb24597737fb1379e1","name":"Apollo Soyuz cigarettes","hash":"36273e3636261696","colors":[52,65,70,139,140,144,119,124,126,36,46,50,60,73,78,169,191,199,150,164,167,38,45,49,62,75,79,121,140,155,138,153,159,39,47,50,39,51,55,124,143,149,111,127,132,30,39,44]},{"id":"573476d324597737da2adc13","name":"Malboro Cigarettes","hash":"8e9e9e26060e8e8e","colors":[41,37,43,130,58,66,115,45,51,34,35,40,44,48,54,172,163,167,148,118,122,31,30,35,39,52,57,132,158,163,118,141,144,24,33,38,28,38,42,95,111,115,84,97,101,21,30,35]},{"id":"573476f124597737e04bf328","name":"Wilston cigarettes","hash":"8e0f1e9e060e0e86","colors":[42,53,57,136,152,153,125,136,136,37,45,49,35,45,54,97,109,129,76,83,102,26,34,41,35,47,52,126,147,152,128,142,144,28,36,39,32,44,49,90,112,113,90,107,106,29,38,42]},{"id":"5734770f24597738025ee254","name":"Strike Cigarettes","hash":"3e36363636361e0a","colors":[55,64,69,132,142,138,122,129,126,39,46,51,56,71,73,132,95,94,123,105,103,35,49,53,51,65,68,132,96,96,102,86,84,27,41,44,37,47,52,89,108,105,70,84,82,28,36,41]},{"id":"5734779624597737e04bf329","name":"CPU fan","hash":"d88e2f4b75199bc4","colors":[30,39,45,45,53,57,45,52,57,27,38,44,57,64,66,73,74,74,70,71,71,36,43,46,52,64,69,68,77,75,48,56,55,56,62,60,22,33,40,45,57,59,45,54,53,30,40,45]},{"id":"573477e124597737dd42e191","name":"PC CPU","hash":"c01f3f2b33132be4","colors":[53,68,72,91,104,105,76,90,92,33,46,52,109,123,125,241,240,239,218,219,218,75,89,92,79,97,100,234,238,237,243,244,241,108,124,125,36,51,55,76,95,96,77,96,97,53,70,72]},{"id":"5734781f24597737e04bf32a","name":"DVD drive","hash":"92e49b8736d2aa82","colors":[24,36,42,13,24,31,17,28,35,28,39,45,35,46,52,185,189,189,199,203,203,55,64,68,42,52,57,111,120,122,97,106,107,27,37,43,20,31,37,4,15,22,7,18,24,23,34,40]},{"id":"573478bc24597738002c6175","name":"Horse figurine","hash":"92accaceac8e8eb0","colors":[27,39,45,28,38,43,28,38,44,27,39,45,20,33,40,47,47,46,40,43,45,20,33,41,19,31,39,45,46,47,55,51,47,19,31,39,21,33,40,43,46,49,48,49,49,22,34,40]},{"id":"5734795124597738002c6176","name":"Insulating tape","hash":"cc96237173271ecc","colors":[28,40,48,48,78,106,49,82,113,29,42,51,45,74,101,52,77,83,62,94,109,48,79,111,53,90,123,54,88,114,49,87,124,35,65,97,30,44,54,51,100,150,33,74,120,20,31,38]},{"id":"57347b8b24597737dd42e192","name":"Classic matches","hash":"94a6cf07239edcd2","colors":[21,33,40,31,41,47,59,69,71,21,33,40,31,43,48,119,109,106,191,149,151,61,70,71,54,62,65,163,165,148,140,126,121,44,51,56,16,28,35,60,68,70,32,45,49,15,27,34]},{"id":"57347baf24597738002c6178","name":"RAM stick","hash":"ab93a3c69c3a36a8","colors":[30,41,47,18,30,37,44,55,58,56,67,68,17,28,36,39,51,54,101,114,107,52,64,64,50,60,61,104,113,107,38,50,51,16,27,34,53,64,64,42,53,54,14,25,33,26,37,43]},{"id":"57347c1124597737fb1379e3","name":"Duct tape","hash":"8e13637173379fce","colors":[38,48,53,121,128,128,136,143,142,48,56,61,124,125,123,75,88,89,96,107,107,129,129,127,102,109,111,131,137,134,125,141,143,81,98,102,24,36,42,100,138,147,78,122,133,22,37,43]},{"id":"57347c2e24597744902c94a1","name":"Power supply unit","hash":"f00f07130b272e86","colors":[42,49,55,59,63,69,56,58,62,29,38,44,86,94,100,163,159,160,176,172,172,75,77,82,44,55,59,108,108,110,123,124,127,77,79,83,26,38,44,21,35,41,17,32,39,22,35,42]},{"id":"57347c5b245977448d35f6e1","name":"Bolts","hash":"86d633bba6b68ec8","colors":[30,40,46,29,37,37,41,48,49,31,41,46,32,40,44,40,44,42,40,44,43,35,42,46,29,36,36,41,46,46,37,42,42,23,33,38,25,35,40,32,40,43,28,37,41,23,34,40]},{"id":"57347c77245977448d35f6e2","name":"Screw nuts","hash":"8a8c2eaeadc7acb2","colors":[31,40,46,33,41,43,31,40,43,26,38,44,36,44,48,46,52,52,38,43,40,26,36,40,24,32,35,36,42,40,46,52,52,36,44,47,23,34,41,23,32,35,26,34,36,22,34,40]},{"id":"57347c93245977448d35f6e3","name":"Toothpaste","hash":"aa93a7ce9c3a364a","colors":[32,33,33,13,11,14,92,95,86,77,80,76,15,12,15,51,59,47,156,174,156,57,58,58,49,53,48,108,137,115,24,32,29,13,12,13,65,74,73,42,50,49,15,13,14,27,29,29]},{"id":"57347ca924597744596b4e71","name":"Graphics card","hash":"92a0924b6b0ef086","colors":[23,35,41,21,33,39,21,33,39,24,36,42,61,67,70,62,64,65,61,64,65,50,54,57,48,57,62,65,70,73,56,62,64,35,42,46,20,31,38,19,31,37,19,31,37,21,32,39]},{"id":"57347cd0245977445a2d6ff1","name":"T-Shaped plug","hash":"cc870731398e9eba","colors":[29,38,44,75,60,59,100,77,73,29,40,45,89,66,62,144,90,78,144,89,74,81,61,57,46,45,47,85,65,56,59,45,39,54,46,45,22,34,40,43,46,43,30,36,39,17,31,38]},{"id":"577e1c9d2459773cd707c525","name":"Printer paper","hash":"92c431350d299282","colors":[32,22,25,27,18,21,29,19,22,35,26,30,72,152,129,125,186,168,131,187,170,120,161,148,31,113,92,57,133,116,36,127,102,26,94,74,23,14,17,16,10,12,18,10,12,23,16,19]},{"id":"5909e99886f7740c983b9984","name":"USB Adapter","hash":"989e869bc6c69c9c","colors":[34,45,49,91,94,92,54,58,61,24,36,42,27,38,43,51,74,76,66,74,71,33,39,43,18,29,36,39,51,55,68,78,78,23,32,36,22,33,39,43,52,54,40,49,52,21,32,39]},{"id":"590a358486f77429692b2790","name":"Rechargeable battery","hash":"9e9e8e9e8c2c3c86","colors":[28,38,44,155,159,161,126,128,131,22,32,37,27,36,42,244,246,247,175,175,176,8,16,21,47,55,58,205,207,206,135,137,138,6,16,22,39,50,54,71,86,87,45,58,62,21,31,37]},{"id":"590a373286f774287540368b","name":"Dry fuel","hash":"8233337333336d8b","colors":[45,54,58,63,70,73,59,66,69,48,57,61,78,86,86,112,117,113,104,109,106,79,85,84,80,87,87,114,119,115,107,113,109,79,86,84,45,54,57,56,65,65,56,66,66,47,57,59]},{"id":"590a386e86f77429692b27ab","name":"Damaged hard drive","hash":"96d02f1f172bc882","colors":[26,38,44,19,30,36,20,31,37,27,38,44,55,64,69,174,177,181,161,165,169,50,59,64,45,55,60,132,137,141,124,130,134,43,52,57,21,32,39,9,20,26,10,21,27,22,33,39]},{"id":"590a391c86f774385a33c404","name":"Magnet","hash":"b24d966b69378ee8","colors":[22,33,39,52,61,64,52,61,64,21,32,38,76,81,78,140,147,140,128,139,135,73,78,77,94,101,95,101,117,112,94,113,116,89,96,94,18,30,35,49,74,79,48,69,74,17,28,33]},{"id":"590a3b0486f7743954552bdb","name":"Printed circuit board","hash":"98a6c39b379ecaa6","colors":[26,37,43,21,32,38,36,48,51,25,37,43,27,38,44,71,85,82,106,123,109,60,74,68,33,44,49,103,117,110,82,96,88,33,42,46,20,31,37,29,40,45,21,32,38,20,31,38]},{"id":"590a3c0a86f774385a33c450","name":"Spark plug","hash":"848ab6cc9a3232c8","colors":[29,40,46,21,33,39,26,37,43,30,41,47,18,30,37,39,48,54,62,70,74,23,34,40,33,43,48,88,99,102,31,41,47,19,31,37,37,48,53,33,46,51,16,27,34,25,36,42]},{"id":"590a3cd386f77436f20848cb","name":"Energy-saving lamp","hash":"8896e38ebc3a3264","colors":[28,40,46,18,29,36,54,61,66,38,48,54,19,28,33,63,74,76,123,157,164,41,54,60,63,76,79,127,158,149,29,50,55,18,28,35,56,76,82,43,69,74,18,25,31,25,37,43]},{"id":"590a3d9c86f774385926e510","name":"Ultraviolet lamp","hash":"92a3e69e9c9a3294","colors":[29,40,46,13,25,32,84,58,105,48,47,67,16,29,34,82,84,96,105,78,140,28,34,49,29,38,45,176,180,176,54,66,65,12,24,30,36,47,52,43,56,60,16,28,34,26,36,43]},{"id":"590a3efd86f77437d351a25b","name":"Gas analyzer","hash":"8ca0cccccccccc84","colors":[28,40,45,21,32,40,23,34,40,28,40,45,18,29,37,60,69,68,57,63,64,18,30,37,16,26,34,57,68,65,56,59,57,16,27,35,24,35,40,24,33,40,26,33,38,23,34,40]},{"id":"590c2b4386f77425357b6123","name":"Pliers","hash":"a4acca99931e3866","colors":[24,36,45,39,47,44,55,60,42,21,33,45,19,31,40,69,71,36,38,45,39,30,40,42,35,45,50,72,78,57,55,59,33,43,49,38,34,44,51,40,50,50,25,36,36,20,32,41]},{"id":"590c2c9c86f774245b1f03f2","name":"Construction measuring tape","hash":"261617635b56269a","colors":[74,90,96,126,146,116,106,119,112,29,39,47,83,99,89,126,137,57,123,135,100,51,61,70,72,86,90,70,79,83,87,102,105,41,54,58,55,70,76,67,84,89,65,81,86,25,35,40]},{"id":"590c2d8786f774245b1f03f3","name":"Screwdriver","hash":"9a96a4acda96b2a8","colors":[28,39,45,25,36,43,67,42,46,32,39,44,19,34,41,40,37,42,83,42,45,19,34,40,23,34,40,34,44,50,17,32,37,22,34,40,28,39,44,28,39,45,21,32,38,25,35,41]},{"id":"590c2e1186f77425357b6124","name":"Toolset","hash":"ae2fb21ecc343e36","colors":[37,50,56,56,53,57,63,36,39,35,40,45,31,40,46,53,54,53,61,39,36,35,35,41,36,45,46,58,65,53,21,28,32,21,32,37,44,56,56,74,87,79,23,36,51,24,34,40]},{"id":"590c311186f77424d1667482","name":"Wrench","hash":"a9a993a688122228","colors":[29,40,46,22,33,40,34,45,51,48,60,65,21,32,39,25,36,42,50,64,70,31,43,49,31,42,48,50,63,69,25,37,43,19,30,37,47,59,64,37,49,54,17,28,34,26,36,42]},{"id":"590c31c586f774245e3141b2","name":"Pack of nails","hash":"96a3ce8e3e3c3ab4","colors":[23,35,43,20,33,41,86,84,76,48,51,49,21,31,35,165,161,100,190,175,105,29,33,31,101,108,73,196,183,89,57,59,26,16,29,39,45,62,59,43,59,45,15,26,35,25,36,42]},{"id":"590c346786f77423e50ed342","name":"Xenomorph sealing foam","hash":"cccccccccccccccc","colors":[23,34,41,49,59,61,46,55,56,23,35,42,16,27,34,65,78,76,59,70,64,17,27,36,14,24,32,65,78,74,62,71,64,14,25,33,20,31,38,43,54,52,42,52,48,20,31,38]},{"id":"590c35a486f774273531c822","name":"Shustrilo sealing foam","hash":"8ccccccccccccccc","colors":[22,33,42,51,62,57,52,63,57,22,33,42,17,25,37,60,85,65,55,82,59,17,25,38,16,25,35,51,74,62,44,67,53,17,26,36,21,30,39,37,55,50,34,51,46,21,31,39]},{"id":"590c595c86f7747884343ad7","name":"Gas mask air filter","hash":"92e88e968e8ee082","colors":[27,38,44,25,34,44,25,35,44,27,38,44,26,39,40,84,106,79,77,97,71,22,34,38,24,35,40,55,87,58,45,71,48,21,31,38,24,34,41,19,29,37,20,30,38,24,35,41]},{"id":"590c5a7286f7747884343aea","name":"Gunpowder \"Kite\"","hash":"cccc968c8c8c8cac","colors":[25,35,39,39,57,73,40,57,72,25,35,39,23,33,38,37,55,65,37,49,56,23,32,38,20,28,33,38,71,84,31,53,62,20,28,33,23,33,39,33,47,52,29,40,45,23,33,39]},{"id":"590c5bbd86f774785762df04","name":"WD-40 (100ml)","hash":"cccccccccccccccc","colors":[19,36,43,73,53,52,69,51,51,19,36,43,15,27,36,81,87,79,80,85,75,15,27,37,15,24,31,63,85,94,62,81,86,15,25,31,22,31,34,34,53,80,34,51,78,22,31,34]},{"id":"590c5c9f86f77477c91c36e7","name":"WD-40 (400ml)","hash":"8ccccccccccccccc","colors":[19,34,41,66,61,59,67,62,60,19,33,41,15,26,33,68,82,83,67,80,82,15,26,33,18,28,28,42,60,95,39,55,87,19,29,29,21,31,32,38,55,81,36,51,74,21,31,33]},{"id":"590de71386f774347051a052","name":"Antique teapot","hash":"b28c8e8e8c8e8cc8","colors":[41,32,44,43,36,46,42,35,45,41,32,44,36,26,39,58,56,58,52,49,53,36,25,39,31,21,34,72,71,72,66,65,65,31,21,34,37,27,40,37,39,45,36,36,42,37,27,40]},{"id":"590de7e986f7741b096e5f32","name":"Antique vase","hash":"8acccc8e8ccccccc","colors":[35,27,41,68,57,60,66,56,59,36,27,41,33,24,38,84,71,68,78,65,62,32,24,38,35,24,38,50,50,49,46,44,44,34,24,38,32,23,37,61,55,56,56,50,53,32,23,38]},{"id":"59e3556c86f7741776641ac2","name":"Ox bleach","hash":"cacc8c9e8e868e8e","colors":[19,18,16,79,92,102,63,70,77,20,19,17,14,13,13,116,133,147,93,102,103,15,14,14,13,11,10,116,130,154,125,141,148,14,12,10,17,14,11,84,119,144,94,124,140,17,12,10]},{"id":"59e358a886f7741776641ac3","name":"Clin window cleaner","hash":"ceccaca6cece8e8e","colors":[20,15,15,104,98,105,92,109,114,18,15,14,18,15,15,51,60,62,99,129,133,17,13,13,12,9,7,91,113,120,113,152,163,14,11,10,14,14,15,119,137,133,113,129,119,14,14,15]},{"id":"59e3596386f774176c10a2a2","name":"PAID AntiRoach spray","hash":"8ccccccccccccccc","colors":[26,27,27,36,36,39,35,34,37,26,27,27,17,20,22,66,48,37,58,48,33,18,20,23,11,16,17,83,54,50,74,53,46,12,16,18,14,21,21,71,41,46,69,38,42,15,21,21]},{"id":"59e35abd86f7741778269d82","name":"Pack of sodium bicarbonate","hash":"b896868e868e8e96","colors":[27,29,29,47,34,31,62,47,43,29,29,30,23,21,18,127,100,75,131,109,94,27,21,18,19,15,10,154,125,100,154,140,131,22,14,10,21,21,22,95,60,49,101,71,57,24,21,21]},{"id":"59e35cbb86f7741778269d83","name":"Corrugated hose","hash":"a2e88e33338ee082","colors":[25,37,43,25,37,43,26,37,43,26,37,44,36,45,48,53,60,58,49,57,57,35,44,48,37,45,47,45,52,52,40,48,48,33,42,45,21,33,40,21,32,38,22,33,38,22,33,40]},{"id":"59e35de086f7741778269d84","name":"Electric drill","hash":"943430362a3a3224","colors":[37,67,90,42,69,90,33,39,42,29,40,46,31,65,92,36,58,73,21,29,34,25,37,43,35,63,85,32,62,85,18,27,31,23,35,41,50,60,64,39,59,74,18,29,35,25,36,42]},{"id":"59e35ef086f7741777737012","name":"Pack of screws","hash":"94a6cb9b0e3c9a94","colors":[24,35,41,21,33,40,78,87,68,32,43,44,26,36,41,121,130,141,160,174,163,69,77,58,81,90,95,188,198,199,93,107,119,21,32,38,31,43,49,50,66,71,14,26,30,23,33,39]},{"id":"59e3606886f77417674759a5","name":"Bottle of saline solution","hash":"e8cc8c8c8c8c8ccc","colors":[17,29,35,81,90,94,79,88,91,18,29,35,10,21,27,132,150,159,116,125,132,10,21,27,10,20,26,125,145,155,106,116,124,10,20,26,15,25,31,89,107,113,77,90,93,15,25,31]},{"id":"59e361e886f774176c10a2a5","name":"Bottle of hydrogen peroxide","hash":"b2cacacc8ccccccc","colors":[25,36,42,37,48,53,32,43,48,26,37,43,11,22,27,102,114,125,78,90,99,12,23,29,9,19,31,123,141,99,92,104,79,9,19,32,17,26,36,73,93,68,57,72,60,17,27,37]},{"id":"59e3639286f7741777737013","name":"Bronze lion figurine","hash":"b2cac8ce13139aa0","colors":[27,38,44,29,39,44,26,37,43,27,38,44,20,32,40,58,61,55,45,50,49,23,34,41,39,47,47,64,69,59,67,71,63,47,51,50,25,35,41,27,38,40,26,37,40,26,37,41]},{"id":"59e3647686f774176a362507","name":"Wooden clock","hash":"ae362b0b8e8e9e8e","colors":[54,60,55,84,79,60,68,67,56,34,44,47,67,69,58,124,123,95,117,115,86,47,53,50,24,32,38,114,114,90,115,111,87,22,31,37,22,33,39,120,98,73,98,81,62,17,29,37]},{"id":"59e3658a86f7741776641ac4","name":"Cat figurine","hash":"8ca88ccccacacccc","colors":[24,38,46,40,39,39,44,39,38,24,38,46,19,35,44,50,36,32,53,35,29,18,35,44,16,33,41,60,36,26,45,31,26,17,33,42,20,35,42,41,33,30,39,34,32,21,35,42]},{"id":"59e366c186f7741778269d85","name":"Piece of plexiglass","hash":"9c9f3333273606c6","colors":[32,43,49,85,96,106,63,74,82,37,48,54,50,61,69,108,117,129,111,120,131,68,76,83,72,82,92,108,118,131,100,109,119,37,46,51,32,42,49,54,65,73,66,75,83,25,35,40]},{"id":"59e36c6f86f774176c10a2a7","name":"Power cord","hash":"82c28ce6269c82a0","colors":[26,38,44,25,37,43,24,36,42,28,39,45,33,40,43,30,38,41,33,41,44,28,37,41,30,38,42,28,38,41,31,38,41,23,33,39,23,34,41,21,32,38,20,31,38,24,35,41]},{"id":"59f32bb586f774757e1e8442","name":"Dogtag BEAR","hash":"6eb416a3a3a3a193","colors":[36,45,50,31,40,46,16,27,33,22,34,40,25,35,41,38,48,53,139,144,146,56,66,71,18,30,36,31,41,47,220,220,220,144,148,150,26,37,43,14,26,32,88,93,96,96,102,104]},{"id":"59f32c3b86f77472a31742f0","name":"Dogtag USEC","hash":"8e34a36381a1a393","colors":[34,44,49,32,41,47,20,30,36,21,33,39,29,38,44,49,57,62,151,155,158,71,80,85,18,29,36,37,46,52,201,202,205,157,160,164,26,37,43,10,22,28,132,136,139,156,159,161]},{"id":"59faf7ca86f7740dbe19f6c2","name":"Roler Submariner gold wrist watch","hash":"b2cc9e36262c0c92","colors":[34,26,42,60,51,52,58,50,48,37,29,43,67,58,63,166,159,127,105,95,47,43,34,43,84,76,55,128,117,62,128,104,50,32,23,38,41,35,41,93,87,53,57,48,44,31,22,39]},{"id":"59faf98186f774067b6be103","name":"Alkaline cleaner for heat exchangers","hash":"b28e8e86968e8cb2","colors":[26,27,28,49,48,46,41,41,41,26,27,28,20,20,20,121,141,126,115,124,102,17,16,16,21,20,19,86,118,100,88,107,77,17,14,15,23,23,24,34,38,29,32,36,31,23,23,24]},{"id":"59fafb5d86f774067a6f2084","name":"Propane tank (5L)","hash":"8e8e8c8e0e0e8e8e","colors":[25,37,43,46,43,40,44,42,40,24,36,43,29,35,40,116,55,46,112,52,42,28,34,39,45,38,39,161,73,58,151,66,49,37,32,34,30,34,37,72,44,34,67,39,30,27,32,36]},{"id":"59faff1d86f7746c51718c9c","name":"Physical Bitcoin","hash":"8e1f332b2b331f8e","colors":[58,47,42,142,113,40,141,111,40,58,46,43,155,128,44,197,158,44,184,140,39,141,109,38,155,133,47,204,176,52,196,154,44,147,116,41,58,47,41,159,137,50,157,128,45,57,45,40]},{"id":"5af0484c86f7740f02001f7f","name":"Can of Majaica coffee beans","hash":"b28c8c8c8c8c8c8a","colors":[24,36,42,51,60,65,45,55,60,24,36,42,18,29,35,81,89,92,64,73,77,17,29,35,17,28,34,72,87,91,59,70,74,16,27,33,21,31,37,48,59,64,43,52,57,20,31,37]},{"id":"5af04b6486f774195a3ebb49","name":"Pliers Elite","hash":"92a7cb969c3a3668","colors":[28,39,46,23,36,43,70,48,51,53,45,48,16,30,37,60,41,45,85,50,51,37,38,43,51,60,63,112,87,85,34,30,35,18,33,40,77,84,85,57,66,69,13,26,33,26,36,42]},{"id":"5af0534a86f7743b6f354284","name":"Ophthalmoscope","hash":"ac8bb2cc9c326298","colors":[29,40,46,21,33,39,30,39,44,37,45,50,18,30,36,35,46,52,49,57,61,25,34,39,40,50,55,78,89,94,28,40,46,20,31,37,40,53,57,28,40,45,17,28,34,25,36,42]},{"id":"5af0561e86f7745f5f3ad6ac","name":"Portable Powerbank","hash":"b48b8b97262e2ec2","colors":[23,35,41,41,52,58,63,72,76,44,53,60,31,40,46,195,190,205,240,235,248,77,84,91,75,92,100,190,221,238,147,165,180,20,29,34,30,46,53,32,59,66,23,44,50,22,32,38]},{"id":"5b4335ba86f7744d2837a264","name":"Medical bloodset","hash":"a6a7cb979e3c1c8a","colors":[23,34,41,37,48,54,130,135,137,60,69,72,13,24,30,125,132,140,193,194,197,66,73,75,63,71,76,192,194,197,99,106,107,12,23,30,48,58,61,111,121,119,40,51,55,19,30,37]},{"id":"5b43575a86f77424f443fe62","name":"Fuel conditioner","hash":"b08e8e8696869ee0","colors":[25,36,42,52,62,68,54,60,66,26,37,43,19,30,35,82,100,99,86,102,108,20,30,36,20,31,34,79,98,75,75,96,91,18,28,33,23,34,40,36,49,44,33,45,42,23,34,40]},{"id":"5bc9b355d4351e6d1509862a","name":"#FireKlean gun lube","hash":"b28acacacacacaca","colors":[41,32,44,39,34,45,39,32,44,41,32,44,34,25,38,59,50,57,49,40,49,35,26,39,32,24,38,61,42,46,48,33,40,33,25,39,35,27,40,44,35,42,39,30,39,36,28,40]},{"id":"5bc9b720d4351e450201234b","name":"Golden 1GPhone smartphone","hash":"cec79b96163e0c8c","colors":[33,28,45,85,59,37,138,92,32,68,49,40,35,26,40,159,103,28,207,132,25,78,53,35,79,55,35,210,137,28,155,100,28,30,23,38,57,42,37,121,85,30,84,58,32,29,23,41]},{"id":"5bc9b9ecd4351e3bac122519","name":"Deadlyslob's beard oil","hash":"aa8aa8a8acccacb2","colors":[42,32,45,37,32,41,36,32,41,42,32,45,39,29,42,32,26,34,30,25,31,39,29,42,35,24,36,39,37,50,41,42,53,34,23,36,37,27,40,35,32,43,34,34,43,36,27,39]},{"id":"5bc9bc53d4351e00367fbcee","name":"Golden rooster figurine","hash":"e63632060c8e8eaa","colors":[54,41,42,64,47,35,91,64,35,49,37,44,79,58,32,121,85,23,129,86,30,49,35,38,41,31,37,90,63,26,75,52,29,32,24,40,39,28,37,57,37,29,62,41,29,41,30,36]},{"id":"5bc9bdb8d4351e003562b8a1","name":"Silver Badge","hash":"c88e2b4d4d71b3cc","colors":[41,33,45,61,57,66,58,53,63,40,31,43,72,69,76,96,99,102,95,98,101,61,58,65,74,72,79,75,77,81,75,76,79,66,63,69,40,33,44,54,52,60,53,51,59,42,35,46]},{"id":"5bc9be8fd4351e00334cae6e","name":"42 Signature Blend English Tea","hash":"8e0f3f2f2f2d0f86","colors":[57,38,46,127,55,57,130,60,62,59,39,47,77,75,83,132,127,131,98,79,76,52,44,45,72,68,77,118,134,143,76,79,74,46,37,37,48,35,43,71,54,59,62,49,51,43,32,39]},{"id":"5bc9c049d4351e44f824d360","name":"Battered antique book","hash":"b29c8e96968ea492","colors":[39,32,44,62,35,33,57,34,37,39,32,45,33,27,41,94,41,21,91,39,23,33,27,43,34,25,38,61,39,34,66,44,41,34,25,38,37,28,40,33,28,44,35,37,52,37,27,39]},{"id":"5bc9c377d4351e3bac12251b","name":"Old firesteel","hash":"cc8a6a604959928c","colors":[38,31,44,79,50,52,58,38,41,38,31,44,89,56,57,62,38,41,37,27,31,40,30,35,53,46,48,70,43,45,64,36,38,68,38,39,34,30,38,51,31,30,52,26,26,46,30,36]},{"id":"5c052e6986f7746b207bc3c9","name":"Portable defibrillator","hash":"c01e070517b88892","colors":[45,37,42,83,38,41,64,39,43,23,38,44,68,34,35,204,49,46,221,87,85,93,51,54,30,36,41,89,29,28,108,27,25,75,29,30,24,35,40,16,31,36,12,23,27,16,31,36]},{"id":"5c052f6886f7746b1e3db148","name":"Military COFDM Wireless Signal Transmitter","hash":"82b8c79f33528290","colors":[27,38,44,21,33,39,24,36,43,27,39,45,28,39,44,51,58,61,60,64,64,41,48,50,35,46,50,43,51,52,28,33,34,27,36,41,23,34,40,18,29,35,20,32,38,23,34,41]},{"id":"5c052fb986f7746b2101e909","name":"UHF RFID Reader","hash":"d2292b2b6b4b32e2","colors":[33,43,48,41,48,52,44,49,54,40,47,52,50,53,57,73,68,71,82,77,80,55,55,60,52,55,59,76,67,70,72,74,77,39,45,49,30,41,45,30,43,48,31,43,47,27,37,42]},{"id":"5c05300686f7746dce784e5d","name":"VPX Flash Storage Module","hash":"a29597962e0ec690","colors":[27,38,45,31,40,45,33,39,44,37,45,50,27,37,43,59,60,62,62,61,62,40,44,47,36,43,47,55,58,59,46,48,50,22,31,37,26,35,40,22,33,37,22,33,38,24,35,41]},{"id":"5c05308086f7746b2101e90b","name":"Virtex programmable processor","hash":"c093a72e06266698","colors":[29,39,45,39,51,45,45,56,47,36,46,46,30,43,42,65,87,52,70,90,53,33,45,42,40,56,47,75,96,62,71,85,58,23,33,38,36,45,47,36,48,50,33,43,46,24,34,40]},{"id":"5c0530ee86f774697952d952","name":"LEDX Skin Transilluminator","hash":"94aad2969c18d2a4","colors":[28,39,45,24,35,41,26,35,40,29,40,46,24,35,42,32,39,43,35,38,40,26,35,40,27,35,40,48,51,53,34,35,36,21,32,37,24,34,40,22,30,34,20,30,35,24,36,42]},{"id":"5c06779c86f77426e00dd782","name":"Bundle of wires","hash":"cc8e336373171c92","colors":[30,37,45,58,59,72,45,63,80,25,40,51,95,53,52,44,52,49,60,56,73,55,64,78,81,53,54,82,64,56,75,61,72,49,55,53,27,41,47,60,63,70,37,47,51,23,34,38]},{"id":"5c06782b86f77426df5407d2","name":"Capacitors","hash":"98a6db9b2565aad2","colors":[27,38,44,23,37,46,39,40,42,28,37,41,28,36,40,50,58,81,51,64,94,35,51,72,57,49,50,55,47,51,35,55,85,35,52,75,30,37,42,24,33,38,20,29,32,23,32,36]},{"id":"5c12620d86f7743f8b198b72","name":"Tetriz portable game console","hash":"8c9c948e8ecece86","colors":[28,38,45,93,107,99,64,77,74,22,32,40,16,26,35,155,169,154,127,140,130,11,21,30,4,16,24,150,155,149,182,184,173,9,20,28,15,26,33,74,85,87,103,112,112,20,30,37]},{"id":"5c1265fc86f7743f896a21c2","name":"Broken GPhone X smartphone","hash":"8ecf9b9e1e3e1c8c","colors":[25,37,43,31,38,41,44,47,49,32,41,45,26,37,43,97,99,101,65,64,65,29,36,40,40,48,52,121,121,122,60,62,64,18,29,35,29,38,43,56,62,64,36,43,47,22,33,39]},{"id":"5c1267ee86f77416ec610f72","name":"Chain with Prokill medallion","hash":"9a84d3985c5a34a2","colors":[40,31,44,38,28,41,43,38,47,44,39,48,40,31,44,48,42,51,43,39,47,44,40,48,86,84,91,104,106,110,43,36,46,37,30,40,56,52,61,57,52,62,34,25,38,37,28,41]},{"id":"5c12688486f77426843c7d32","name":"Paracord","hash":"b28279696189b682","colors":[34,24,18,29,20,15,25,16,13,30,20,16,91,85,57,99,81,45,93,74,41,76,68,45,55,54,36,60,51,28,76,69,39,72,71,48,28,18,13,25,15,11,23,14,10,27,18,13]},{"id":"5c13cd2486f774072c757944","name":"Soap","hash":"9a1c0617938fc7b6","colors":[76,76,76,126,126,126,63,64,64,17,18,18,135,146,140,255,255,255,226,222,222,43,42,42,19,24,23,183,199,195,248,255,255,135,143,140,19,18,18,35,50,49,69,102,101,40,51,50]},{"id":"5c13cef886f774072e618e82","name":"Toilet paper","hash":"8e961e1e1e9e87e6","colors":[40,41,42,159,161,161,151,153,153,33,33,33,52,58,60,182,225,236,128,157,165,25,24,24,42,45,46,194,232,241,121,148,155,20,19,18,17,18,18,102,100,100,165,165,165,36,37,37]},{"id":"5d0375ff86f774186372f685","name":"Military cable","hash":"828886a78e9ea082","colors":[41,32,45,38,28,42,38,28,42,41,32,45,38,30,40,39,37,39,46,42,44,40,32,41,35,28,37,40,40,41,41,39,39,35,29,36,37,28,41,34,24,38,34,24,37,37,28,41]},{"id":"5d0376a486f7747d8050965c","name":"Military circuit board","hash":"920b2f372f2b360e","colors":[43,37,46,80,84,83,92,98,96,50,47,53,49,44,52,118,122,116,117,122,115,49,45,51,55,50,57,128,132,127,111,116,110,44,40,46,52,48,55,90,95,91,80,85,80,42,37,45]},{"id":"5d03775b86f774203e7e0c4b","name":"Phased array element","hash":"e2a3230b1b3b113f","colors":[45,36,48,55,45,54,121,101,91,67,52,55,52,48,62,151,123,106,190,146,111,90,70,66,95,84,83,180,136,105,186,142,108,121,94,80,75,70,72,113,96,80,106,91,77,89,75,68]},{"id":"5d0377ce86f774186372f689","name":"Iridium military thermal vision module","hash":"98a62f3f2b0696c8","colors":[39,30,42,44,44,44,55,53,53,40,30,43,60,69,60,89,122,85,92,93,82,56,50,55,52,63,63,71,107,103,91,100,99,54,48,54,35,26,39,41,53,64,47,55,64,36,26,38]},{"id":"5d03784a86f774203e7e0c4d","name":"Military gyrotachometer","hash":"b2cccc8c8cccccb2","colors":[41,32,44,41,33,44,42,34,45,41,32,44,36,25,39,52,54,58,49,51,54,35,25,38,33,22,36,53,57,61,47,49,53,34,22,36,36,27,39,40,35,45,39,33,43,36,27,40]},{"id":"5d0378d486f77420421a5ff4","name":"Military power filter","hash":"c89e060b21219b82","colors":[44,36,47,75,70,77,65,59,67,36,28,40,70,73,77,135,136,134,146,145,147,66,58,67,49,47,54,74,87,87,107,120,120,90,94,97,35,25,38,39,39,48,42,56,63,40,41,50]},{"id":"5d03794386f77420415576f5","name":"6-STEN-140-M military battery","hash":"a2c223237c2a8282","colors":[42,33,45,41,31,44,41,31,44,42,33,45,47,44,46,54,53,53,53,52,53,47,43,47,35,35,39,28,34,35,26,31,31,32,30,36,37,28,41,36,27,39,36,26,39,37,28,41]},{"id":"5d0379a886f77420407aa271","name":"OFZ 30x165mm shell","hash":"acacacacacacacae","colors":[27,38,44,30,39,45,31,40,45,26,38,44,22,34,41,33,40,43,38,43,44,21,34,41,18,31,39,38,43,39,46,48,40,17,30,39,22,33,41,31,39,39,36,42,39,21,33,41]},{"id":"5d1b2f3f86f774252167a52c","name":"FP-100 filter absorber","hash":"a26d3f0f0f0d0f0e","colors":[49,51,53,60,57,53,59,58,53,51,52,53,60,68,68,142,159,145,127,135,123,58,56,56,59,73,72,199,235,216,141,149,135,52,43,42,44,55,56,135,158,144,115,129,117,41,46,47]},{"id":"5d1b2fa286f77425227d1674","name":"Electric motor","hash":"982e33969e9e8e8e","colors":[42,52,56,88,91,92,55,61,64,27,38,45,41,52,57,81,96,99,80,86,85,37,44,47,19,30,36,37,48,53,36,47,50,23,32,37,24,33,39,40,48,52,38,49,52,24,34,39]},{"id":"5d1b2ffd86f77425243e8d17","name":"NIXXOR lens","hash":"8c8e0b07474b9e86","colors":[27,38,44,78,82,83,83,86,86,33,43,48,47,48,45,107,102,94,141,138,132,59,63,63,49,49,46,63,69,65,73,87,87,40,48,50,26,36,42,39,56,60,32,51,55,24,35,40]},{"id":"5d1b304286f774253763a528","name":"Working LCD","hash":"f29c9c9494de86b0","colors":[27,38,45,37,47,52,31,42,48,27,38,44,24,36,43,43,49,50,31,36,38,23,35,42,21,33,39,35,42,46,32,37,39,22,33,40,23,34,41,24,35,41,25,36,42,24,35,41]},{"id":"5d1b309586f77425227d1676","name":"Broken LCD","hash":"b28c8c8496d686a0","colors":[27,38,44,38,47,52,32,42,48,26,38,44,22,33,40,55,60,60,46,52,55,21,33,39,20,32,39,38,45,47,46,51,53,21,33,39,24,35,41,23,33,39,24,34,40,24,35,41]},{"id":"5d1b313086f77425227d1678","name":"Phase control relay","hash":"b4c686969686c6b8","colors":[25,36,43,27,37,43,72,81,84,34,44,50,25,37,42,121,131,132,137,145,146,25,35,42,24,35,41,117,129,131,137,146,147,26,37,42,22,33,39,21,32,38,61,70,74,31,42,47]},{"id":"5d1b317c86f7742523398392","name":"Hand drill","hash":"aa92928ccf8ab284","colors":[42,33,45,43,32,43,38,27,41,41,33,45,39,31,41,51,44,45,42,36,44,39,30,42,37,30,38,41,42,44,55,58,49,44,37,43,37,28,41,33,22,37,36,25,37,39,30,41]},{"id":"5d1b31ce86f7742523398394","name":"Round pliers","hash":"8b95a9ca9c3a66c8","colors":[29,39,45,21,36,43,43,40,44,52,43,46,18,32,39,42,37,42,72,44,45,39,38,42,38,49,54,86,75,75,34,32,36,19,33,40,48,56,59,33,45,50,16,30,36,25,36,42]},{"id":"5d1b327086f7742525194449","name":"Pressure gauge","hash":"82b0c687b6b6c892","colors":[41,33,45,37,28,41,34,23,36,40,31,43,35,26,38,63,54,58,123,120,117,49,42,53,38,31,42,41,40,45,65,70,78,43,36,48,37,28,41,33,24,37,29,18,31,36,27,39]},{"id":"5d1b32c186f774252167a530","name":"Analog thermometer","hash":"ec8e86aca4a4a482","colors":[35,27,39,73,69,75,100,95,100,35,27,39,32,22,35,72,74,80,109,108,112,32,21,34,37,27,39,33,23,36,36,28,40,36,26,38,37,28,41,37,28,40,39,32,43,37,28,40]},{"id":"5d1b36a186f7742523398433","name":"Metal fuel tank","hash":"a88a9e96b6969696","colors":[48,50,33,84,90,85,69,73,66,48,49,34,54,52,38,109,114,115,91,101,103,51,52,39,51,49,34,82,83,80,75,81,80,48,47,34,45,47,32,60,63,56,61,58,52,45,45,31]},{"id":"5d1b371186f774253763a656","name":"Expeditionary fuel tank","hash":"9a33633333572323","colors":[60,67,79,70,81,116,67,78,111,60,67,81,69,88,143,75,98,173,67,89,153,61,75,113,69,89,144,78,99,168,77,95,156,66,77,111,52,67,93,64,83,135,68,86,138,56,65,83]},{"id":"5d1b385e86f774252167b98a","name":"Water filter","hash":"96968c8c8c8c8c8c","colors":[27,39,45,44,48,48,38,40,43,26,38,45,19,28,32,68,101,119,60,88,104,19,27,31,15,19,22,80,144,179,73,129,158,14,19,21,20,27,31,51,91,112,47,82,100,20,27,31]},{"id":"5d1b392c86f77425243e98fe","name":"Light bulb","hash":"c683958d3a3e742a","colors":[27,38,43,40,48,57,61,67,79,42,50,57,21,31,37,71,79,92,72,77,87,48,51,55,75,82,86,91,95,100,24,31,34,21,29,33,58,70,74,38,49,53,17,27,33,25,36,42]},{"id":"5d1b39a386f774252339976f","name":"Silicone tube","hash":"d01e2361793987f8","colors":[34,44,49,93,104,108,77,88,93,21,32,38,159,163,164,122,135,139,135,156,161,129,138,142,122,133,137,103,120,125,60,75,80,144,152,155,18,30,36,51,68,73,48,64,69,26,38,44]},{"id":"5d1b3a5d86f774252167ba22","name":"Pile of meds","hash":"ce57731b5a1f9dcc","colors":[65,80,89,85,100,103,116,121,118,48,62,67,119,141,133,139,162,156,112,134,158,79,91,88,83,99,77,139,162,154,74,96,117,36,42,40,16,25,34,98,115,121,59,76,79,19,28,32]},{"id":"5d1b3f2d86f774253763b735","name":"Disposable syringe","hash":"92a3cb9f3e7832a4","colors":[28,39,46,14,25,32,115,124,127,65,75,80,11,22,29,114,122,126,215,223,224,78,87,91,99,108,111,200,213,215,69,79,84,10,21,27,64,74,79,81,91,95,9,20,26,27,38,44]},{"id":"5d1c774f86f7746d6620f8db","name":"Radiator helix","hash":"f0861b3db19bc6b0","colors":[26,38,44,36,45,49,39,47,51,26,37,43,52,56,56,81,81,77,58,63,62,57,61,62,34,42,45,56,60,58,45,51,51,54,57,57,21,32,39,27,38,43,36,45,48,22,33,39]},{"id":"5d1c819a86f774771b0acd6c","name":"Weapon parts","hash":"82b2c8171784b284","colors":[27,38,44,22,34,41,22,34,40,27,38,44,29,39,44,40,47,50,47,52,53,35,42,46,28,38,42,45,51,52,50,55,56,31,40,44,23,34,40,18,30,36,17,29,36,22,33,40]},{"id":"5d235a5986f77443f6329bc6","name":"Gold skull ring","hash":"988e0f0f1e9e9c9a","colors":[45,33,42,151,129,74,115,98,63,41,30,42,65,50,42,193,158,76,178,144,64,59,43,35,47,37,41,150,126,64,99,85,47,34,27,37,34,26,40,90,77,52,56,43,41,32,24,40]},{"id":"5d40412b86f7743cb332ac3a","name":"Schaman shampoo","hash":"cccccc8e8e9e8ccc","colors":[29,18,31,20,83,16,20,79,16,29,18,31,19,10,24,66,148,22,62,142,20,19,9,24,16,15,20,87,120,46,70,122,30,16,14,20,20,12,24,54,121,23,50,107,22,20,12,24]},{"id":"5d40419286f774318526545f","name":"Metal cutting scissors","hash":"a6a6a48ccada9294","colors":[27,38,45,27,38,45,44,53,58,28,38,44,22,33,39,30,42,49,45,55,60,22,33,39,16,28,35,72,78,80,37,47,51,18,30,36,25,36,42,64,70,73,22,33,38,24,35,41]},{"id":"5d4041f086f7743cac3f22a7","name":"Ortodontox toothpaste","hash":"aa93a7ce9c3a366a","colors":[32,32,33,9,15,15,103,70,69,78,48,48,9,6,5,76,82,85,183,165,173,57,26,26,76,80,81,174,189,200,33,45,49,12,16,15,96,113,117,63,77,79,10,7,6,28,28,29]},{"id":"5d40425986f7743185265461","name":"Nippers","hash":"8c92a2ce9c3a6248","colors":[28,39,45,25,36,43,29,38,44,30,40,45,22,33,39,24,34,40,32,40,43,26,37,42,36,46,50,40,48,50,20,31,36,22,34,40,51,62,65,32,43,48,19,30,37,25,35,41]},{"id":"5d4042a986f7743185265463","name":"Flat screwdriver (Long)","hash":"9296a4ac8ada92b4","colors":[28,39,45,25,36,43,32,42,47,28,39,45,23,35,41,26,37,43,35,44,49,23,34,41,21,33,40,27,36,41,23,33,39,22,33,40,25,35,41,29,36,41,21,32,38,24,35,41]},{"id":"5d63d33b86f7746ea9275524","name":"Flat screwdriver","hash":"9b93a6aec89ab628","colors":[29,40,46,21,33,40,54,59,60,44,51,53,22,34,40,28,38,43,65,67,67,29,38,43,21,32,38,62,68,70,27,37,42,19,31,37,39,48,53,49,57,60,16,28,35,26,36,42]},{"id":"5d6fc78386f77449d825f9dc","name":"Gunpowder \"Eagle\"","hash":"cccc969c8c8c8c8c","colors":[23,27,17,40,60,38,41,61,38,23,28,17,20,26,13,46,63,54,38,49,42,20,26,13,17,22,10,51,75,57,36,51,40,17,22,10,20,27,14,33,48,39,29,40,32,20,27,14]},{"id":"5d6fc87386f77449db3db94e","name":"Gunpowder \"Hawk\"","hash":"cccc968c8ccc8c8c","colors":[44,28,25,78,44,39,78,44,39,44,28,25,46,25,21,57,45,45,50,41,41,46,25,21,44,23,20,56,40,41,44,33,34,43,23,19,46,25,21,41,39,39,39,35,34,46,25,21]},{"id":"5df8a6a186f77412640e2e80","name":"Christmas tree ornament (Red)","hash":"aacc8e0b2b0a8a9e","colors":[42,27,23,81,47,45,80,46,44,42,27,23,76,35,35,202,93,110,206,97,111,76,37,37,81,37,42,126,54,70,116,46,56,69,29,32,44,24,22,77,51,54,63,37,41,42,23,21]},{"id":"5df8a72c86f77412640e2e83","name":"Christmas tree ornament (Silver)","hash":"aacc8f2b2f2b8e8e","colors":[17,17,17,71,72,72,70,71,71,18,18,18,66,67,69,220,223,227,224,227,227,63,63,64,75,89,92,142,176,184,131,157,158,59,65,66,23,26,27,72,109,118,60,92,102,21,23,24]},{"id":"5df8a77486f77412672a1e3f","name":"Christmas tree ornament (Violet)","hash":"a8ce170f070f0a8e","colors":[34,28,34,75,57,87,74,56,85,35,28,35,57,38,77,170,121,229,176,127,233,59,39,77,56,38,100,113,99,196,105,90,173,47,29,77,35,27,45,51,48,132,43,38,116,34,27,43]},{"id":"5e2aedd986f7746d404f3aa4","name":"GreenBat lithium battery","hash":"aa93e78e1c3a36a8","colors":[41,35,46,38,15,35,39,76,61,38,75,60,38,19,37,43,83,67,29,149,86,27,58,47,49,81,65,97,160,121,25,37,39,37,18,36,37,52,53,35,41,44,37,20,37,37,31,42]},{"id":"5e2aee0a86f774755a234b62","name":"Cyclon rechargeable battery","hash":"82e0961717e48aa4","colors":[40,31,43,30,21,34,30,21,34,40,31,43,51,44,53,115,115,112,116,116,114,52,45,54,41,34,44,63,64,67,63,64,67,41,33,44,36,27,39,27,17,31,27,17,31,36,27,39]},{"id":"5e2aef7986f7746d3f3c33f5","name":"Repellent","hash":"cccccccccccccccc","colors":[22,19,22,54,71,59,53,69,57,22,19,23,18,13,19,56,84,53,55,79,50,18,13,19,18,14,19,44,68,44,44,65,42,18,14,19,19,18,22,44,54,39,46,54,37,19,18,22]},{"id":"5e2af00086f7746d3f3c33f7","name":"Smoked Chimney drain cleaner","hash":"cacccccccccc8c8e","colors":[22,25,25,53,44,45,50,42,43,23,25,26,16,17,18,67,61,60,66,62,61,16,18,18,11,13,14,100,92,87,66,62,58,13,14,15,22,22,22,46,50,52,33,35,36,22,22,22]},{"id":"5e2af02c86f7746d420957d4","name":"Pack of chlorine","hash":"9284735b2331cea2","colors":[27,27,27,23,20,16,21,19,17,24,25,26,87,92,97,91,126,169,117,141,170,101,99,97,72,77,80,71,103,132,86,111,132,92,93,92,21,22,22,18,15,10,15,13,10,18,20,20]},{"id":"5e2af22086f7746d3f3c33fa","name":"Tube of Poxeram cold welding","hash":"a896a3c79c3236c8","colors":[31,41,46,16,31,37,50,61,66,40,49,55,12,30,37,51,47,53,184,154,154,57,68,73,49,44,48,146,97,98,41,42,47,14,28,34,74,40,42,39,40,45,11,28,35,27,37,43]},{"id":"5e2af29386f7746d4159f077","name":"KEKTAPE duct tape","hash":"a4c68b961c189ad2","colors":[41,31,45,42,34,42,50,46,46,42,35,45,35,29,39,45,43,40,52,49,41,33,29,32,53,57,54,148,162,131,42,43,38,25,18,29,44,37,46,103,109,95,43,40,45,35,25,39]},{"id":"5e2af2bc86f7746d3f3c33fc","name":"Hunting matches","hash":"acc68713070e8cca","colors":[17,29,36,43,53,58,75,83,86,18,29,36,43,52,58,139,145,145,178,189,187,77,87,91,60,66,72,164,169,172,145,158,159,45,55,61,14,25,31,61,68,75,43,53,58,13,24,30]},{"id":"5e2af37686f774755a234b65","name":"SurvL Survivor Lighter","hash":"3234064ecc8c8ada","colors":[85,61,51,110,76,53,68,53,56,40,31,43,40,36,39,138,82,44,173,100,58,26,24,41,21,19,38,133,68,42,101,54,38,23,24,40,38,28,40,41,35,35,36,28,36,36,28,40]},{"id":"5e2af41e86f774755a234b67","name":"Cordura polyamide fabric","hash":"82803a1703b8d282","colors":[27,38,44,21,33,39,20,32,39,25,37,43,56,57,58,83,81,80,83,81,80,45,50,54,34,41,44,57,59,58,60,61,60,49,52,52,22,34,40,17,28,35,15,27,33,20,32,38]},{"id":"5e2af47786f7746d404f3aaa","name":"Fleece fabric","hash":"a28036070196e282","colors":[25,36,44,18,29,39,16,28,38,23,34,43,67,75,58,103,107,75,102,106,75,46,55,51,37,47,44,69,77,56,83,90,62,64,71,53,21,32,40,15,26,35,12,24,34,18,30,38]},{"id":"5e2af4a786f7746d3f3c3400","name":"Ripstop fabric","hash":"968036078391a282","colors":[27,38,44,22,33,39,21,32,38,26,37,43,43,52,58,71,77,83,67,72,78,31,41,47,27,37,43,50,58,64,59,65,71,41,49,55,23,34,40,18,29,35,16,27,33,22,33,39]},{"id":"5e2af4d286f7746d4159f07a","name":"Aramid fiber fabric","hash":"96c036170391ea92","colors":[27,38,45,16,29,39,13,27,38,22,34,43,90,87,61,182,160,94,166,145,87,47,53,48,36,44,42,114,105,63,143,125,69,86,81,53,21,32,40,9,23,34,7,21,32,18,30,38]},{"id":"5e2af51086f7746d3f3c3402","name":"UZRGM grenade fuze","hash":"8cd9cb831266e4ac","colors":[27,38,44,32,40,44,44,49,47,49,55,55,25,36,43,29,37,37,80,84,77,68,74,74,34,40,40,37,45,40,101,110,108,29,41,47,29,35,37,27,40,46,58,75,77,19,29,35]},{"id":"5e54f62086f774219b0f1937","name":"Raven figurine","hash":"92a8b8f2ac8c94a0","colors":[41,33,45,40,31,43,38,30,41,41,33,45,39,29,42,27,23,30,29,23,32,40,29,43,35,26,40,38,29,32,43,31,33,35,26,40,37,28,41,35,28,36,35,28,34,37,28,41]},{"id":"5e54f6af86f7742199090bf3","name":"Can of Dr. Lupo's coffee beans","hash":"e88e8e8a8e8e94c8","colors":[41,34,45,104,92,71,101,90,71,41,33,45,38,31,42,89,84,68,85,81,65,37,31,42,32,24,34,49,41,50,48,39,52,33,24,36,35,27,39,40,33,33,38,31,31,35,27,39]},{"id":"5f745ee30acaeb0d490d8c5b","name":"Veritas guitar pick","hash":"cc0f2b2b3396ccaa","colors":[56,47,48,134,124,68,135,124,64,58,50,49,124,114,65,247,188,67,247,191,68,126,117,66,52,48,49,210,181,78,208,181,81,51,46,49,25,16,36,81,78,59,78,74,57,25,16,36]},{"id":"60391a8b3364dc22b04d0ce5","name":"Can of thermite","hash":"8c8e0e36260e8e8c","colors":[28,39,46,60,63,72,59,62,69,29,39,45,42,50,44,113,117,82,106,107,75,33,40,42,43,52,33,140,144,15,126,124,15,30,37,37,26,37,43,57,72,64,52,65,59,25,35,41]},{"id":"60391afc25aff57af81f7085","name":"Ratchet wrench","hash":"a4acac8acadada94","colors":[25,37,43,35,44,49,50,56,58,24,36,42,21,33,40,35,43,47,41,47,50,21,33,40,20,31,38,41,46,49,27,36,41,21,32,39,23,34,40,37,44,47,23,34,39,24,35,41]},{"id":"60391b0fb847c71012789415","name":"TP-200 TNT brick","hash":"a2842b2b3733c282","colors":[25,38,45,20,33,41,21,34,41,25,37,44,95,78,53,165,122,68,167,124,69,107,87,58,70,65,45,135,105,59,135,102,57,93,76,51,19,32,40,11,27,35,10,26,35,17,31,39]},{"id":"60b0f561c4449e4cb624c1d7","name":"LVNDMARK's rat poison","hash":"c896cc8c8c9ecccc","colors":[38,29,42,64,61,66,64,59,65,38,29,42,33,21,34,72,86,95,71,81,88,33,21,34,35,23,36,47,62,70,41,50,56,36,23,36,35,22,34,54,73,84,49,64,73,35,22,34]},{"id":"60b0f7057897d47c5b04ab94","name":"Loot Lord plushie","hash":"968e8e8e2b4c96b2","colors":[31,22,41,109,106,67,108,104,63,31,22,41,34,22,36,104,124,110,100,119,103,35,24,37,43,36,47,50,73,61,48,71,58,44,38,48,36,30,42,35,42,44,35,42,43,35,30,41]},{"id":"619cbf476b8a1b37a54eebf8","name":"Military corrugated tube","hash":"b0c63371298eccda","colors":[38,29,42,44,36,46,47,39,49,40,31,43,62,57,61,55,53,55,52,51,54,62,58,61,46,44,49,62,64,64,65,67,67,44,43,47,31,21,35,50,50,55,46,46,51,32,23,36]},{"id":"619cbfccbedcde2f5b3f7bdd","name":"Pipe grip wrench","hash":"8e8eacac8a8acaca","colors":[40,31,44,44,38,47,48,45,51,40,31,43,32,27,41,61,33,43,68,36,45,31,27,40,29,26,39,67,30,40,62,29,40,30,26,39,32,28,40,59,30,40,48,28,39,34,28,41]},{"id":"619cbfeb6b8a1b37a54eebfa","name":"Bulbex cable cutter","hash":"aa8ec6cccccc8c8e","colors":[40,32,45,44,31,43,51,33,44,41,33,45,35,28,40,52,32,45,59,34,45,35,28,40,35,25,39,45,35,43,44,33,43,35,25,39,37,28,40,42,39,44,40,36,43,36,27,40]},{"id":"619cc01e0a7c3a1a2731940c","name":"Medical tools","hash":"92ec2e87f192aa8a","colors":[31,41,47,30,39,45,27,37,42,26,37,44,33,41,46,41,46,50,43,48,51,29,39,44,24,34,40,20,29,33,34,41,45,32,41,46,24,35,41,21,32,38,25,36,42,26,37,43]},{"id":"61bf7b6302b3924be92fa8c3","name":"Metal spare parts","hash":"a6da9e16078b8a94","colors":[21,34,42,41,50,51,26,38,44,25,37,44,54,54,49,121,109,85,77,69,57,25,35,40,33,41,42,80,68,55,115,94,71,59,55,50,20,32,40,22,32,37,28,35,38,28,37,42]},{"id":"61bf83814088ec1a363d7097","name":"Sewing kit","hash":"900a4b536b2327c2","colors":[32,42,50,31,41,50,31,41,50,29,39,46,57,65,82,60,65,97,57,61,96,35,44,62,47,57,68,59,64,93,68,71,95,47,53,71,26,38,44,29,40,49,33,43,51,28,38,46]},{"id":"62a08f4c4f842e1bd12d9d62","name":"BEAR Buddy plush toy","hash":"8e9e8e694d2b232a","colors":[37,29,42,94,85,82,90,80,77,36,28,41,42,31,40,60,63,59,56,59,55,41,31,40,65,62,63,61,61,49,64,64,52,64,59,61,59,59,64,46,50,49,47,50,50,56,55,59]},{"id":"62a091170b9d3c46de5b6cf2","name":"Axel parrot figurine","hash":"8adacc8c8c8ed694","colors":[38,29,43,59,55,50,46,39,45,39,30,44,35,24,41,58,68,40,50,52,37,36,24,41,35,23,39,44,65,36,42,57,31,35,22,39,37,28,41,36,32,34,35,34,34,37,28,41]},{"id":"62a09cb7a04c0c5c6e0a84f8","name":"Press pass (issued for NoiceGuy)","hash":"8496a2a6cccccc8a","colors":[41,33,45,43,31,42,49,31,39,41,32,45,39,30,42,35,20,31,52,25,33,41,30,42,27,17,33,88,80,73,83,71,64,27,18,34,29,19,34,89,86,81,68,64,67,30,20,34]},{"id":"62a09cfe4f842e1bd12da3e4","name":"Golden egg","hash":"cc8e8e0f0f0e8e8e","colors":[31,21,44,151,138,40,152,138,39,31,22,44,58,43,35,235,201,49,240,203,47,55,41,34,61,52,33,167,151,21,155,134,17,50,40,29,35,28,38,64,79,21,59,71,18,34,26,37]},{"id":"62a09ee4cf4a99369e262453","name":"Can of white salt","hash":"b28c8c8c8c8c8c8e","colors":[25,24,24,46,61,65,46,58,62,25,24,24,20,17,15,66,85,99,59,75,86,19,17,15,14,18,18,82,63,67,72,55,58,14,18,18,19,20,20,55,60,65,50,54,58,19,20,20]},{"id":"62a0a043cf4a99369e2624a5","name":"Bottle of OLOLO Multivitamins","hash":"cc8e9e9e8e8e8e8e","colors":[18,29,35,105,115,114,102,111,111,18,29,36,18,31,37,139,148,152,128,130,119,15,27,33,19,29,38,119,135,129,101,119,116,16,26,33,19,29,36,95,118,114,83,105,105,19,28,34]},{"id":"62a0a098de7ac8199358053b","name":"Awl","hash":"a99386a49ab66ad0","colors":[29,39,45,20,34,43,55,51,42,63,56,41,24,36,42,23,34,40,59,53,38,33,39,37,24,34,40,24,32,37,17,29,37,20,33,41,27,36,41,22,33,38,22,33,39,24,35,41]},{"id":"62a0a0bb621468534a797ad5","name":"Set of files \"Master\"","hash":"46172b7b3b2b119b","colors":[97,84,109,120,119,152,117,115,146,46,48,59,93,79,102,95,106,145,97,99,135,72,55,70,74,59,72,142,121,146,139,123,154,99,81,103,50,47,58,128,108,131,128,113,138,106,84,103]},{"id":"6389c6463485cf0eeb260715","name":"Pack of Arseniy buckwheat","hash":"9c8e8e8e9c9e9696","colors":[46,47,54,139,142,71,136,138,81,45,45,53,40,44,48,186,168,83,182,154,91,37,41,47,45,50,51,122,102,72,104,75,59,46,50,50,47,51,53,90,77,53,87,82,41,50,52,52]},{"id":"6389c6c7dbfd5e4b95197e68","name":"Aquapeps water purification tablets","hash":"b28c8c8c8c8c8c8c","colors":[24,35,42,54,62,67,49,58,62,24,35,42,17,27,33,90,107,112,73,86,90,16,26,33,17,27,32,66,91,101,57,75,83,17,26,31,20,30,36,50,66,73,47,60,66,20,30,36]},{"id":"6389c70ca33d8c4cdf4932c6","name":"Electronic components","hash":"a687373f5d2e9aa2","colors":[27,38,44,27,36,41,55,64,66,40,49,55,40,48,53,73,83,86,70,79,77,41,51,52,50,55,60,74,82,86,51,57,56,26,40,39,27,39,45,25,35,39,20,31,36,23,33,41]},{"id":"6389c7750ef44505c87f5996","name":"Microcontroller board","hash":"921c0c16a7878382","colors":[46,39,49,67,64,71,40,34,45,39,31,44,52,46,52,100,99,95,85,75,76,39,25,39,37,27,38,53,54,54,68,67,66,42,34,42,36,27,40,37,35,41,38,43,45,37,36,43]},{"id":"6389c7f115805221fb410466","name":"Far-forward GPS Signal Amplifier Unit","hash":"c83323232727a684","colors":[51,44,54,65,60,67,65,60,67,52,45,55,71,69,73,113,116,115,123,124,124,77,77,79,38,46,51,40,58,61,66,74,75,40,46,50,35,29,40,31,28,38,35,34,37,34,28,39]},{"id":"6389c85357baa773a825b356","name":"Advanced current converter","hash":"2c0e0743391999cb","colors":[90,80,76,184,168,140,125,108,97,28,21,36,107,97,81,198,177,143,241,216,174,105,93,85,73,62,59,110,102,83,72,79,68,75,79,70,34,25,38,62,56,56,43,50,49,41,42,46]},{"id":"63a0b208f444d32d6f03ea1e","name":"Fierce Blow sledgehammer","hash":"ccdab2b2b28a8a8a","colors":[41,32,44,39,36,44,36,32,40,42,32,45,40,30,43,30,23,34,30,23,33,40,30,43,37,27,41,33,25,33,33,25,33,37,27,41,36,28,42,38,29,35,37,29,36,36,28,42]},{"id":"655c652d60d0ac437100fed7","name":"BEAR operative figurine","hash":"b2cacc8ccccc96a2","colors":[40,32,44,43,35,47,42,34,45,40,32,44,34,24,38,64,62,62,52,47,52,35,24,39,36,25,39,39,40,41,36,34,37,36,25,39,37,29,41,32,25,35,33,25,36,37,29,41]},{"id":"655c663a6689c676ce57af85","name":"USEC operative figurine","hash":"b2cc8e8ccc9294a8","colors":[38,30,42,57,50,57,58,50,57,38,29,42,31,22,37,84,80,72,82,76,67,31,22,37,36,25,39,35,35,37,33,32,35,36,25,40,37,29,41,33,27,37,33,27,37,37,28,41]},{"id":"655c669103999d3c810c025b","name":"Cultist figurine","hash":"a8cc96c89a9696a8","colors":[37,29,41,75,65,69,76,66,69,37,29,41,35,25,38,70,68,65,66,62,59,35,25,38,38,27,40,34,36,37,25,26,32,37,27,40,37,28,41,34,30,37,34,31,38,37,28,40]},{"id":"655c66e40b2de553b618d4b8","name":"Politician Mutkevich figurine","hash":"b2cc8c8cccd49680","colors":[40,32,44,47,37,45,45,35,45,40,32,44,33,23,38,85,77,66,72,63,57,32,23,38,36,25,39,39,39,37,39,38,35,36,25,39,37,29,41,33,27,36,33,27,36,37,28,41]},{"id":"655c673673a43e23e857aebd","name":"Scav figurine","hash":"dad8ce8ecce89696","colors":[38,29,42,57,51,57,47,40,46,39,30,43,31,23,36,85,76,71,88,77,70,32,23,37,36,25,39,41,37,42,37,34,40,36,25,39,37,28,40,38,34,42,37,33,42,37,28,40]},{"id":"655c67782a1356436041c9c5","name":"Ryzhy figurine","hash":"b28cccc88ccc94a0","colors":[41,32,44,41,33,44,41,32,43,41,32,45,37,27,41,36,35,37,35,31,35,38,28,41,36,25,39,38,37,37,39,36,37,36,25,39,37,28,41,37,31,39,37,31,38,37,28,41]},{"id":"655c67ab0d37ca5135388f4b","name":"Ded Moroz figurine","hash":"a4ce9e8c8e9e94aa","colors":[33,30,43,91,49,59,116,60,68,35,32,45,30,22,35,131,124,128,121,109,114,31,23,36,34,22,35,71,86,87,63,71,81,33,20,34,37,29,41,36,30,35,34,27,33,37,28,41]},{"id":"6638a5474e92f038531e210e","name":"Mr Kerman's cat hologram","hash":"b28e8e96968e86e0","colors":[40,32,44,44,36,47,44,36,47,40,32,44,36,25,38,53,62,69,52,60,67,36,25,38,34,24,36,55,64,69,54,62,67,34,23,36,37,28,40,41,36,44,41,35,43,36,27,40]},{"id":"6656560053eaaa7a23349c86","name":"Lega Medal","hash":"cc971b2b252b8ec8","colors":[48,49,31,72,67,69,76,69,75,52,52,37,75,67,75,111,94,126,105,89,118,78,70,79,75,63,77,93,74,109,99,82,118,63,58,59,45,44,29,68,57,71,61,55,60,42,43,25]},{"id":"66571bf06a723f7f005a0619","name":"Locked equipment crate (Rare)","hash":"9251216959564d82","colors":[65,75,79,73,86,89,73,85,89,63,74,78,142,156,155,161,194,193,162,192,192,146,160,158,76,89,91,89,104,105,83,96,98,73,82,83,24,38,43,24,37,42,23,36,41,22,35,40]},{"id":"66572b3f6a723f7f005a066c","name":"Locked weapon crate (Rare)","hash":"80aa8e796914a282","colors":[26,35,40,24,34,40,24,35,41,26,35,40,40,59,69,41,55,60,40,53,58,39,58,68,34,62,76,36,55,62,34,51,57,33,60,73,23,31,35,20,30,36,20,30,36,23,31,35]},{"id":"66572b88ac60f009f270d1dc","name":"Locked supply crate (Rare)","hash":"b20f0fe8292b2f96","colors":[51,54,58,62,81,86,63,84,89,49,53,57,52,56,59,58,71,75,56,69,72,50,53,56,27,48,57,36,67,78,23,43,50,20,36,42,32,47,53,39,61,68,30,46,52,26,37,42]},{"id":"66572b8d80b1cd4b6a67847f","name":"Den figurine","hash":"b2ccccccc88c96a0","colors":[40,31,44,43,36,47,43,37,47,40,31,44,32,23,37,67,63,61,69,64,62,32,23,37,36,26,39,36,32,35,35,31,35,36,26,40,37,29,41,33,28,36,33,27,36,37,28,41]},{"id":"66572bb3ac60f009f270d1df","name":"Locked valuables crate (Rare)","hash":"a08e330f2f2b07e0","colors":[29,40,46,35,41,46,35,41,46,29,40,46,66,76,82,141,163,168,135,161,165,65,74,78,63,74,79,121,155,162,120,158,165,63,71,75,30,42,48,45,55,60,47,55,59,30,42,47]},{"id":"66572be36a723f7f005a066e","name":"Reshala figurine","hash":"b2ce8e8eec9496a8","colors":[38,30,43,58,47,53,59,46,53,39,30,43,30,21,36,97,82,71,102,84,71,30,21,36,35,25,39,42,38,41,44,41,42,34,24,38,37,28,41,37,31,41,36,31,41,37,28,40]},{"id":"66572c82ad599021091c6118","name":"Killa figurine","hash":"a28acccedc9aa294","colors":[41,32,44,41,32,44,40,30,43,41,33,44,36,25,39,45,45,50,47,45,51,36,26,39,36,26,39,38,35,38,37,31,39,36,26,39,37,28,41,34,25,38,34,25,38,37,29,41]},{"id":"66572cbdad599021091c611a","name":"Tagilla figurine","hash":"82baac8c8c868aa0","colors":[41,33,45,39,30,42,39,31,42,41,33,45,35,25,38,50,44,51,66,65,68,34,23,37,35,25,38,42,35,40,52,43,47,34,25,38,37,29,41,34,25,37,32,25,36,37,29,41]},{"id":"6658285190486915542256c4","name":"Locked equipment crate (Epic)","hash":"924d31715d564d82","colors":[76,68,79,87,75,89,87,74,89,75,66,77,158,137,155,197,150,193,196,152,192,163,140,158,79,86,91,90,102,105,84,95,98,75,80,83,32,34,43,30,35,42,30,33,41,30,31,40]},{"id":"66582889efd94e2d665b14a2","name":"Locked weapon crate (Epic)","hash":"80aa8c51791c8282","colors":[38,31,39,38,28,40,38,28,41,38,31,40,57,44,69,50,49,60,48,47,58,57,43,68,57,40,76,45,47,62,43,43,57,56,37,73,33,27,35,34,24,36,34,24,36,33,27,35]},{"id":"665828c44de4820934746ce4","name":"Locked supply crate (Epic)","hash":"a20f1fe80b3f3fa6","colors":[55,54,58,84,59,85,87,59,88,54,53,57,53,56,60,66,61,75,65,57,72,51,53,56,38,39,57,42,59,78,29,36,50,31,25,42,40,42,53,47,55,68,38,40,52,35,32,42]},{"id":"665828f490486915542256c6","name":"Locked valuables crate (Epic)","hash":"a08e3b0f2b2b07e0","colors":[42,34,46,43,40,46,42,40,46,43,34,46,75,71,82,162,142,168,161,135,166,74,69,78,72,70,79,150,125,162,155,121,165,70,68,74,42,36,48,50,55,60,51,56,59,42,36,47]},{"id":"66588b514de4820934746dc6","name":"Locked equipment crate (Common)","hash":"a24d317159564d8a","colors":[63,72,61,71,83,70,70,82,70,61,70,60,138,157,141,153,195,163,154,194,164,142,160,143,75,89,87,89,104,105,83,96,98,72,82,80,22,34,28,23,34,30,22,33,28,20,31,25]},{"id":"66588b6dcb48a73e674b2649","name":"Locked weapon crate (Common)","hash":"a28a8e796914a280","colors":[25,27,17,22,28,14,22,28,15,25,28,17,37,62,45,40,54,47,39,52,45,37,62,44,30,70,45,35,56,48,33,52,44,29,67,42,21,23,14,18,24,10,18,24,11,21,23,14]},{"id":"66588ba291f6e93c4c06efef","name":"Locked supply crate (Common)","hash":"b20f0fe8292b2f96","colors":[51,50,47,57,79,62,57,82,64,49,49,45,53,57,58,56,72,68,53,70,65,50,54,54,26,51,42,35,71,69,23,47,41,18,38,26,30,44,38,37,60,55,29,45,38,24,34,26]},{"id":"66588bb047fbd536a674240e","name":"Locked valuables crate (Common)","hash":"b08e2b0b0f0b23e8","colors":[29,36,24,40,43,34,42,44,36,29,36,24,46,56,50,76,103,91,80,108,93,52,59,50,35,47,42,47,111,84,53,124,95,46,56,52,26,35,25,36,46,43,40,52,50,29,40,30]},{"id":"6662e9aca7e0b43baa3d5f74","name":"Dogtag BEAR","hash":"669413a3a7a5a593","colors":[37,45,50,30,40,45,19,30,39,22,33,42,24,35,41,38,47,49,139,134,101,71,74,64,16,28,36,40,48,49,236,220,159,166,157,115,26,36,42,13,25,34,149,146,111,142,139,106]},{"id":"6662e9cda7e0b43baa3d5f76","name":"Dogtag BEAR","hash":"66d212a383a7a793","colors":[37,45,50,33,42,46,25,36,37,25,37,41,25,36,42,31,40,46,85,76,100,46,51,64,19,31,36,32,40,47,149,176,220,93,115,140,25,35,41,19,29,34,104,133,145,80,102,112]},{"id":"6662e9f37fa79a6d83730fa0","name":"Dogtag USEC","hash":"ce94634bc3a5a792","colors":[29,40,46,29,38,44,22,32,40,24,35,43,28,38,44,48,55,54,125,122,96,58,64,59,17,28,36,45,53,52,203,190,140,132,129,101,24,35,41,18,30,37,105,106,88,82,87,76]},{"id":"6662ea05f6259762c56f3189","name":"Dogtag USEC","hash":"86125227c3a3a7a3","colors":[30,41,46,30,39,44,25,36,38,25,37,42,29,39,44,38,45,50,86,78,94,44,49,59,18,29,35,39,48,55,151,169,208,80,93,112,23,34,40,26,36,42,96,119,134,60,73,82]},{"id":"66b37ea4c5d72b0277488439","name":"Tamatthi kunai knife replica","hash":"a6a4acaccaca9a94","colors":[40,32,44,42,33,45,55,48,56,39,31,43,36,26,40,47,36,47,56,46,54,35,25,39,35,25,38,43,35,45,38,30,41,36,26,39,37,28,40,37,30,41,36,27,39,37,28,41]},{"id":"66b37eb4acff495a29492407","name":"Viibiin sneaker","hash":"92a2b4c41232cc92","colors":[41,33,45,40,30,43,40,30,43,41,33,45,38,28,41,36,26,38,35,28,37,38,28,41,41,38,51,53,66,80,65,54,72,44,31,47,38,29,41,37,30,43,36,29,41,37,29,41]},{"id":"66b37f114410565a8f6789e2","name":"Inseq gas pipe wrench","hash":"a4ccccac8acadad8","colors":[42,29,41,37,47,60,38,58,69,41,28,40,40,23,36,31,51,64,27,59,73,40,22,35,38,24,36,28,41,54,30,34,47,38,25,37,38,27,39,28,42,55,33,29,42,38,28,40]},{"id":"66d9f7256916142b3b02276e","name":"Radar station spare parts","hash":"800b3b2929690282","colors":[51,45,51,60,54,57,60,54,57,51,44,52,50,55,50,68,76,64,68,74,62,58,63,56,34,41,39,25,37,32,23,33,28,30,38,36,37,32,41,36,33,39,36,33,39,36,32,40]},{"id":"66d9f7e7099cf6adcc07a369","name":"KOSA UAV electronic jamming device","hash":"f0868f3b3f2e2680","colors":[39,30,43,57,51,53,58,53,53,39,30,43,42,35,42,77,90,63,74,83,55,46,43,39,44,48,43,54,72,46,47,59,39,38,38,31,37,31,40,37,35,39,36,33,38,35,27,40]},{"id":"66d9f8744827a77e870ecaf1","name":"GARY ZONT portable electronic warfare device","hash":"aa8ccc8cccaca686","colors":[41,32,44,41,37,45,42,38,47,40,31,44,38,27,40,37,40,43,38,38,42,38,27,40,36,25,39,36,34,40,38,37,41,36,25,39,37,28,41,35,26,38,35,29,38,37,28,41]},{"id":"67408903268737ef6908d432","name":"Contraband box","hash":"f0868e8e8e869ee0","colors":[47,48,31,75,69,42,78,70,42,47,48,32,37,35,16,182,165,123,205,180,134,41,38,17,34,35,19,158,138,84,188,158,96,42,41,23,44,44,29,53,56,30,54,56,30,45,45,29]},{"id":"67409848d0b2f8eb9b034db9","name":"Sealed box","hash":"e8968e8e8e869ee0","colors":[26,37,44,58,60,52,60,62,53,26,37,44,16,25,29,180,164,124,201,178,136,19,27,30,12,25,33,155,136,86,186,157,98,21,30,36,23,34,41,36,47,40,37,48,40,24,35,42]},{"id":"6740987b89d5e1ddc603f4f0","name":"Locked case","hash":"ca9c0f130787c6ac","colors":[43,34,46,107,98,89,64,56,59,27,18,35,109,106,92,255,247,199,235,222,182,94,86,79,34,37,41,106,109,91,164,166,135,72,76,68,35,24,38,25,24,33,29,35,39,30,21,35]},{"id":"67449b6c89d5e1ddc603f504","name":"Case key","hash":"b0a68fc39a3026ca","colors":[47,47,30,55,56,40,71,76,64,47,47,30,40,38,18,66,69,55,126,142,144,61,65,52,51,53,37,83,91,85,56,58,43,46,46,29,56,58,45,52,54,40,38,37,17,45,45,28]},{"id":"67586af7036d7f3da60c3612","name":"Jar of pickles","hash":"8ccc8e8c8c9c9ce8","colors":[39,29,44,50,55,49,49,54,48,39,29,44,35,24,39,55,62,44,60,66,45,34,23,39,35,25,39,42,47,24,34,38,23,34,24,38,37,28,41,35,34,34,31,29,32,37,28,41]},{"id":"67586bee39b1b82b0d0f9d06","name":"Special 40-degree fuel","hash":"aa8e171317073796","colors":[48,34,43,72,51,41,52,46,39,44,33,42,39,42,41,63,95,54,66,87,54,43,43,41,35,44,39,57,96,53,70,87,59,39,43,39,36,40,40,52,76,48,55,69,44,39,39,39]},{"id":"67586c61a0c49554ed0bb4a8","name":"SHYSHKA Christmas tree life extender","hash":"a48ccccccccccccc","colors":[39,30,44,46,42,48,65,45,49,37,30,43,37,21,37,37,71,61,42,71,59,37,21,37,32,19,36,55,70,55,54,68,51,31,19,36,35,22,37,40,66,59,38,62,55,36,22,37]},{"id":"675dc9d37ae1a8792107ca96","name":"Dogtag BEAR","hash":"94cc968e8e8e8ee8","colors":[26,37,44,36,44,48,35,43,47,26,37,44,22,32,38,109,118,102,111,118,103,23,32,38,17,27,34,130,140,119,143,153,128,24,32,38,21,31,39,48,59,55,55,66,59,23,32,39]},{"id":"675dcb0545b1a2d108011b2b","name":"Dogtag BEAR","hash":"988e8e8e8e8e8e8c","colors":[27,38,44,31,38,44,30,38,43,27,38,44,20,29,35,108,107,107,111,110,109,19,29,35,19,29,34,131,127,122,136,131,124,23,32,37,22,33,39,47,52,56,51,55,59,24,34,40]},{"id":"6764202ae307804338014c1a","name":"Dogtag USEC","hash":"988e8e8e8e8e8e8c","colors":[27,38,44,31,38,44,30,38,43,27,38,44,20,29,35,108,107,107,111,110,109,19,29,35,19,29,34,131,127,122,136,131,124,23,32,37,22,33,39,47,52,56,51,55,59,24,34,40]},{"id":"6764207f2fa5e32733055c4a","name":"Dogtag USEC","hash":"94cc968e8e8e8ee8","colors":[26,37,44,36,44,48,35,43,47,26,37,44,22,32,38,109,118,102,111,118,103,23,32,38,17,27,34,130,140,119,143,153,128,24,32,38,21,31,39,48,59,55,55,66,59,23,32,39]},{"id":"679b9cce4e4ed4b3b40ae5c5","name":"Nailhead figurine","hash":"a8cc8e84a8b2d6cc","colors":[34,26,38,79,72,85,78,70,83,35,26,38,35,24,36,61,66,78,61,64,75,34,24,36,39,28,42,26,23,30,25,23,29,38,28,41,35,26,39,48,44,54,48,44,53,36,27,39]},{"id":"679b9d43597ba2ed120c3d44","name":"Petya Crooker figurine","hash":"b2cc968c8c86ccb0","colors":[40,32,44,44,35,43,44,35,43,40,32,44,37,27,41,46,40,39,46,38,37,37,27,41,35,26,40,40,33,37,43,32,35,35,26,40,35,27,39,45,36,44,46,37,44,35,26,39]},{"id":"679b9d4b3374fb14f40efe6d","name":"Count Bloodsucker figurine","hash":"8eec868c9696cecc","colors":[41,32,45,34,29,36,35,30,38,41,32,45,37,27,40,48,49,52,52,48,51,36,26,39,36,25,38,48,42,49,53,48,52,36,26,38,34,26,38,56,41,48,59,44,49,34,26,38]},{"id":"679b9d55708cfcb2060b9ae3","name":"Xenoalien figurine","hash":"cccc98daaca2cccc","colors":[38,29,40,58,55,72,52,48,64,38,29,40,37,27,39,36,40,55,32,30,43,38,27,40,37,27,39,28,27,38,32,29,40,37,26,39,34,25,37,55,51,60,51,47,56,34,25,37]},{"id":"679b9d6390622daf9708da76","name":"Pointy guy figurine","hash":"aaa8cecc9e86cecc","colors":[40,32,45,44,32,41,47,33,39,40,32,45,34,27,42,65,40,40,70,40,37,34,27,41,34,25,39,61,46,41,56,48,44,34,25,38,35,25,38,44,42,47,53,52,52,34,25,38]},{"id":"67cad1ec19b006e9e50f44d6","name":"Locked equipment crate (BattlePass 0)","hash":"924d31715d564d82","colors":[76,68,79,87,75,89,87,74,89,75,66,77,158,137,155,197,150,193,196,152,192,163,140,158,79,86,91,90,102,105,84,95,98,75,80,83,32,34,43,30,35,42,30,33,41,30,31,40]},{"id":"67ea616a74f765cefd009fb7","name":"Tagilla's welding mask \"ZABEY\" (Replica)","hash":"9a088e8e9e8c3296","colors":[41,35,45,50,43,48,44,35,43,39,34,42,33,27,38,59,52,45,56,49,45,34,28,39,38,27,38,43,42,39,38,39,40,36,25,39,39,33,39,56,50,43,53,47,43,39,30,41]},{"id":"68418091b5b0c9e4c60f0e7a","name":"Dogtag USEC","hash":"e886968e868e96ce","colors":[26,38,45,51,58,51,54,60,52,25,37,44,23,34,38,135,133,102,134,133,105,21,31,37,17,29,34,125,119,100,142,135,114,26,35,36,17,28,37,94,97,73,112,110,78,24,35,41]},{"id":"684180bc51bf8645f7067bc8","name":"Dogtag BEAR","hash":"e886968e868e96ce","colors":[26,38,45,51,58,51,54,60,52,25,37,44,23,34,38,135,133,102,134,133,105,21,31,37,17,29,34,125,119,100,142,135,114,26,35,36,17,28,37,94,97,73,112,110,78,24,35,41]},{"id":"684180ee9b6d80d840042e8a","name":"Dogtag USEC","hash":"90cc969696968ecc","colors":[27,38,44,35,44,49,34,44,49,26,38,44,24,35,41,89,101,107,87,98,104,23,34,40,21,33,40,98,99,96,108,108,104,24,36,42,20,31,38,56,66,69,60,70,72,22,33,39]},{"id":"684181208d035f60230f63f9","name":"Dogtag BEAR","hash":"90cc969696968ecc","colors":[27,38,44,35,44,49,34,44,49,26,38,44,24,35,41,89,101,107,87,98,104,23,34,40,21,33,40,98,99,96,108,108,104,24,36,42,20,31,38,56,66,69,60,70,72,22,33,39]},{"id":"6841b6b674a3c16f5e03d653","name":"PMC Origins figurine","hash":"b2cc8c8c9c9ca282","colors":[39,31,43,56,44,53,50,39,49,39,31,43,32,22,37,102,95,83,75,66,64,31,21,36,37,26,39,39,38,36,34,30,34,36,26,40,37,28,41,33,26,37,34,26,37,37,28,41]},{"id":"686666db646d47fec3018925","name":"Disk with unknown data","hash":"c6932f17170b369c","colors":[45,45,28,113,116,111,145,149,152,67,67,55,83,85,75,177,183,190,188,196,204,107,111,105,104,106,101,185,192,199,180,188,194,82,84,75,64,65,52,146,151,153,108,111,107,40,40,23]},{"id":"68df9908972cf1e1ec07256a","name":"Dogtag BEAR","hash":"aa948e8e9686ceb8","colors":[48,49,32,50,50,37,49,49,34,48,49,31,45,45,27,62,63,58,65,67,60,45,45,26,43,43,25,61,63,55,67,69,64,43,43,26,44,44,27,45,45,32,47,48,38,44,44,27]},{"id":"68df991142e96f583d042b8a","name":"Dogtag BEAR","hash":"889c9e9e968686cc","colors":[50,32,29,73,66,62,59,42,39,48,29,26,47,29,25,100,103,97,80,67,63,44,22,19,43,21,18,76,77,71,92,98,91,47,27,24,45,24,21,57,48,44,69,66,61,47,28,25]},{"id":"68df991dbeba86572e097ceb","name":"Dogtag BEAR","hash":"aa8c9e96968e8ecc","colors":[26,37,43,46,57,63,40,52,58,25,36,42,27,39,45,80,94,102,67,81,88,22,33,39,21,32,39,72,86,93,81,96,103,25,37,44,20,30,36,50,66,74,61,76,84,23,34,40]},{"id":"68df9927a38a5e37d80df6c9","name":"Dogtag BEAR","hash":"8a8e968e8e868e8c","colors":[26,33,21,45,47,37,40,43,31,24,32,19,26,32,18,96,89,77,84,77,63,18,26,13,17,24,11,90,81,66,107,95,79,22,29,16,18,27,14,46,46,35,61,58,47,23,30,17]},{"id":"68df99975d4e135b130392ca","name":"Dogtag USEC","hash":"aa948e8e9686ceb8","colors":[48,49,32,50,50,37,49,49,34,48,49,31,45,45,27,62,63,58,65,67,60,45,45,26,43,43,25,61,63,55,67,69,64,43,43,26,44,44,27,45,45,32,47,48,38,44,44,27]},{"id":"68df99a614ca2428b2017cd8","name":"Dogtag USEC","hash":"889c9e9e968686cc","colors":[50,32,29,73,66,62,59,42,39,48,29,26,47,29,25,100,103,97,80,67,63,44,22,19,43,21,18,76,77,71,92,98,91,47,27,24,45,24,21,57,48,44,69,66,61,47,28,25]},{"id":"68df99b2f716906506098308","name":"Dogtag USEC","hash":"aa8c9e96968e8ecc","colors":[26,37,43,46,57,63,40,52,58,25,36,42,27,39,45,80,94,102,67,81,88,22,33,39,21,32,39,72,86,93,81,96,103,25,37,44,20,30,36,50,66,74,61,76,84,23,34,40]},{"id":"68df99c05d4e135b130392cc","name":"Dogtag USEC","hash":"8a8e968e8e868e8c","colors":[26,33,21,45,47,37,40,43,31,24,32,19,26,32,18,96,89,77,84,77,63,18,26,13,17,24,11,90,81,66,107,95,79,22,29,16,18,27,14,46,46,35,61,58,47,23,30,17]},{"id":"68e6394e658d876c930977b1","name":"Unknown device fragment","hash":"8ab2b0e22e9ed0a4","colors":[49,49,32,47,47,29,47,46,28,49,49,32,47,47,29,43,43,26,45,45,29,48,47,28,46,47,35,54,57,53,52,54,51,43,44,32,42,43,29,40,41,29,39,39,27,42,42,29]},{"id":"68f0f60a121d878a2303eedb","name":"Dogtag BEAR","hash":"b2cc8e9686968ecc","colors":[25,37,44,39,47,47,39,47,48,25,37,44,20,30,37,112,118,93,110,115,89,19,30,37,19,28,35,95,111,85,109,126,97,25,33,37,17,28,37,73,79,66,92,96,77,20,31,38]},{"id":"68f0f63c645c14a02104142a","name":"Dogtag BEAR","hash":"aacc8696969686ce","colors":[24,36,42,50,60,65,50,60,65,25,36,42,20,30,36,117,130,133,120,133,134,21,31,37,19,29,36,96,107,99,119,132,120,29,38,44,17,27,34,76,87,90,107,119,122,25,35,41]},{"id":"68f0f64f183146ea530330aa","name":"Dogtag USEC","hash":"b2cc8e9686968ecc","colors":[25,37,44,39,47,47,39,47,48,25,37,44,20,30,37,112,118,93,110,115,89,19,30,37,19,28,35,95,111,85,109,126,97,25,33,37,17,28,37,73,79,66,92,96,77,20,31,38]},{"id":"68f0f662859ebec8d501b76a","name":"Dogtag USEC","hash":"aacc8696969686ce","colors":[24,36,42,50,60,65,50,60,65,25,36,42,20,30,36,117,130,133,120,133,134,21,31,37,19,29,36,96,107,99,119,132,120,29,38,44,17,27,34,76,87,90,107,119,122,25,35,41]},{"id":"68f11224197b61ffe703b16f","name":"Hardened PMC figurine","hash":"92e28c8c9696a882","colors":[40,32,44,45,34,44,43,33,43,40,32,45,33,24,38,85,76,66,64,54,53,33,23,38,37,27,40,40,38,37,39,34,37,37,27,40,37,28,41,32,24,35,34,25,37,37,29,41]},{"id":"68f119c6121d878a2303eee3","name":"Right half of a Physical Bitcoin","hash":"323a0c969686cecc","colors":[83,64,40,124,85,34,40,30,41,39,32,45,52,42,39,177,121,32,117,77,32,31,24,42,26,21,40,125,89,34,173,113,31,39,29,38,29,22,41,74,56,36,102,73,35,32,24,40]},{"id":"68f11adfcd0babab2c0fb003","name":"Left half of a Physical Bitcoin","hash":"99a3c3cb8696ccac","colors":[42,33,45,32,25,42,104,74,36,98,76,42,30,23,42,92,63,35,198,139,36,77,61,41,26,19,39,153,106,35,164,119,38,28,23,39,30,23,40,80,60,38,88,69,38,28,22,40]},{"id":"68f153aa7da590b6df0515da","name":"Dogtag BEAR","hash":"8eb4a36381a5a193","colors":[31,41,46,29,38,44,18,28,34,22,34,40,26,35,41,42,49,52,136,139,139,67,75,77,19,31,39,34,41,41,154,152,150,123,124,121,25,36,43,15,26,32,91,89,81,113,110,99]},{"id":"68f15cf222c8979ee308f495","name":"Dogtag BEAR","hash":"d4868e9b9397979a","colors":[27,38,44,37,45,47,43,49,49,29,39,45,24,35,42,45,49,47,49,51,47,29,39,43,23,34,40,37,42,42,45,47,46,32,41,44,23,34,40,40,47,48,43,49,49,30,39,44]},{"id":"68f15dbab2b53abd200b9378","name":"Dogtag USEC","hash":"d4868e9b9397979a","colors":[27,38,44,37,45,47,43,49,49,29,39,45,24,35,42,45,49,47,49,51,47,29,39,43,23,34,40,37,42,42,45,47,46,32,41,44,23,34,40,40,47,48,43,49,49,30,39,44]},{"id":"68f15e26f1aa7e100a0ca208","name":"Dogtag BEAR","hash":"8cc6cececec6c68e","colors":[26,38,44,36,45,49,40,48,51,26,38,44,19,31,37,57,64,67,72,77,78,21,32,39,19,31,37,40,48,52,69,73,73,23,34,39,23,34,41,27,36,41,46,53,55,27,38,43]},{"id":"68f15e53103c5d9d4f022c78","name":"Dogtag USEC","hash":"8cc6cececec6c68e","colors":[26,38,44,36,45,49,40,48,51,26,38,44,19,31,37,57,64,67,72,77,78,21,32,39,19,31,37,40,48,52,69,73,73,23,34,39,23,34,41,27,36,41,46,53,55,27,38,43]},{"id":"68f25c64b2b53abd200b954f","name":"Prapor figurine","hash":"b2cc8c9cca8e98a2","colors":[38,30,43,59,46,53,57,44,52,38,30,43,31,22,37,104,87,76,87,71,66,30,21,36,37,27,41,33,28,30,35,28,29,37,26,40,37,28,41,35,26,37,35,26,36,37,28,41]},{"id":"68f25ce9b2b53abd200b9551","name":"Therapist figurine","hash":"8ab0ccccccccccb2","colors":[42,33,45,33,26,37,34,27,38,42,33,45,34,25,38,52,48,45,51,46,44,34,24,38,30,19,34,71,69,68,65,62,61,30,19,34,37,28,40,37,30,40,36,29,39,37,28,40]},{"id":"68f25da3b84c6e1f8a09cffb","name":"Fence figurine","hash":"b2cccccccc92cca8","colors":[40,32,44,44,37,47,44,36,47,40,32,44,36,26,39,44,42,44,44,39,41,36,26,40,36,26,40,34,27,33,34,27,33,36,26,40,37,29,41,33,26,36,33,25,36,37,28,41]},{"id":"68f25eba19a2b503d70dc28f","name":"Skier figurine","hash":"b2cccccccec8a490","colors":[39,31,43,47,36,49,45,36,49,39,31,43,30,21,35,84,77,78,86,77,76,30,21,35,34,23,38,51,45,45,47,42,41,34,24,39,37,29,41,32,25,35,31,24,34,37,28,41]},{"id":"68f25eef19a2b503d70dc291","name":"Peacekeeper figurine","hash":"b2ce8e8c8c94f080","colors":[38,31,43,59,46,52,58,45,51,39,31,44,33,23,37,82,74,71,75,67,65,33,23,37,37,26,39,31,31,39,28,28,37,37,26,39,37,29,41,32,25,34,32,25,34,37,29,41]},{"id":"68f25f1201fb9de974058be4","name":"Mechanic figurine","hash":"82e28c8c8eb2a2a4","colors":[40,32,44,45,34,44,43,33,44,40,32,44,30,22,37,98,79,66,77,61,56,30,22,38,36,26,40,37,33,38,36,30,37,36,26,40,38,29,41,32,23,35,33,24,36,37,29,41]},{"id":"68f25f3a5d977110860c3350","name":"Ragman figurine","hash":"82a8ccccccccccb0","colors":[41,33,45,36,28,37,36,28,37,41,33,45,31,23,37,70,59,55,77,62,59,32,24,38,33,23,37,50,47,49,54,50,51,34,23,37,37,28,41,34,28,36,33,28,36,37,28,41]},{"id":"68f25faa22c8979ee308f4da","name":"Jaeger figurine","hash":"b2cccc8cdcccb488","colors":[38,31,44,54,39,42,53,39,42,38,31,44,32,22,37,78,67,61,73,61,56,31,22,37,35,24,38,45,41,41,41,37,39,35,25,39,37,29,41,32,27,34,33,27,34,37,28,41]},{"id":"68f25fdf928cd23ddf0471fb","name":"Lightkeeper figurine","hash":"b2cc8cccccacaa90","colors":[41,33,44,37,32,45,36,31,44,41,32,44,32,24,38,67,63,66,74,66,66,32,23,37,33,22,37,53,48,49,59,54,54,33,22,37,38,29,41,30,24,34,29,23,33,38,29,41]},{"id":"68f26063b2b53abd200b9553","name":"Ref figurine","hash":"b2cc8c8ccc84d4aa","colors":[36,28,42,70,57,61,71,58,62,36,28,42,28,19,34,103,95,88,104,94,87,28,18,34,35,25,38,39,36,44,42,39,47,35,25,38,37,28,41,34,26,36,33,26,36,37,28,41]},{"id":"68f2608301fb9de974058be6","name":"BTR figurine","hash":"92a28c9c86ccb086","colors":[41,33,45,38,28,41,38,28,42,41,33,45,36,27,40,57,55,54,54,50,52,36,26,40,34,23,37,50,52,50,55,56,53,34,23,37,38,28,41,32,24,36,31,24,36,37,28,41]},{"id":"68f260d7b84c6e1f8a09cffd","name":"Hideout Cat figurine","hash":"b2ccccd4cca890a8","colors":[39,30,44,45,42,44,44,41,43,40,30,44,35,24,39,48,54,39,46,51,38,35,24,39,35,25,38,35,31,37,33,29,35,35,25,38,38,29,41,30,25,33,30,24,32,38,29,41]},{"id":"68f26124b84c6e1f8a09cfff","name":"Walking Tank figurine","hash":"b28c8c8c888c8892","colors":[41,32,44,44,37,44,43,35,43,41,32,44,33,24,37,74,75,63,58,56,51,34,23,38,35,24,38,51,48,46,40,35,40,35,25,38,37,28,41,32,26,35,33,26,36,37,28,41]},{"id":"68f26161b84c6e1f8a09d001","name":"Escape figurine","hash":"92a28c8c9a8e8aa2","colors":[40,32,44,44,34,44,42,32,44,41,32,44,34,25,39,67,60,58,54,46,48,35,25,39,36,26,40,34,33,34,33,29,33,37,26,40,37,28,41,34,26,37,34,26,37,37,28,41]},{"id":"68f261f6928cd23ddf0471fd","name":"Mastichin figurine","hash":"aacccccc9496d490","colors":[40,31,43,43,39,54,43,39,53,40,31,43,33,23,36,58,58,60,57,56,58,33,23,36,36,25,39,38,42,45,36,40,44,37,25,39,37,28,41,31,28,33,32,28,34,37,28,41]},{"id":"68fb41120760c7891606613c","name":"Dogtag BEAR","hash":"92c89cc6cec6c6a4","colors":[27,39,45,29,37,39,27,35,38,27,39,45,23,34,40,33,41,45,34,42,47,23,34,40,21,31,37,31,43,50,38,52,59,22,31,36,23,35,41,25,33,38,29,35,39,24,34,40]},{"id":"68fb412b0760c7891606613e","name":"Dogtag BEAR","hash":"88ce8696969aceac","colors":[26,37,43,43,53,60,44,55,62,26,37,43,20,31,37,96,106,113,108,119,128,24,35,41,17,28,34,79,89,92,100,110,114,30,40,46,20,31,37,47,55,59,62,69,73,24,35,41]},{"id":"68fb4143a854bc7ae80fad3e","name":"Dogtag USEC","hash":"92c89cc6cec6c6a4","colors":[27,39,45,29,37,39,27,35,38,27,39,45,23,34,40,33,41,45,34,42,47,23,34,40,21,31,37,31,43,50,38,52,59,22,31,36,23,35,41,25,33,38,29,35,39,24,34,40]},{"id":"68fb4157b280c103230e3b3c","name":"Dogtag USEC","hash":"88ce8696969aceac","colors":[26,37,43,43,53,60,44,55,62,26,37,43,20,31,37,96,106,113,108,119,128,24,35,41,17,28,34,79,89,92,100,110,114,30,40,46,20,31,37,47,55,59,62,69,73,24,35,41]},{"id":"690c70a2a1461a01d605a1bd","name":"Elvisvista figurine","hash":"b2cc8c8ccccccca2","colors":[40,31,43,45,38,49,43,36,47,40,32,44,32,22,36,84,81,78,70,66,64,32,22,36,33,24,37,52,43,48,50,41,46,33,24,37,36,28,40,40,31,42,38,30,40,36,27,40]},{"id":"6937ed118715e9fd1b0f286d","name":"Tangerine","hash":"cc86330f17278ecc","colors":[46,34,44,123,76,37,128,79,37,50,36,43,117,64,31,246,141,43,255,145,41,125,69,26,81,54,24,118,91,36,127,86,26,74,47,20,35,28,38,52,50,30,50,47,28,35,28,37]},{"id":"6937edb912d456a817083e82","name":"Mazoni golden dumbbell","hash":"8a9273676333a282","colors":[46,36,45,44,34,44,45,35,45,46,36,45,106,82,42,65,48,20,97,74,33,72,56,29,59,57,27,42,36,14,52,50,20,50,42,21,36,29,41,36,28,39,34,26,39,37,29,40]},{"id":"697cddb414e932098005748d","name":"Duck figurine","hash":"82908c8c8e8ecc96","colors":[42,33,44,37,30,43,37,30,45,42,33,44,34,25,40,67,54,43,66,54,47,33,24,40,34,24,37,92,78,48,79,66,47,32,22,37,35,26,40,49,42,41,48,41,40,35,27,39]},{"id":"699f09de81a6c812900a77b7","name":"AMG-10 hydraulic fluid","hash":"92a88e868e868eb8","colors":[41,33,45,40,30,43,38,29,43,41,33,44,34,24,37,77,80,81,88,90,84,35,25,38,27,18,37,94,99,74,132,130,61,30,21,38,35,26,39,49,45,49,57,52,52,35,27,40]},{"id":"69bb41c03b5fb75517065960","name":"Ultralink satellite communication module","hash":"92e0969e83c78ab0","colors":[40,33,43,34,25,37,33,23,36,40,31,43,36,30,40,70,69,74,80,76,83,45,37,48,33,23,36,65,69,75,105,116,118,63,64,70,37,28,40,32,25,36,31,29,38,35,31,42]},{"id":"69bb4203f94327bc0f0230cd","name":"IBX Gigachad cryptographic processor","hash":"92b08e6d3d1fe292","colors":[40,30,44,38,26,41,39,27,42,40,30,44,45,42,47,56,60,44,49,55,39,39,42,41,45,45,46,60,78,54,42,59,44,39,49,42,36,26,40,33,24,38,34,25,39,36,26,40]},{"id":"69bb424e99f3fda8f107247d","name":"Memento Server RAM Module","hash":"9ab2c18b260c9ab4","colors":[42,33,46,36,26,39,47,44,49,44,40,48,35,24,38,52,51,55,85,94,82,58,57,52,45,43,48,84,93,81,67,66,55,34,23,36,41,37,44,56,56,51,32,21,35,37,28,41]},{"id":"69bb435ff609db77390b0e25","name":"Aceso Xpress semi-automatic biochemical analyzer","hash":"949e9a9a928e8e8c","colors":[39,31,43,51,54,61,40,43,64,39,32,46,36,29,41,67,72,72,36,49,81,33,30,51,34,28,40,37,48,67,29,43,79,32,29,48,36,29,43,35,51,99,31,42,77,33,27,40]},{"id":"69bb43df99f3fda8f1072483","name":"Nooby Shield potassium iodide tablets","hash":"e88e8ecccc9e8e8c","colors":[38,30,43,60,57,60,58,54,57,39,30,43,31,23,35,61,56,60,52,52,51,31,22,35,30,21,32,78,90,95,68,73,74,28,18,30,31,21,33,106,126,134,95,102,110,29,18,30]},{"id":"69d39aacf1954acdb3083285","name":"Echo Belli crate","hash":"a2824b4e0f09a682","colors":[42,35,46,40,33,45,39,32,44,42,34,46,38,42,46,51,56,60,55,60,63,39,42,49,29,35,41,44,51,52,58,60,53,43,44,39,36,29,41,33,27,39,32,26,38,36,29,40]},{"id":"69f9d547b98cc4120608692a","name":"DesmondPilak CD","hash":"a8473333130f4fa8","colors":[71,77,54,92,99,87,100,112,99,61,62,51,110,124,99,197,204,183,198,209,195,115,118,117,71,85,87,191,205,199,203,214,211,98,106,109,50,55,48,86,87,85,84,89,96,42,46,48]},{"id":"customdogtags12345678910","name":"Dogtag","hash":"6eb416a3a3a3a193","colors":[36,45,50,31,40,46,16,27,33,22,34,40,25,35,41,38,48,53,139,144,146,56,66,71,18,30,36,31,41,47,220,220,220,144,148,150,26,37,43,14,26,32,88,93,96,96,102,104]}];
+// BARTER_HASH_DB:END
+
+let scanState = null;
+
+function resetScanState() {
+  scanState = { step: 'upload', img: null, naturalW: 0, naturalH: 0, displayScale: 1, cropRect: null, gridCols: 1, gridRows: 1, results: [] };
+}
+
+function openScanModal() {
+  resetScanState();
+  document.getElementById('scan-modal').classList.remove('hidden');
+  renderScanStep();
+}
+function closeScanModal() {
+  document.getElementById('scan-modal').classList.add('hidden');
+}
+
+function onScanFileSelected(e) {
+  if (e.target.files[0]) loadScanImage(e.target.files[0]);
+}
+function loadScanImage(file) {
+  const reader = new FileReader();
+  reader.onload = () => {
+    const img = new Image();
+    img.onload = () => {
+      scanState.img = img;
+      scanState.naturalW = img.naturalWidth;
+      scanState.naturalH = img.naturalHeight;
+      scanState.step = 'crop-grid';
+      renderScanStep();
+    };
+    img.src = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function renderScanStep() {
+  const body = document.getElementById('scan-modal-body');
+  if (scanState.step === 'upload') {
+    body.innerHTML = `
+      <div class="scan-step-desc">Lucky Scav Junkbox <b>안에 있는 잡템만</b> 인식합니다. 총기 부품, GP코인 같은 재화류는 인식 대상이 아니에요.</div>
+      <div class="scan-dropzone" id="scan-dropzone">스크린샷을 클릭해서 선택하거나 이 영역으로 드래그하세요</div>
+      <input type="file" id="scan-file-input" accept="image/*" style="display:none" onchange="onScanFileSelected(event)">`;
+    const dz = document.getElementById('scan-dropzone');
+    dz.onclick = () => document.getElementById('scan-file-input').click();
+    dz.ondragover = e => { e.preventDefault(); dz.classList.add('dragover'); };
+    dz.ondragleave = () => dz.classList.remove('dragover');
+    dz.ondrop = e => {
+      e.preventDefault(); dz.classList.remove('dragover');
+      if (e.dataTransfer.files[0]) loadScanImage(e.dataTransfer.files[0]);
+    };
+  } else if (scanState.step === 'crop-grid') {
+    body.innerHTML = `
+      <div class="scan-step-desc"><b>Junkbox 그리드 전체 영역</b>을 드래그로 선택하세요 (테두리 안쪽, 제목줄 제외). 칸 수는 자동으로 인식합니다.</div>
+      <div class="scan-canvas-wrap"><canvas id="scan-canvas"></canvas></div>
+      <div class="scan-actions"><button class="filter-btn" onclick="resetScanState();renderScanStep()">처음으로</button></div>`;
+    setupScanCanvas();
+  } else if (scanState.step === 'confirm-grid') {
+    body.innerHTML = `
+      <div class="scan-step-desc">이렇게 칸을 인식했어요. <b>격자가 아이템 칸과 안 맞으면</b> 숫자를 조정하세요.</div>
+      <div class="scan-canvas-wrap"><canvas id="scan-canvas"></canvas></div>
+      <div class="scan-grid-controls">
+        <div class="level-input-wrap"><span>가로 칸</span>
+          <button class="tic-btn" onclick="adjustGridDim('gridCols',-1)">−</button>
+          <span class="tic-val" id="scan-cols-val">${scanState.gridCols}</span>
+          <button class="tic-btn" onclick="adjustGridDim('gridCols',1)">+</button>
+        </div>
+        <div class="level-input-wrap"><span>세로 칸</span>
+          <button class="tic-btn" onclick="adjustGridDim('gridRows',-1)">−</button>
+          <span class="tic-val" id="scan-rows-val">${scanState.gridRows}</span>
+          <button class="tic-btn" onclick="adjustGridDim('gridRows',1)">+</button>
+        </div>
+      </div>
+      <div class="scan-actions">
+        <button class="filter-btn" onclick="scanState.step='crop-grid';renderScanStep()">영역 다시 선택</button>
+        <button class="filter-btn active" onclick="scanState.step='analyzing';renderScanStep()">이 칸 수로 분석</button>
+      </div>`;
+    renderGridPreviewCanvas();
+  } else if (scanState.step === 'analyzing') {
+    body.innerHTML = `<div class="scan-empty-state">분석 중...</div>`;
+    setTimeout(runScanAnalysis, 30);
+  } else if (scanState.step === 'review') {
+    renderScanReview();
+  }
+}
+
+function normRect(x0, y0, x1, y1) {
+  return { x: Math.min(x0, x1), y: Math.min(y0, y1), w: Math.abs(x1 - x0), h: Math.abs(y1 - y0) };
+}
+function scaleRectToDisplay(r, scale) {
+  return { x: r.x * scale, y: r.y * scale, w: r.w * scale, h: r.h * scale };
+}
+
+// 표시용 canvas 크기/스케일을 계산해 캔버스에 세팅한다. 두 단계(crop-grid, confirm-grid)가 공유.
+function setupDisplayCanvas() {
+  const canvas = document.getElementById('scan-canvas');
+  const wrapWidth = document.querySelector('.scan-modal-box')?.clientWidth - 32 || 700;
+  const maxW = Math.min(700, wrapWidth);
+  const scale = Math.min(1, maxW / scanState.naturalW);
+  canvas.width = Math.round(scanState.naturalW * scale);
+  canvas.height = Math.round(scanState.naturalH * scale);
+  scanState.displayScale = scale;
+  return { canvas, ctx: canvas.getContext('2d'), scale, dispW: canvas.width, dispH: canvas.height };
+}
+
+// 1단계: Junkbox 그리드 전체 영역을 드래그로 선택
+function setupScanCanvas() {
+  const { canvas, ctx, scale, dispW, dispH } = setupDisplayCanvas();
+
+  function draw(liveRect) {
+    ctx.clearRect(0, 0, dispW, dispH);
+    ctx.drawImage(scanState.img, 0, 0, dispW, dispH);
+    if (liveRect) {
+      ctx.strokeStyle = '#8fba5e'; ctx.lineWidth = 2;
+      ctx.setLineDash([5, 3]);
+      ctx.strokeRect(liveRect.x, liveRect.y, liveRect.w, liveRect.h);
+      ctx.setLineDash([]);
+    }
+  }
+  draw();
+
+  let startX = 0, startY = 0, dragging = false;
+  function getPos(e) {
+    const rect = canvas.getBoundingClientRect();
+    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+  }
+  canvas.onmousedown = e => { const p = getPos(e); startX = p.x; startY = p.y; dragging = true; };
+  canvas.onmousemove = e => {
+    if (!dragging) return;
+    const p = getPos(e);
+    draw(normRect(startX, startY, p.x, p.y));
+  };
+  canvas.onmouseup = e => {
+    if (!dragging) return;
+    dragging = false;
+    const p = getPos(e);
+    const r = normRect(startX, startY, p.x, p.y);
+    if (r.w < 12 || r.h < 12) { draw(); return; }
+    const naturalRect = { x: r.x / scale, y: r.y / scale, w: r.w / scale, h: r.h / scale };
+    const layout = detectGridLayout(scanState.img, naturalRect);
+    scanState.cropRect = layout.cropRect;
+    scanState.gridCols = layout.gridCols;
+    scanState.gridRows = layout.gridRows;
+    scanState.step = 'confirm-grid';
+    renderScanStep();
+  };
+}
+
+// 2단계: 자동 인식된 격자를 미리보기로 그리기 (드래그 없음, 칸 수 조절만)
+function renderGridPreviewCanvas() {
+  const { ctx, dispW, dispH, scale } = setupDisplayCanvas();
+  ctx.clearRect(0, 0, dispW, dispH);
+  ctx.drawImage(scanState.img, 0, 0, dispW, dispH);
+
+  const r = scaleRectToDisplay(scanState.cropRect, scale);
+  ctx.fillStyle = 'rgba(0,0,0,.55)';
+  ctx.fillRect(0, 0, dispW, r.y);
+  ctx.fillRect(0, r.y + r.h, dispW, dispH - (r.y + r.h));
+  ctx.fillRect(0, r.y, r.x, r.h);
+  ctx.fillRect(r.x + r.w, r.y, dispW - (r.x + r.w), r.h);
+  ctx.strokeStyle = '#c8a84b'; ctx.lineWidth = 2; ctx.strokeRect(r.x, r.y, r.w, r.h);
+
+  ctx.strokeStyle = '#8fba5e'; ctx.lineWidth = 1;
+  const { gridCols, gridRows } = scanState;
+  for (let c = 1; c < gridCols; c++) {
+    const x = r.x + (r.w / gridCols) * c;
+    ctx.beginPath(); ctx.moveTo(x, r.y); ctx.lineTo(x, r.y + r.h); ctx.stroke();
+  }
+  for (let row = 1; row < gridRows; row++) {
+    const y = r.y + (r.h / gridRows) * row;
+    ctx.beginPath(); ctx.moveTo(r.x, y); ctx.lineTo(r.x + r.w, y); ctx.stroke();
+  }
+}
+
+function adjustGridDim(field, delta) {
+  scanState[field] = Math.max(1, Math.min(30, scanState[field] + delta));
+  document.getElementById(field === 'gridCols' ? 'scan-cols-val' : 'scan-rows-val').textContent = scanState[field];
+  renderGridPreviewCanvas();
+}
+
+// Junkbox 그리드 영역 안에서 칸 사이 경계선의 주기를 찾아 칸 크기를 추정하고,
+// 사용자가 드래그한 경계가 정확하지 않아도 실제 경계선에 맞춰 보정한다.
+// (수직/수평 방향 밝기 변화량을 누적한 신호에 자기상관을 적용해 가장 강한 주기를 찾고,
+//  사용자가 드래그한 4개 변 근처에서 가장 강한 경계선으로 스냅하는 방식)
+function detectGridLayout(img, rect) {
+  const padX = Math.max(20, Math.round(rect.w * 0.08));
+  const padY = Math.max(20, Math.round(rect.h * 0.08));
+  const x0 = Math.max(0, rect.x - padX);
+  const y0 = Math.max(0, rect.y - padY);
+  const x1 = Math.min(scanState.naturalW, rect.x + rect.w + padX);
+  const y1 = Math.min(scanState.naturalH, rect.y + rect.h + padY);
+  const leftPad = rect.x - x0;
+  const topPad = rect.y - y0;
+
+  const W = Math.max(2, Math.round(x1 - x0));
+  const H = Math.max(2, Math.round(y1 - y0));
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, x0, y0, x1 - x0, y1 - y0, 0, 0, W, H);
+  const data = ctx.getImageData(0, 0, W, H).data;
+  const gray = new Float32Array(W * H);
+  for (let i = 0; i < W * H; i++) {
+    gray[i] = 0.299 * data[i*4] + 0.587 * data[i*4+1] + 0.114 * data[i*4+2];
+  }
+  function colEdgeSignal() {
+    const sig = new Float32Array(W);
+    for (let x = 1; x < W; x++) {
+      let sum = 0;
+      for (let y = 0; y < H; y++) sum += Math.abs(gray[y*W+x] - gray[y*W+x-1]);
+      sig[x] = sum;
+    }
+    return sig;
+  }
+  function rowEdgeSignal() {
+    const sig = new Float32Array(H);
+    for (let y = 1; y < H; y++) {
+      let sum = 0;
+      for (let x = 0; x < W; x++) sum += Math.abs(gray[y*W+x] - gray[(y-1)*W+x]);
+      sig[y] = sum;
+    }
+    return sig;
+  }
+  function findPeriod(sig, minP, maxP) {
+    let bestP = minP, bestScore = -Infinity;
+    for (let p = minP; p <= maxP; p++) {
+      let score = 0, n = 0;
+      for (let i = 0; i + p < sig.length; i++) { score += sig[i] * sig[i+p]; n++; }
+      if (n) score /= n;
+      if (score > bestScore) { bestScore = score; bestP = p; }
+    }
+    return bestP;
+  }
+  function snapEdge(sig, roughIdx, maxSearch) {
+    let best = Math.round(roughIdx), bestVal = -Infinity;
+    const lo = Math.max(0, Math.round(roughIdx - maxSearch));
+    const hi = Math.min(sig.length - 1, Math.round(roughIdx + maxSearch));
+    for (let i = lo; i <= hi; i++) { if (sig[i] > bestVal) { bestVal = sig[i]; best = i; } }
+    return best;
+  }
+
+  const colSig = colEdgeSignal(), rowSig = rowEdgeSignal();
+  const minP = 20;
+  const rawCellW = findPeriod(colSig, minP, Math.max(minP + 1, Math.min(160, Math.floor(W / 2))));
+  const rawCellH = findPeriod(rowSig, minP, Math.max(minP + 1, Math.min(160, Math.floor(H / 2))));
+  // Junkbox 칸은 항상 정사각형이다. 여러 칸을 차지하는 큰 아이템이 있으면
+  // 자기상관이 진짜 주기의 배수(하모닉)를 잘못 잡는 경우가 있는데, 그런 오류는
+  // 항상 주기를 "더 크게" 잘못 잡는 쪽으로 치우치므로 두 축 중 더 작게 검출된
+  // 쪽을 두 축 모두에 적용하면 더 안정적으로 보정된다.
+  const cellW = Math.min(rawCellW, rawCellH);
+  const cellH = cellW;
+
+  // 사용자가 드래그한 4개 변 근처에서 가장 강한 실제 경계선으로 스냅.
+  // 칸의 절반을 넘기면 옆 칸 경계로 잘못 스냅될 수 있어 0.5 미만으로 제한.
+  const searchX = Math.max(20, Math.round(cellW * 0.48));
+  const searchY = Math.max(20, Math.round(cellH * 0.48));
+  const left = snapEdge(colSig, leftPad, searchX);
+  const right = snapEdge(colSig, leftPad + rect.w, searchX);
+  const top = snapEdge(rowSig, topPad, searchY);
+  const bottom = snapEdge(rowSig, topPad + rect.h, searchY);
+
+  const cropRect = { x: x0 + left, y: y0 + top, w: Math.max(1, right - left), h: Math.max(1, bottom - top) };
+  return {
+    cropRect,
+    gridCols: Math.max(1, Math.min(30, Math.round(cropRect.w / cellW))),
+    gridRows: Math.max(1, Math.min(30, Math.round(cropRect.h / cellH))),
+  };
+}
+
+// 셀 이미지를 잘라 dHash(64bit, 9x8 그레이스케일) + 색상 시그니처(4x4 RGB)를 계산.
+// build_barter_hashes.py와 알고리즘이 동일해야 해시 비교가 의미를 가진다.
+function computeCellSignature(img, sx, sy, sw, sh) {
+  const dh = document.createElement('canvas');
+  dh.width = 9; dh.height = 8;
+  const dctx = dh.getContext('2d');
+  dctx.imageSmoothingEnabled = true;
+  if ('imageSmoothingQuality' in dctx) dctx.imageSmoothingQuality = 'high';
+  dctx.drawImage(img, sx, sy, sw, sh, 0, 0, 9, 8);
+  const dData = dctx.getImageData(0, 0, 9, 8).data;
+  const gray = [];
+  for (let i = 0; i < 9 * 8; i++) {
+    gray.push(0.299 * dData[i*4] + 0.587 * dData[i*4+1] + 0.114 * dData[i*4+2]);
+  }
+  let hashBits = '';
+  for (let row = 0; row < 8; row++) {
+    for (let col = 0; col < 8; col++) {
+      hashBits += gray[row*9+col] > gray[row*9+col+1] ? '1' : '0';
+    }
+  }
+  const hashHex = BigInt('0b' + hashBits).toString(16).padStart(16, '0');
+  const grayRange = Math.max(...gray) - Math.min(...gray);
+
+  const cc = document.createElement('canvas');
+  cc.width = 4; cc.height = 4;
+  const cctx = cc.getContext('2d');
+  cctx.imageSmoothingEnabled = true;
+  if ('imageSmoothingQuality' in cctx) cctx.imageSmoothingQuality = 'high';
+  cctx.drawImage(img, sx, sy, sw, sh, 0, 0, 4, 4);
+  const cData = cctx.getImageData(0, 0, 4, 4).data;
+  const colors = [];
+  for (let i = 0; i < 16; i++) colors.push(cData[i*4], cData[i*4+1], cData[i*4+2]);
+
+  return { hash: hashHex, colors, grayRange };
+}
+
+// 명암 대비가 거의 없는 칸(빈 칸/배경)은 매칭을 시도하지 않고 건너뛴다.
+const SCAN_EMPTY_GRAY_RANGE = 12;
+function isLikelyEmptyCell(sig) {
+  return sig.grayRange < SCAN_EMPTY_GRAY_RANGE;
+}
+
+function hammingDistance(hexA, hexB) {
+  let x = BigInt('0x' + hexA) ^ BigInt('0x' + hexB);
+  let count = 0;
+  while (x > 0n) { count += Number(x & 1n); x >>= 1n; }
+  return count;
+}
+function colorDistance(a, b) {
+  let sum = 0;
+  for (let i = 0; i < a.length; i++) { const d = a[i] - b[i]; sum += d * d; }
+  return Math.sqrt(sum / a.length);
+}
+
+const SCAN_MATCH_THRESHOLD = 140; // hammingDistance*4 + colorDistance 합산 점수 컷오프(베타, 추후 조정 가능)
+
+function matchCellToItem(sig, candidates) {
+  let best = null, bestScore = Infinity;
+  for (const cand of candidates) {
+    const score = hammingDistance(sig.hash, cand.hash) * 4 + colorDistance(sig.colors, cand.colors);
+    if (score < bestScore) { bestScore = score; best = cand; }
+  }
+  if (!best || bestScore > SCAN_MATCH_THRESHOLD) return null;
+  return best;
+}
+
+function runScanAnalysis() {
+  const neededItems = allData.all.filter(it => it.needed > 0);
+  const neededIds = new Set(neededItems.map(it => it.key));
+  const candidates = BARTER_HASH_DB.filter(c => neededIds.has(c.id));
+
+  if (!candidates.length) {
+    scanState.results = [];
+    scanState.step = 'review';
+    renderScanStep();
+    return;
+  }
+
+  const { cropRect, gridCols, gridRows, img } = scanState;
+  const cellW = cropRect.w / gridCols;
+  const cellH = cropRect.h / gridRows;
+
+  const counts = {};
+  for (let r = 0; r < gridRows; r++) {
+    for (let c = 0; c < gridCols; c++) {
+      const sx = cropRect.x + c * cellW, sy = cropRect.y + r * cellH;
+      const sig = computeCellSignature(img, sx, sy, cellW, cellH);
+      if (isLikelyEmptyCell(sig)) continue;
+      const match = matchCellToItem(sig, candidates);
+      if (match) counts[match.id] = (counts[match.id] || 0) + 1;
+    }
+  }
+
+  scanState.results = Object.entries(counts).map(([id, count]) => {
+    const meta = neededItems.find(it => it.key === id);
+    return { key: id, name: meta.name, iconLink: meta.iconLink, needed: meta.needed, count };
+  }).sort((a, b) => b.count - a.count);
+
+  scanState.step = 'review';
+  renderScanStep();
+}
+
+function renderScanReview() {
+  const body = document.getElementById('scan-modal-body');
+  if (!scanState.results.length) {
+    body.innerHTML = `
+      <div class="scan-empty-state">인식된 아이템이 없어요. 영역을 다시 선택해보세요.</div>
+      <div class="scan-actions"><button class="filter-btn" onclick="scanState.step='crop-grid';renderScanStep()">다시 선택</button></div>`;
+    return;
+  }
+  const rowsHtml = scanState.results.map((r, i) => `
+    <div class="scan-result-row">
+      ${r.iconLink ? `<img class="scan-result-icon" src="${escapeHtml(r.iconLink)}" alt="">` : ''}
+      <div class="scan-result-name">${escapeHtml(r.name)}</div>
+      <div class="scan-result-count">
+        <button class="tic-btn" onclick="adjustScanResultCount(${i},-1)">−</button>
+        <span>${r.count}</span>
+        <button class="tic-btn" onclick="adjustScanResultCount(${i},1)">+</button>
+      </div>
+      <button class="scan-result-remove" onclick="removeScanResult(${i})" title="목록에서 제외">✕</button>
+    </div>`).join('');
+  body.innerHTML = `
+    <div class="scan-step-desc">이렇게 인식했어요. 틀린 항목은 빼거나 수량을 고쳐주세요.</div>
+    <div class="scan-result-list">${rowsHtml}</div>
+    <div class="scan-actions">
+      <button class="filter-btn" onclick="scanState.step='crop-grid';renderScanStep()">다시 선택</button>
+      <button class="filter-btn active" onclick="applyScanResults()">적용</button>
+    </div>`;
+}
+function adjustScanResultCount(i, delta) {
+  scanState.results[i].count = Math.max(0, scanState.results[i].count + delta);
+  renderScanReview();
+}
+function removeScanResult(i) {
+  scanState.results.splice(i, 1);
+  renderScanReview();
+}
+function applyScanResults() {
+  for (const r of scanState.results) {
+    if (r.count > 0) setCount(r.key, getCount(r.key) + r.count, r.needed);
+  }
+  closeScanModal();
+  renderCurrentItemTab();
+}
+
 init();
 </script>
 
@@ -5380,6 +5911,47 @@ init();
       <button class="modal-close" onclick="document.getElementById('item-modal').classList.add('hidden')">✕</button>
     </div>
     <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- 시작 안내(온보딩) 모달 -->
+<div class="modal-overlay hidden" id="onboarding-modal">
+  <div class="modal-box onboarding-modal-box">
+    <div class="modal-header">
+      <div class="modal-item-name">👋 Tarkov ContractBoard에 오신 걸 환영합니다</div>
+      <button class="modal-close" onclick="closeOnboarding()">✕</button>
+    </div>
+    <div class="modal-body">
+      <p class="onboarding-p">퀘스트·하이드아웃·카파 컨테이너에 필요한 아이템을 한 곳에서 모아 추적하는 도구입니다.</p>
+
+      <div class="modal-section-title">시작하기 전에</div>
+      <p class="onboarding-p">툴바에서 <b>진영(BEAR / USEC)</b>, <b>에디션</b>, <b>레벨</b>을 본인 캐릭터에 맞게 설정해주세요. 이 값에 따라 필요한 퀘스트·아이템이 달라집니다.</p>
+
+      <div class="modal-section-title">4개 탭 안내</div>
+      <div class="onboarding-tab-row"><b>아이템 트래커</b><span>퀘스트·하이드아웃·카파에 필요한 아이템을 모아서 보여주고 수량을 체크합니다.</span></div>
+      <div class="onboarding-tab-row"><b>하이드아웃</b><span>시설별 건설 조건과 필요 재료를 확인합니다.</span></div>
+      <div class="onboarding-tab-row"><b>퀘스트 트래커</b><span>상인별로 퀘스트 진행 상황을 관리합니다.</span></div>
+      <div class="onboarding-tab-row"><b>스토리 챕터</b><span>메인 스토리 진행과 선택지를 추적합니다.</span></div>
+
+      <div class="modal-section-title">팁</div>
+      <p class="onboarding-p">모든 진행 상황은 브라우저에 자동 저장됩니다. 다른 기기로 옮기거나 백업하려면 상단 <b>📥 내보내기 / 📤 불러오기</b>를 사용하세요. 이 안내는 헤더의 <b>❓ 도움말</b> 버튼으로 언제든 다시 볼 수 있어요.</p>
+
+      <div class="scan-actions">
+        <button class="filter-btn active" onclick="closeOnboarding()">시작하기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 스크린샷 인식 모달 (베타) -->
+<div class="modal-overlay hidden" id="scan-modal">
+  <div class="modal-box scan-modal-box">
+    <div class="modal-header">
+      <div class="modal-item-name">📷 스크린샷으로 잡템 인식 <span style="font-size:11px;color:var(--muted);font-weight:400">(베타)</span></div>
+      <button class="filter-btn" onclick="resetScanState();renderScanStep()" title="업로드한 스크린샷을 지우고 처음부터 다시 시작" style="margin-left:auto">↺ 처음부터</button>
+      <button class="modal-close" onclick="closeScanModal()" style="margin-left:0">✕</button>
+    </div>
+    <div class="modal-body" id="scan-modal-body"></div>
   </div>
 </div>
 
