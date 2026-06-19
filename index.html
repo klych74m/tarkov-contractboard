@@ -1738,11 +1738,16 @@ function buildCombinedItems() {
   for (const item of allData.hideout) addCombinedItem(map, item, 'hideout', '하이드아웃건설');
   return Object.values(map)
     .map(item => {
-      // 완료로 전부 충족된 아이템은 0개짜리 출처만 남으므로, 원래 필요했던 총량 기준으로 보여준다.
-      const forcedDone = isItemFullyDoneViaCompletion(item);
+      // 출처(퀘스트/하이드아웃)별로 그 쪽 요구량만 이미 다 끝났으면 ✅와 원래 총량을 보여주고,
+      // 아직 남아있으면 남은 수량을 보여준다. 예: 하이드아웃 쪽은 끝났는데 퀘스트 쪽이 남아있는
+      // 아이템도 "하이드아웃 쪽은 이미 완료됨"이 카드에서 바로 보이도록(완료 탭에 안 보여서
+      // 헷갈리는 것을 방지).
       item.sourceSummary = item.sourceDetails
-        .filter(detail => (forcedDone ? detail.totalCount : detail.count) > 0)
-        .map(detail => `${detail.label} ${forcedDone ? detail.totalCount : detail.count}개`)
+        .filter(detail => detail.totalCount > 0)
+        .map(detail => {
+          const sourceDone = detail.count === 0;
+          return `${sourceDone ? '✅ ' : ''}${detail.label} ${sourceDone ? detail.totalCount : detail.count}개`;
+        })
         .join(' · ');
       return item;
     })
@@ -5066,7 +5071,9 @@ function openCraftInfoModal(itemId) {
   const modal = document.getElementById('craft-info-modal');
 
   const iconEl = document.getElementById('cim-icon');
-  iconEl.src = meta?.iconLink || '';
+  // src=''로 비우면 file:// 환경에서 "자기 자신을 프레임으로 불러오려는 시도"로 처리돼
+  // 콘솔에 보안 경고가 뜬다. 아이콘이 없을 때는 속성 자체를 제거한다.
+  if (meta?.iconLink) iconEl.src = meta.iconLink; else iconEl.removeAttribute('src');
   iconEl.style.display = meta?.iconLink ? '' : 'none';
   document.getElementById('cim-name').textContent = meta?.name || itemId;
   document.getElementById('cim-sub').textContent = '하이드아웃 제작 정보';
@@ -5172,7 +5179,9 @@ function openItemModal(source, key) {
   const cur = getCount(key);
   const modal = document.getElementById('item-modal');
   const iconEl = document.getElementById('modal-icon');
-  iconEl.src = item.iconLink || '';
+  // src=''로 비우면 file:// 환경에서 "자기 자신을 프레임으로 불러오려는 시도"로 처리돼
+  // 콘솔에 보안 경고가 뜬다. 아이콘이 없을 때는 속성 자체를 제거한다.
+  if (item.iconLink) iconEl.src = item.iconLink; else iconEl.removeAttribute('src');
   iconEl.style.display = item.iconLink ? '' : 'none';
   document.getElementById('modal-name').textContent = item.name;
   document.getElementById('modal-short').textContent = item.shortName ? `(${item.shortName})` : '';
@@ -5189,6 +5198,15 @@ function openItemModal(source, key) {
       ${displayCur} <span style="font-size:14px;color:var(--muted);font-weight:400">/ ${displayNeeded}</span>
     </div>
     <div class="modal-progress-bar"><div class="modal-progress-fill" style="width:${pct}%"></div></div>`;
+
+  // 일부 출처(퀘스트/하이드아웃)는 이미 완료됐지만 다른 출처에서 아직 필요해 전체 완료로는
+  // 표시되지 않는 경우, 아래 목록에 보이는 ✅ 표시가 "전체 완료"를 뜻하지 않음을 알려준다.
+  if (!forcedDone && item.needed > 0 && item.totalNeeded > item.needed) {
+    body += `<div style="margin-top:6px;font-size:11px;color:var(--muted);line-height:1.5">
+      ℹ️ 아래 출처 중 ✅ 표시된 것은 이미 제출/건설되어 제외됐지만, 표시 안 된 나머지 출처 때문에
+      ${item.needed}개가 아직 더 필요해서 완료 탭에는 나타나지 않습니다.
+    </div>`;
+  }
 
   // FIR 조건 표시
   if (item.hasFir || item.hasNofir) {
@@ -5989,7 +6007,7 @@ init();
 <div class="modal-overlay hidden" id="item-modal" onclick="closeItemModal(event)">
   <div class="modal-box">
     <div class="modal-header">
-      <img class="modal-item-icon" id="modal-icon" src="" alt="">
+      <img class="modal-item-icon" id="modal-icon" alt="">
       <div>
         <div class="modal-item-name" id="modal-name"></div>
         <div class="modal-item-short" id="modal-short"></div>
@@ -6045,7 +6063,7 @@ init();
 <div class="modal-overlay hidden" id="craft-info-modal" onclick="if(event.target===this)this.classList.add('hidden')">
   <div class="modal-box" style="max-width:480px">
     <div class="modal-header">
-      <img class="modal-item-icon" id="cim-icon" src="" alt="">
+      <img class="modal-item-icon" id="cim-icon" alt="">
       <div>
         <div class="modal-item-name" id="cim-name"></div>
         <div class="modal-item-short" id="cim-sub"></div>
