@@ -918,7 +918,13 @@ async function gql(query) {
   const res = await fetch(GQL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({query}) });
   if (!res.ok) throw new Error(`API ${res.status}`);
   const j = await res.json();
-  if (j.errors) throw new Error(j.errors[0].message);
+  if (j.errors) {
+    // tarkov.dev API가 특정 항목 하나(예: PVE 전용 퀘스트의 experience 필드)에서만 서버 오류를
+    // 내는 경우가 있는데, 이때도 나머지 항목은 data에 정상적으로 채워져서 온다. data가 비어있지
+    // 않으면 그 항목 하나가 null로 빠진 것만 감수하고 계속 쓴다(완전히 비어있을 때만 진짜 실패).
+    console.warn('tarkov.dev GraphQL partial error:', j.errors[0]?.message, j.errors);
+    if (!j.data) throw new Error(j.errors[0].message);
+  }
   return j.data;
 }
 
@@ -968,6 +974,13 @@ async function fetchAllData() {
     gql(`{ food: items(categoryNames: ["Food"]) { id name shortName iconLink craftsFor { station { name } level } }
            drink: items(categoryNames: ["Drink"]) { id name shortName iconLink craftsFor { station { name } level } } }`)
   ]);
+
+  // tarkov.dev가 특정 항목 하나의 필드 리졸브에 실패하면 그 항목만 null로 빠진 채 나머지는
+  // 정상으로 채워서 보내는 경우가 있다(예: PVE 전용 퀘스트 하나의 experience 필드). 그 null
+  // 항목 하나 때문에 전체 데이터를 못 쓰게 되는 일을 막기 위해 걸러낸다.
+  for (const d of [regularItemsData, pveItemsData, regularKoData, pveKoData]) {
+    if (Array.isArray(d?.tasks)) d.tasks = d.tasks.filter(Boolean);
+  }
 
   presetToBaseWeaponId = {};
   for (const it of (gunPresetsData?.items || [])) {
