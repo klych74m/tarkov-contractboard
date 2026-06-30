@@ -481,39 +481,6 @@
   .btn-retry{margin-top:14px;background:var(--danger);color:#fff;border:none;padding:8px 20px;border-radius:4px;cursor:pointer;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;letter-spacing:1px}
   .empty-state{color:var(--muted);text-align:center;padding:60px 20px;font-size:13px}
 
-  /* ── 지도 탭 ── */
-  .map-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-bottom:16px}
-  .map-card{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:10px 12px;cursor:pointer;transition:border-color .15s}
-  .map-card:hover{border-color:var(--accent)}
-  .map-card.active{border-color:var(--accent2);background:#182018}
-  .map-card-name{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;color:var(--text)}
-  .map-card-meta{font-size:11px;color:var(--muted);margin-top:2px}
-  .map-detail{background:var(--card);border:1px solid var(--border);border-radius:7px;padding:16px}
-  .map-detail-header{display:flex;align-items:center;justify-content:space-between;gap:10px}
-  .map-detail-title{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:20px;color:var(--text)}
-  .map-wiki-link{color:var(--muted);font-size:11px;text-decoration:none;white-space:nowrap}
-  .map-detail-meta{display:flex;gap:6px;margin:6px 0}
-  .map-detail-desc{font-size:12px;color:var(--muted);line-height:1.6;margin:8px 0 14px;white-space:pre-line}
-  .map-img-scroll{max-height:75vh;overflow:auto;border-radius:6px;margin-bottom:6px;background:#0a0a0a}
-  .map-img-inner{position:relative;line-height:0;display:inline-block;min-width:100%}
-  .map-img{width:100%;height:auto;display:block}
-  .map-marker{position:absolute;width:12px;height:12px;border-radius:50%;border:2px solid rgba(0,0,0,0.7);transform:translate(-50%,-50%);cursor:pointer;z-index:2;transition:transform .15s}
-  .map-marker:hover{transform:translate(-50%,-50%) scale(1.6);z-index:10}
-  .map-marker::after{content:attr(data-label);position:absolute;bottom:130%;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.92);color:#e8e4d8;font-size:10px;padding:2px 7px;border-radius:3px;white-space:nowrap;display:none;pointer-events:none;font-family:'Rajdhani',sans-serif;font-weight:600;z-index:20}
-  .map-marker:hover::after{display:block}
-  .map-marker.pmc{background:#d4503a}
-  .map-marker.scav{background:#5db640}
-  .map-marker.shared{background:#d4aa30}
-  .map-marker.hazard{background:#d44;border-radius:2px}
-  .map-diagram-empty{color:var(--muted);font-size:12px;text-align:center;padding:40px 20px}
-  .map-legend{display:flex;gap:12px;font-size:10px;color:var(--muted);margin-bottom:4px;flex-wrap:wrap}
-  .map-legend-item.pmc{color:#d4503a}.map-legend-item.scav{color:#5db640}.map-legend-item.shared{color:#d4aa30}.map-legend-item.hazard{color:#d44}
-  .map-attribution{font-size:10px;color:var(--muted);margin-bottom:10px}
-  .map-attribution a{color:var(--accent2)}
-  .map-extract-list{display:flex;flex-direction:column;gap:6px;margin-bottom:10px}
-  .map-extract-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-  .map-extract-faction{font-size:10px;font-weight:700;color:var(--accent);min-width:36px}
-
   /* ── 스토리 챕터 ── */
   .story-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:16px;padding:4px 0;align-items:start}
   .chapter-card{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;transition:border-color .15s}
@@ -688,7 +655,6 @@
   <div class="main-tab" data-main="hideout" onclick="switchMain('hideout')">하이드아웃<span class="tab-badge" id="hideout-tab-badge" style="display:none" title="건설 가능한 시설이 있습니다">!</span></div>
   <div class="main-tab" data-main="quests" onclick="switchMain('quests')">퀘스트 트래커</div>
   <div class="main-tab" data-main="story" onclick="switchMain('story')">📖 스토리 챕터 <span id="story-tab-count" style="font-size:11px;opacity:.6"></span></div>
-  <div class="main-tab" data-main="maps" onclick="switchMain('maps')">🗺 지도</div>
 </div>
 
 <!-- ── 아이템 트래커 패널 ── -->
@@ -822,11 +788,6 @@
 <!-- ── 스토리 챕터 패널 ── -->
 <div class="main-panel" id="main-story">
   <div class="main-content" id="story-content"></div>
-</div>
-
-<!-- ── 지도 패널 ── -->
-<div class="main-panel" id="main-maps">
-  <div class="main-content" id="maps-content"></div>
 </div>
 
 <script>
@@ -991,7 +952,7 @@ async function fetchAllData() {
     startRewards { items { item { id name } count } traderStanding { trader { name } standing } }
     finishRewards { items { item { name iconLink } count } traderStanding { trader { name normalizedName imageLink } standing } offerUnlock { trader { name } } }`;
 
-  const [regularItemsData, pveItemsData, regularKoData, pveKoData, hideoutData, tradersLoyaltyData, craftsData, gunPresetsData, categoryCraftItemsData, mapsData] = await Promise.all([
+  const [regularItemsData, pveItemsData, regularKoData, pveKoData, hideoutData, tradersLoyaltyData, craftsData, gunPresetsData, categoryCraftItemsData] = await Promise.all([
     gql(`{ tasks(lang: en, gameMode: regular) { ${ITEMS_FIELDS} }}`),
     gql(`{ tasks(lang: en, gameMode: pve)     { ${ITEMS_FIELDS} }}`),
     gql(`{ tasks(lang: ko, gameMode: regular) { ${KO_FIELDS}   }}`),
@@ -1011,14 +972,7 @@ async function fetchAllData() {
     gql(`{ items(type: gun) { id properties { ... on ItemPropertiesWeapon { defaultPreset { id } presets { id } } } } }`),
     // "FIR Food/Drink류 아이템 제출" 같은 카테고리 조건에서, 하이드아웃 제작으로 대체 가능한 항목 목록용
     gql(`{ food: items(categoryNames: ["Food"]) { id name shortName iconLink craftsFor { station { name } level } }
-           drink: items(categoryNames: ["Drink"]) { id name shortName iconLink craftsFor { station { name } level } } }`),
-    // 지도 탭 — 맵별 기본 정보 + 탈출구/위험구역 좌표(보스는 위치 데이터가 없어 이름·확률만 제공됨)
-    gql(`{ maps(lang: ko) {
-      name normalizedName wiki raidDuration players minPlayerLevel description
-      extracts { name faction position { x y z } }
-      hazards { name hazardType position { x y z } }
-      bosses { boss { name } spawnChance }
-    }}`)
+           drink: items(categoryNames: ["Drink"]) { id name shortName iconLink craftsFor { station { name } level } } }`)
   ]);
 
   // tarkov.dev가 특정 항목 하나의 필드 리졸브에 실패하면 그 항목만 null로 빠진 채 나머지는
@@ -1120,8 +1074,7 @@ async function fetchAllData() {
     startRewardItemIds,
     tradersLoyaltyData,
     craftsData,
-    categoryCraftItemsData,
-    mapsData
+    categoryCraftItemsData
   };
 }
 
@@ -4497,170 +4450,6 @@ function switchMain(tab) {
   if (tab==='hideout') renderHideoutTab();
   if (tab==='quests') renderCurrentQuestTab();
   if (tab==='story') renderStory();
-  if (tab==='maps') renderMapsTab();
-}
-
-// ══════════════════════════════════════════════════════
-//  지도 탭
-// ══════════════════════════════════════════════════════
-// API의 ground-zero-21/night-factory/ground-zero-tutorial은 같은 맵의 변형이라 기본판만 보여준다.
-const MAPS_CANONICAL_ORDER = ['ground-zero','interchange','streets-of-tarkov','customs','factory','woods','shoreline','reserve','lighthouse','the-lab','the-labyrinth','icebreaker','terminal'];
-let currentMapId = null;
-
-function getCanonicalMaps() {
-  const byName = new Map((allData.maps || []).map(m => [m.normalizedName, m]));
-  return MAPS_CANONICAL_ORDER.map(id => byName.get(id)).filter(Boolean);
-}
-
-function selectMap(normalizedName) {
-  currentMapId = currentMapId === normalizedName ? null : normalizedName;
-  renderMapsTab();
-}
-
-const MAP_FACTION_KO = { pmc: 'PMC', scav: '스캐브', shared: '공용' };
-
-// tarkov.dev MIT-licensed 2D 맵 이미지 + 좌표 변환 설정
-// 이미지: CC BY-NC 4.0 (각 지도 제작자 귀속)
-// 좌표 변환: tarkov.dev maps.json의 Leaflet transform + bounds 기반
-const MAP_CONFIG = {
-  'ground-zero':       { img:'ground-zero',  tr:[0.524,167.3,0.524,65.1],     rot:180, b:[[249,-124],[-99,364]] },
-  'streets-of-tarkov': { img:'streets',      tr:[0.38,0,0.38,0],              rot:180, b:[[323,-295],[-280,532]] },
-  'customs':           { img:'customs',      tr:[0.239,168.65,0.239,136.35],  rot:180, b:[[698,-307],[-372,237]] },
-  'factory':           { img:'factory',      tr:[1.629,119.9,1.629,139.3],    rot:90,  b:[[77,-64.5],[-65.5,67.4]], noOverlay:true },
-  'interchange':       { img:'interchange',  tr:[0.265,150.6,0.265,134.6],    rot:180, b:[[598,-442],[-433,426]], noOverlay:true },
-  'the-lab':           { img:'labs',         tr:[0.575,281.2,0.575,193.7],    rot:270, b:[[-80,-477],[-287,-193]] },
-  'the-labyrinth':     { img:'labyrinth',    tr:[2.115,85.5,2.115,128.0],     rot:270, b:[[-52,-37],[53,76]] },
-  'lighthouse':        { img:'lighthouse',   tr:[0.2,0,0.2,0],                rot:180, b:[[515,-998],[-545,725]] },
-  'reserve':           { img:'reserve',      tr:[0.395,122.0,0.395,137.65],   rot:180, b:[[289,-293],[-303,244]] },
-  'shoreline':         { img:'shoreline',    tr:[0.16,83.2,0.16,111.1],       rot:180, b:[[504,-415],[-1056,618]] },
-  'terminal':          { img:'terminal',     tr:[0.20,0,0.20,0],              rot:180, b:[[463,-580],[-433,475]] },
-  'woods':             { img:'woods',        tr:[0.1855,112.95,0.1855,167.85],rot:180, b:[[646,-914],[-761,442]] },
-  'icebreaker':        { img:'icebreaker',   tr:null, rot:null, b:null, noOverlay:true },
-};
-
-// 게임 월드 좌표(x,z) → 이미지 백분율 위치(%x, %y)
-// tarkov.dev Leaflet transform + coordinateRotation을 이용한 정확한 변환
-function worldToPercent(worldX, worldZ, cfg) {
-  if (!cfg || !cfg.b || !cfg.tr) return null;
-  const scale = cfg.tr[0], offX = cfg.tr[1], offY = cfg.tr[3];
-  function rot(x, z) {
-    switch(cfg.rot) {
-      case 90:  return [-z, x];
-      case 180: return [-x, -z];
-      case 270: return [z, -x];
-      default:  return [x, z];
-    }
-  }
-  const [rx, rz] = rot(worldX, worldZ);
-  const lx = rx * scale + offX, ly = rz * scale + offY;
-  const [[b1x,b1z],[b2x,b2z]] = cfg.b;
-  const [r1x,r1z] = rot(b1x, b1z), [r2x,r2z] = rot(b2x, b2z);
-  const minLx = Math.min(r1x,r2x)*scale+offX, maxLx = Math.max(r1x,r2x)*scale+offX;
-  const minLy = Math.min(r1z,r2z)*scale+offY, maxLy = Math.max(r1z,r2z)*scale+offY;
-  const px = (lx-minLx)/(maxLx-minLx)*100;
-  const py = (maxLy-ly)/(maxLy-minLy)*100; // Leaflet Y는 위가 양수 → 화면 Y 반전
-  if (px < -5 || px > 105 || py < -5 || py > 105) return null;
-  return [Math.max(0,Math.min(100,px)), Math.max(0,Math.min(100,py))];
-}
-
-function mapImgErr(img) {
-  img.parentNode.innerHTML = '<div class="map-diagram-empty">지도 이미지를 불러올 수 없습니다</div>';
-}
-
-function mapImageHtml(map) {
-  const cfg = MAP_CONFIG[map.normalizedName];
-  const imgKey = cfg ? cfg.img : (map.normalizedName || 'unknown');
-  const imgUrl = `https://raw.githubusercontent.com/the-hideout/tarkov-dev/main/public/maps/${imgKey}-2d.jpg`;
-
-  const markers = [];
-  let hasHazard = false;
-  if (cfg && !cfg.noOverlay && cfg.b) {
-    for (const e of (map.extracts || [])) {
-      if (!e.position) continue;
-      const pos = worldToPercent(e.position.x, e.position.z, cfg);
-      if (!pos) continue;
-      const fc = e.faction === 'pmc' ? 'pmc' : e.faction === 'scav' ? 'scav' : 'shared';
-      markers.push(`<div class="map-marker ${fc}" style="left:${pos[0].toFixed(2)}%;top:${pos[1].toFixed(2)}%" data-label="${escapeHtml(e.name)}"></div>`);
-    }
-    for (const h of (map.hazards || [])) {
-      if (!h.position) continue;
-      const pos = worldToPercent(h.position.x, h.position.z, cfg);
-      if (!pos) continue;
-      hasHazard = true;
-      markers.push(`<div class="map-marker hazard" style="left:${pos[0].toFixed(2)}%;top:${pos[1].toFixed(2)}%" data-label="${escapeHtml(h.name || h.hazardType || '위험구역')}"></div>`);
-    }
-  }
-
-  const legendItems = markers.length
-    ? `<div class="map-legend">
-        <span class="map-legend-item pmc">● PMC 탈출구</span>
-        <span class="map-legend-item scav">● 스캐브 탈출구</span>
-        <span class="map-legend-item shared">● 공용 탈출구</span>
-        ${hasHazard ? '<span class="map-legend-item hazard">■ 위험구역</span>' : ''}
-      </div>` : '';
-
-  return `<div class="map-img-scroll">
-    <div class="map-img-inner">
-      <img src="${imgUrl}" class="map-img" loading="lazy" alt="${escapeHtml(map.name)} 지도" onerror="mapImgErr(this)">
-      ${markers.join('')}
-    </div>
-  </div>
-  ${legendItems}
-  <div class="map-attribution">이미지: <a href="https://github.com/the-hideout/tarkov-dev" target="_blank" rel="noopener noreferrer">tarkov.dev</a> 커뮤니티 지도 (CC BY-NC 4.0)</div>`;
-}
-
-function mapDetailHtml(map) {
-  const byFaction = {};
-  for (const e of (map.extracts || [])) {
-    const f = e.faction || 'shared';
-    (byFaction[f] = byFaction[f] || []).push(e.name);
-  }
-  const factionOrder = ['pmc','scav','shared'];
-  const allFactions = [...factionOrder, ...Object.keys(byFaction).filter(f => !factionOrder.includes(f))];
-  const factionRows = allFactions.filter(f => byFaction[f]?.length).map(f =>
-    `<div class="map-extract-row"><span class="map-extract-faction">${MAP_FACTION_KO[f] || f}</span>${byFaction[f].map(n => `<span class="prereq-chip">${escapeHtml(n)}</span>`).join('')}</div>`
-  ).join('');
-  const bossRows = (map.bosses || []).filter(b => b.boss?.name).map(b =>
-    `<span class="prereq-chip">${escapeHtml(b.boss.name)}${b.spawnChance ? ` · ${Math.round(b.spawnChance*100)}%` : ''}</span>`
-  ).join('');
-
-  return `<div class="map-detail">
-    <div class="map-detail-header">
-      <div class="map-detail-title">${escapeHtml(map.name)}</div>
-      ${map.wiki ? `<a href="${escapeHtml(map.wiki)}" target="_blank" rel="noopener noreferrer" class="map-wiki-link">📖 위키</a>` : ''}
-    </div>
-    <div class="map-detail-meta">
-      ${map.players ? `<span class="badge badge-level">인원 ${escapeHtml(map.players)}</span>` : ''}
-      ${map.raidDuration ? `<span class="badge badge-level">레이드 ${map.raidDuration}분</span>` : ''}
-      ${map.minPlayerLevel ? `<span class="badge badge-level">Lv${map.minPlayerLevel}+</span>` : ''}
-    </div>
-    ${map.description ? `<div class="map-detail-desc">${escapeHtml(map.description)}</div>` : ''}
-    ${mapImageHtml(map)}
-    ${factionRows ? `<div class="quest-section-title">탈출구</div><div class="map-extract-list">${factionRows}</div>` : ''}
-    ${bossRows ? `<div class="quest-section-title">보스</div><div class="choice-option-list" style="display:flex;flex-wrap:wrap;gap:4px">${bossRows}</div>` : ''}
-  </div>`;
-}
-
-function renderMapsTab() {
-  const container = document.getElementById('maps-content');
-  if (!container) return;
-  const maps = getCanonicalMaps();
-  if (!maps.length) {
-    container.innerHTML = '<div class="empty-state">지도 데이터를 불러오는 중...</div>';
-    return;
-  }
-  const cards = maps.map(m => {
-    const active = currentMapId === m.normalizedName;
-    return `<div class="map-card${active ? ' active' : ''}" onclick="selectMap('${m.normalizedName}')">
-      <div class="map-card-name">${escapeHtml(m.name)}</div>
-      <div class="map-card-meta">${escapeHtml(m.players || '')}${m.raidDuration ? ` · ${m.raidDuration}분` : ''}</div>
-    </div>`;
-  }).join('');
-  const selected = maps.find(m => m.normalizedName === currentMapId);
-  container.innerHTML = `
-    <div class="map-grid">${cards}</div>
-    ${selected ? mapDetailHtml(selected) : '<div class="empty-state">지도를 선택하면 탈출구·보스 정보를 볼 수 있습니다.</div>'}
-  `;
 }
 
 // ══════════════════════════════════════════════════════
@@ -6814,9 +6603,8 @@ async function init() {
   }
 
   try {
-    const { regularItemsData, pveItemsData, regularQuestsData, pveQuestsData, hideoutData, startRewardItemIds, tradersLoyaltyData, craftsData, categoryCraftItemsData, mapsData } = await fetchAllData();
+    const { regularItemsData, pveItemsData, regularQuestsData, pveQuestsData, hideoutData, startRewardItemIds, tradersLoyaltyData, craftsData, categoryCraftItemsData } = await fetchAllData();
     allData.startRewardItemIds = startRewardItemIds;
-    allData.maps = mapsData?.maps || [];
     allData._rawRegularItemTasks = regularItemsData.tasks;
     allData._rawPveItemTasks = pveItemsData.tasks;
     allData._rawRegularQuestList = regularQuestsData.tasks;
