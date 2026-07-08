@@ -675,6 +675,7 @@
         <option value="eod">Edge of Darkness</option>
         <option value="unheard">The Unheard</option>
       </select>
+      <span id="edition-badge" class="badge badge-edition" style="display:none;font-size:9px;padding:1px 5px"></span>
     </div>
     <div class="level-input-wrap">
       <span>진영</span>
@@ -754,6 +755,7 @@
         <option value="eod">Edge of Darkness</option>
         <option value="unheard">The Unheard</option>
       </select>
+      <span id="edition-badge-quests" class="badge badge-edition" style="display:none;font-size:9px;padding:1px 5px"></span>
     </div>
     <button class="faction-btn bear active" id="faction-bear" onclick="setFaction('bear')">BEAR</button>
     <button class="faction-btn usec" id="faction-usec" onclick="setFaction('usec')">USEC</button>
@@ -816,7 +818,14 @@ function normalizeState(parsed) {
     collapsedSections: parsed.collapsedSections || {},
     manualXP: parsed.manualXP || 0,
     faction: parsed.faction || 'bear',
-    edition: ['standard','eod','unheard'].includes(parsed.edition) ? parsed.edition : 'standard',
+    ownedEditions: (() => {
+      if (Array.isArray(parsed.ownedEditions) && parsed.ownedEditions.length) {
+        return parsed.ownedEditions.filter(e => ['standard','eod','unheard'].includes(e));
+      }
+      // 구버전 edition 단일 값 마이그레이션
+      const leg = parsed.edition;
+      return (leg && leg !== 'standard') ? [leg] : ['standard'];
+    })(),
     excludeStart: parsed.excludeStart !== undefined ? parsed.excludeStart : true,
     gameMode: ['pve','pvp'].includes(parsed.gameMode) ? parsed.gameMode : 'pve',
     theme: ['dark','light'].includes(parsed.theme) ? parsed.theme : 'dark',
@@ -1083,6 +1092,21 @@ function questEnglishName(task) {
   return task?.nameEn || task?.name || '';
 }
 
+// 현재 보유한 에디션 목록 — ownedEditions 배열 기반
+function ownedEditions() {
+  return state.ownedEditions || ['standard'];
+}
+function hasEdition(ed) {
+  return ownedEditions().includes(ed);
+}
+// 가장 높은 단일 에디션 (표시·레거시 용도)
+function primaryEdition() {
+  const owned = ownedEditions();
+  if (owned.includes('unheard')) return 'unheard';
+  if (owned.includes('eod'))     return 'eod';
+  return 'standard';
+}
+
 function isPvpZoneQuest(task) {
   const name = questEnglishName(task);
   return name.includes('[PVP ZONE]') || name.includes('[PVE ZONE]');
@@ -1097,8 +1121,8 @@ function questEditionBadge(task) {
 
 function isQuestAvailableForEdition(task) {
   const name = questEnglishName(task);
-  if (EOD_ONLY_QUESTS.has(name)) return state.edition === 'eod';
-  if (state.edition === 'unheard' && UNHEARD_EXCLUDED_QUESTS.has(name)) return false;
+  if (EOD_ONLY_QUESTS.has(name)) return hasEdition('eod') || hasEdition('unheard');
+  if (hasEdition('unheard') && !hasEdition('eod') && UNHEARD_EXCLUDED_QUESTS.has(name)) return false;
   // PVE/PVP 분리는 API gameMode 파라미터로 처리됨 — 여기서는 에디션만 필터링
   return true;
 }
@@ -1402,8 +1426,8 @@ function hideoutStationKey(name) {
 
 function defaultHideoutLevel(station) {
   const key = hideoutStationKey(station.name);
-  if (key === 'stash') return state.edition === 'standard' ? 1 : 4;
-  if (key === 'cultist circle' && state.edition === 'unheard') {
+  if (key === 'stash') return primaryEdition() === 'standard' ? 1 : 4;
+  if (key === 'cultist circle' && hasEdition('unheard')) {
     return Math.max(...station.levels.map(level => level.level), 0);
   }
   return 0;
@@ -5193,7 +5217,7 @@ function findStoryObjective(objId) {
 
 // 에디션(Edge of Darkness/The Unheard)이 자동으로 충족시키는 목표인지 확인
 function isObjEditionSkipped(objId) {
-  return !!findStoryObjective(objId)?.editionSkip?.includes(state.edition);
+  return !!(findStoryObjective(objId)?.editionSkip?.some(e => hasEdition(e)));
 }
 
 function isObjDone(objId) { return !!state.storyObj?.[objId] || isObjEditionSkipped(objId); }
@@ -6488,18 +6512,58 @@ function recalculateEditionData() {
   refreshItemAggregation();
 }
 
-// 아이템 탭/퀘스트 탭에 각각 있는 에디션 선택 select를 항상 같은 값으로 동기화
+// 에디션 select + 복수 보유 뱃지 동기화
 function syncEditionSelects() {
-  const v = state.edition || 'standard';
-  const a = document.getElementById('game-edition');
-  if (a) a.value = v;
-  const b = document.getElementById('game-edition-quests');
-  if (b) b.value = v;
+  const primary = primaryEdition();
+  ['game-edition','game-edition-quests'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = primary;
+  });
+  const owned = ownedEditions();
+  const bothPremium = owned.includes('eod') && owned.includes('unheard');
+  ['edition-badge','edition-badge-quests'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (bothPremium) {
+      el.textContent = 'EOD + Unheard';
+      el.style.display = '';
+    } else {
+      el.style.display = 'none';
+    }
+  });
 }
 
+// select 변경 시 → 팝업으로 추가 에디션 여부 질의
 function setEdition(edition) {
   if (!['standard','eod','unheard'].includes(edition)) return;
-  state.edition = edition;
+  if (edition === 'standard') {
+    applyEditions(['standard']);
+    return;
+  }
+  // 선택한 에디션과 반대 프리미엄 에디션
+  const other = edition === 'eod' ? 'unheard' : 'eod';
+  const otherLabel = other === 'unheard' ? 'The Unheard' : 'Edge of Darkness';
+  const modal = document.getElementById('edition-confirm-modal');
+  if (!modal) { applyEditions([edition]); return; }
+  document.getElementById('edition-confirm-text').textContent =
+    `${otherLabel} 에디션도 함께 보유하고 계신가요?`;
+  document.getElementById('edition-confirm-yes').onclick = () => {
+    closeEditionConfirmModal();
+    applyEditions([edition, other]);
+  };
+  document.getElementById('edition-confirm-no').onclick = () => {
+    closeEditionConfirmModal();
+    applyEditions([edition]);
+  };
+  modal.classList.remove('hidden');
+}
+
+function closeEditionConfirmModal() {
+  document.getElementById('edition-confirm-modal')?.classList.add('hidden');
+}
+
+function applyEditions(editions) {
+  state.ownedEditions = editions;
   saveState();
   syncEditionSelects();
   recalculateEditionData();
@@ -7136,6 +7200,21 @@ init();
       <button class="modal-close" onclick="document.getElementById('item-modal').classList.add('hidden')">✕</button>
     </div>
     <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<!-- 에디션 추가 구매 확인 모달 -->
+<div class="modal-overlay hidden" id="edition-confirm-modal" onclick="if(event.target===this) closeEditionConfirmModal()">
+  <div class="modal-box" style="max-width:360px">
+    <div class="modal-header">
+      <div class="modal-item-name">🎫 에디션 확인</div>
+      <button class="modal-close" onclick="closeEditionConfirmModal()">✕</button>
+    </div>
+    <div style="padding:20px 20px 8px;font-size:13px;color:var(--text);line-height:1.6" id="edition-confirm-text"></div>
+    <div style="display:flex;gap:10px;padding:12px 20px 20px;justify-content:flex-end">
+      <button id="edition-confirm-no" style="padding:7px 18px;font-size:12px;border-radius:5px;cursor:pointer;background:var(--bg2);color:var(--text);border:1px solid var(--border)">아니요</button>
+      <button id="edition-confirm-yes" style="padding:7px 18px;font-size:12px;border-radius:5px;cursor:pointer;background:#4a3060;color:#d4b8f0;border:1px solid #7a50a0">네, 둘 다 보유</button>
+    </div>
   </div>
 </div>
 
