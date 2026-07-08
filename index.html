@@ -929,16 +929,8 @@ async function gql(query) {
 }
 
 async function fetchAllData() {
-  const ITEMS_FIELDS = `
-    id name kappaRequired factionName
-    trader { name imageLink normalizedName }
-    startRewards { items { item { id name } count } }
-    objectives {
-      id description type optional
-      ... on TaskObjectiveItem { type item { id name shortName iconLink } count foundInRaid }
-    }
-    taskRequirements { task { id name } status }`;
-  const KO_FIELDS = `
+  // EN이 완전한 퀘스트 목록의 기준. KO는 번역 오버레이용으로만 사용.
+  const FULL_FIELDS = `
     id name wikiLink kappaRequired experience factionName
     minPlayerLevel availableDelaySecondsMin availableDelaySecondsMax
     requiredPrestige { id name prestigeLevel }
@@ -951,12 +943,14 @@ async function fetchAllData() {
     }
     startRewards { items { item { id name } count } traderStanding { trader { name } standing } }
     finishRewards { items { item { name iconLink } count } traderStanding { trader { name normalizedName imageLink } standing } offerUnlock { trader { name } } }`;
+  // KO 쿼리는 번역 텍스트만 가져옴 (experience 등 오류 유발 필드 제외)
+  const KO_TRANS_FIELDS = `id name wikiLink objectives { id description }`;
 
-  const [regularItemsData, pveItemsData, regularKoData, pveKoData, hideoutData, tradersLoyaltyData, craftsData, gunPresetsData, categoryCraftItemsData] = await Promise.all([
-    gql(`{ tasks(lang: en, gameMode: regular) { ${ITEMS_FIELDS} }}`),
-    gql(`{ tasks(lang: en, gameMode: pve)     { ${ITEMS_FIELDS} }}`),
-    gql(`{ tasks(lang: ko, gameMode: regular) { ${KO_FIELDS}   }}`),
-    gql(`{ tasks(lang: ko, gameMode: pve)     { ${KO_FIELDS}   }}`),
+  const [regularEnData, pveEnData, regularKoData, pveKoData, hideoutData, tradersLoyaltyData, craftsData, gunPresetsData, categoryCraftItemsData] = await Promise.all([
+    gql(`{ tasks(lang: en, gameMode: regular) { ${FULL_FIELDS} }}`),
+    gql(`{ tasks(lang: en, gameMode: pve)     { ${FULL_FIELDS} }}`),
+    gql(`{ tasks(lang: ko, gameMode: regular) { ${KO_TRANS_FIELDS} }}`),
+    gql(`{ tasks(lang: ko, gameMode: pve)     { ${KO_TRANS_FIELDS} }}`),
     gql(`{ hideoutStations(lang: en) {
       name normalizedName imageLink levels {
         id level constructionTime
@@ -978,7 +972,7 @@ async function fetchAllData() {
   // tarkov.dev가 특정 항목 하나의 필드 리졸브에 실패하면 그 항목만 null로 빠진 채 나머지는
   // 정상으로 채워서 보내는 경우가 있다(예: PVE 전용 퀘스트 하나의 experience 필드). 그 null
   // 항목 하나 때문에 전체 데이터를 못 쓰게 되는 일을 막기 위해 걸러낸다.
-  for (const d of [regularItemsData, pveItemsData, regularKoData, pveKoData]) {
+  for (const d of [regularEnData, pveEnData, regularKoData, pveKoData]) {
     if (Array.isArray(d?.tasks)) d.tasks = d.tasks.filter(Boolean);
   }
 
@@ -990,86 +984,83 @@ async function fetchAllData() {
     }
   }
 
-  // 영문명 맵 생성 (id → 영문 이름)
-  function buildEnNameMap(enTasks) {
-    const map = {};
-    for (const t of enTasks) map[t.id] = t.name;
-    return map;
+  // EN 데이터가 기준. KO 번역(이름·목표 설명·wikiLink)을 오버레이로 적용.
+  // koNameMap: id → KO 이름 (regular+pve 합산 — taskRequirements 조회용)
+  const koNameMap = {};
+  for (const t of [...(regularKoData.tasks || []), ...(pveKoData.tasks || [])]) {
+    if (t.name) koNameMap[t.id] = t.name;
   }
-  const regularEnMap = buildEnNameMap(regularItemsData.tasks);
-  const pveEnMap = { ...regularEnMap };
-  for (const t of pveItemsData.tasks) pveEnMap[t.id] = t.name;
 
-  // ko 퀘스트에 영문명 병합 → 이름을 "한국어명 (English)" 형태로
-  function processKoTasks(koTasks, enMap) {
-    for (const t of koTasks) {
-      const enName = enMap[t.id] || '';
-      t.nameEn = enName;
-      const apiHasKo = enName && t.name !== enName;
-      const koOverride = !apiHasKo && enName && QUEST_NAME_KO[enName];
-      if (koOverride) {
-        t.name = koOverride;
-        t.nameDisplay = `${koOverride} (${enName})`;
+  function applyKoTranslations(enTasks, koTasks) {
+    const koMap = {};
+    for (const t of koTasks) koMap[t.id] = t;
+    const missing = [];
+    for (const t of enTasks) {
+      t.nameEn = t.name;
+      const ko = koMap[t.id];
+      const koName = ko?.name;
+      const hasKoApi = koName && koName !== t.name;
+      const koOverride = !hasKoApi && QUEST_NAME_KO[t.name];
+      if (hasKoApi) {
+        t.nameDisplay = `${koName} (${t.name})`;
+      } else if (koOverride) {
+        t.nameDisplay = `${koOverride} (${t.name})`;
       } else {
-        t.nameDisplay = apiHasKo ? `${t.name} (${enName})` : t.name;
+        t.nameDisplay = t.name;
+        missing.push({ id: t.id, name: t.name, trader: t.trader?.name });
       }
-      for (const req of (t.taskRequirements || [])) {
-        const reqEnName = enMap[req.task.id] || req.task.name;
-        req.task.nameEn = reqEnName;
-        req.task.nameKo = req.task.name;
-        const reqApiHasKo = reqEnName && req.task.name !== reqEnName;
-        const reqKoOverride = !reqApiHasKo && reqEnName && QUEST_NAME_KO[reqEnName];
-        if (reqKoOverride) {
-          req.task.name = reqKoOverride;
-          req.task.nameDisplay = `${reqKoOverride} (${reqEnName})`;
-        } else {
-          req.task.nameDisplay = reqApiHasKo ? `${req.task.name} (${reqEnName})` : req.task.name;
+      t.wikiLink = ko?.wikiLink || t.wikiLink || null;
+      // KO 목표 설명 병합
+      if (ko?.objectives) {
+        const koObjMap = {};
+        for (const obj of ko.objectives) koObjMap[obj.id] = obj;
+        for (const obj of (t.objectives || [])) {
+          if (koObjMap[obj.id]?.description) obj.description = koObjMap[obj.id].description;
         }
       }
-      // tarkov.dev ko 쿼리가 일부 목표에 대해 잘못된 description을 반환하는 경우 보정
+      // 목표 설명 수동 보정
       for (const obj of (t.objectives || [])) {
         if (OBJECTIVE_DESC_OVERRIDES[obj.id]) obj.description = OBJECTIVE_DESC_OVERRIDES[obj.id];
       }
-    }
-  }
-  processKoTasks(regularKoData.tasks, regularEnMap);
-  processKoTasks(pveKoData.tasks, pveEnMap);
-
-  // itemsData에 nameDisplay, wikiLink 병합 (aggregateQuestItems용)
-  function mergeItemsWithKo(itemsTasks, koTasks) {
-    const koMap = {};
-    for (const t of koTasks) koMap[t.id] = t;
-    for (const t of itemsTasks) {
-      const ko = koMap[t.id];
-      t.nameEn = t.name;
-      const koName = ko?.name;
-      const koOverride2 = (!koName || koName === t.name) && QUEST_NAME_KO[t.name];
-      if (koName && koName !== t.name) {
-        t.nameDisplay = `${koName} (${t.name})`;
-      } else if (koOverride2) {
-        t.nameDisplay = `${koOverride2} (${t.name})`;
-      } else {
-        t.nameDisplay = t.name;
+      // taskRequirements: KO 이름 적용
+      for (const req of (t.taskRequirements || [])) {
+        req.task.nameEn = req.task.name;
+        const reqKoName = koNameMap[req.task.id];
+        const reqHasKo = reqKoName && reqKoName !== req.task.name;
+        const reqKoOverride = !reqHasKo && QUEST_NAME_KO[req.task.name];
+        if (reqHasKo) {
+          req.task.nameDisplay = `${reqKoName} (${req.task.name})`;
+        } else if (reqKoOverride) {
+          req.task.nameDisplay = `${reqKoOverride} (${req.task.name})`;
+        } else {
+          req.task.nameDisplay = req.task.name;
+        }
       }
-      t.wikiLink = ko?.wikiLink || null;
-      t.startRewards = t.startRewards || ko?.startRewards || { items: [] };
     }
+    return missing;
   }
-  mergeItemsWithKo(regularItemsData.tasks, regularKoData.tasks);
-  mergeItemsWithKo(pveItemsData.tasks, pveKoData.tasks);
+
+  const regularMissing = applyKoTranslations(regularEnData.tasks, regularKoData.tasks);
+  const pveMissing = applyKoTranslations(pveEnData.tasks, pveKoData.tasks);
+  // 중복 제거 후 콘솔 리포트
+  const allMissingKo = [...new Map([...regularMissing, ...pveMissing].map(m => [m.id, m])).values()];
+  if (allMissingKo.length > 0) {
+    console.info(`[KO 번역 없음] ${allMissingKo.length}개 퀘스트 — 영문명으로 표시됨:`);
+    for (const m of allMissingKo) console.info(`  ${m.trader || '?'} | ${m.name}`);
+  }
 
   const startRewardItemIds = new Set();
-  for (const t of regularItemsData.tasks) {
+  for (const t of regularEnData.tasks) {
     for (const si of (t.startRewards?.items || [])) {
       if (si.item?.id) startRewardItemIds.add(si.item.id);
     }
   }
 
   return {
-    regularItemsData,
-    pveItemsData,
-    regularQuestsData: regularKoData,
-    pveQuestsData: pveKoData,
+    regularItemsData: regularEnData,
+    pveItemsData: pveEnData,
+    regularQuestsData: regularEnData,
+    pveQuestsData: pveEnData,
     hideoutData,
     startRewardItemIds,
     tradersLoyaltyData,
