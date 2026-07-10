@@ -919,6 +919,7 @@ let traders = []; // 상인 목록
 let traderLoyaltyLevels = {}; // normalizedName → { levels:[], currency:'RUB' }
 let presetToBaseWeaponId = {}; // 무기 프리셋(완성형) 아이템 ID → 베이스(분해형) 아이템 ID
 function normalizeWeaponId(id) { return presetToBaseWeaponId[id] || id; }
+let koItemMap = {}; // 아이템 ID → 한국어 이름 (tarkov.dev lang:ko)
 let craftsByItemId = {}; // itemId → craft[]
 let craftItemMeta = {}; // itemId → { name, shortName, iconLink }
 let craftableItemsByCategory = {}; // 'Food'|'Drink' → 제작 가능한 해당 카테고리 아이템[]
@@ -955,7 +956,7 @@ async function fetchAllData() {
   // KO 쿼리는 번역 텍스트만 가져옴 (experience 등 오류 유발 필드 제외)
   const KO_TRANS_FIELDS = `id name wikiLink objectives { id description }`;
 
-  const [regularEnData, pveEnData, regularKoData, pveKoData, hideoutData, tradersLoyaltyData, craftsData, gunPresetsData, categoryCraftItemsData] = await Promise.all([
+  const [regularEnData, pveEnData, regularKoData, pveKoData, hideoutData, tradersLoyaltyData, craftsData, gunPresetsData, categoryCraftItemsData, koItemsData] = await Promise.all([
     gql(`{ tasks(lang: en, gameMode: regular) { ${FULL_FIELDS} }}`),
     gql(`{ tasks(lang: en, gameMode: pve)     { ${FULL_FIELDS} }}`),
     gql(`{ tasks(lang: ko, gameMode: regular) { ${KO_TRANS_FIELDS} }}`),
@@ -975,7 +976,9 @@ async function fetchAllData() {
     gql(`{ items(type: gun) { id properties { ... on ItemPropertiesWeapon { defaultPreset { id } presets { id } } } } }`),
     // "FIR Food/Drink류 아이템 제출" 같은 카테고리 조건에서, 하이드아웃 제작으로 대체 가능한 항목 목록용
     gql(`{ food: items(categoryNames: ["Food"]) { id name shortName iconLink craftsFor { station { name } level } }
-           drink: items(categoryNames: ["Drink"]) { id name shortName iconLink craftsFor { station { name } level } } }`)
+           drink: items(categoryNames: ["Drink"]) { id name shortName iconLink craftsFor { station { name } level } } }`),
+    // 아이템 한국어 이름 맵 구축용
+    gql(`{ items(lang: ko) { id name } }`)
   ]);
 
   // tarkov.dev가 특정 항목 하나의 필드 리졸브에 실패하면 그 항목만 null로 빠진 채 나머지는
@@ -983,6 +986,13 @@ async function fetchAllData() {
   // 항목 하나 때문에 전체 데이터를 못 쓰게 되는 일을 막기 위해 걸러낸다.
   for (const d of [regularEnData, pveEnData, regularKoData, pveKoData]) {
     if (Array.isArray(d?.tasks)) d.tasks = d.tasks.filter(Boolean);
+  }
+
+  koItemMap = {};
+  for (const it of (koItemsData?.items || [])) {
+    // tarkov.dev의 아이템 한국어 API가 다수 항목에서 깨진 인코딩을 반환함 (U+FFFD 포함).
+    // 깨진 이름은 제외하고 온전한 번역만 저장한다.
+    if (it.id && it.name && !it.name.includes('�') && !it.name.includes('\x08')) koItemMap[it.id] = it.name.trim();
   }
 
   presetToBaseWeaponId = {};
@@ -1308,6 +1318,7 @@ function aggregateQuestItems(tasks, mode, excludeStartRewards = false) {
       const key = itemId;
       if (!map[key]) map[key] = {
         key, id: itemId, name: effectiveObj.item.name,
+        nameKo: koItemMap[itemId] || null,
         shortName: effectiveObj.item.shortName, iconLink: effectiveObj.item.iconLink,
         needed: 0, neededFir: 0, neededNofir: 0,
         totalNeeded: 0, totalNeededFir: 0, totalNeededNofir: 0,
@@ -1357,7 +1368,8 @@ function aggregateHideoutItems(stations) {
           attr.name === 'foundInRaid' && String(attr.value).toLowerCase() === 'true'
         );
         if (!map[key]) map[key] = {
-          key, id:req.item.id, name:req.item.name, shortName:req.item.shortName, iconLink:req.item.iconLink,
+          key, id:req.item.id, name:req.item.name, nameKo:koItemMap[req.item.id]||null,
+          shortName:req.item.shortName, iconLink:req.item.iconLink,
           needed:0, neededFir:0, neededNofir:0,
           totalNeeded:0, totalNeededFir:0, totalNeededNofir:0,
           hasFir:false, hasNofir:false,
@@ -1587,7 +1599,7 @@ function hideoutReqRows(station, level) {
       done,
       fir,
       unknown: req.item.id === ROUBLES_ITEM_ID,
-      searchable: `${req.item.name} ${req.item.shortName || ''}`,
+      searchable: `${req.item.name} ${req.item.shortName || ''} ${koItemMap[req.item.id] || ''}`,
       html: `<div class="hideout-req-row ${done?'done':'missing'} ${fir?'fir-required':''}">
         <span class="hideout-req-name">${escapeHtml(req.item.shortName || req.item.name)}${fir ? ' <span class="modal-fir-badge">FIR 필요</span>' : ' <span class="nofir-badge">일반</span>'}</span>
         <span class="hideout-req-count">${have}/${req.count}</span>
@@ -1947,12 +1959,14 @@ function itemCardHtml(item, suffix) {
        <button class="counter-btn plus" onclick="setCount('${item.key}',getCount('${item.key}')+1,${item.needed})">+</button>`;
 
   // 아이콘 클릭 → 상세 모달
+  const hasKoName = item.nameKo && item.nameKo !== item.name;
+  const displayItemName = hasKoName ? `${item.nameKo} (${item.name})` : item.name;
   const cardId = `card-${item.key}${suffix?'-'+suffix:''}`;
   return `<div class="item-card ${done?'completed':''}" id="${cardId}" data-needed="${displayNeeded}" data-forced-done="${forcedDone?'1':''}" style="cursor:pointer" onclick="openItemModal('${item.source}','${item.key}')">
     ${item.iconLink?`<img class="item-icon" src="${escapeHtml(item.iconLink)}" alt="" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:``}
     <div class="item-icon-placeholder" style="${item.iconLink?'display:none':''}">📦</div>
     <div class="item-info">
-      <div class="item-name">${escapeHtml(item.shortName||item.name)}</div>
+      <div class="item-name">${escapeHtml(displayItemName)}</div>
       ${requirementsHtml}
       <div class="item-meta" title="${escapeHtml(metaTitle)}">${escapeHtml(metaStr||item.name)}</div>
       <div class="counter" onclick="event.stopPropagation()">
@@ -1974,7 +1988,7 @@ function sectionHtml(title, items, suffix) {
 function filterItems(items) {
   const q = document.getElementById('item-search').value.toLowerCase();
   return items.filter(i => {
-    if (q && !i.name.toLowerCase().includes(q) && !(i.shortName||'').toLowerCase().includes(q)) return false;
+    if (q && !i.name.toLowerCase().includes(q) && !(i.shortName||'').toLowerCase().includes(q) && !(i.nameKo||'').toLowerCase().includes(q)) return false;
     const done = isItemDone(i);
     if (statusFilter === 'complete' && !done) return false;
     if (statusFilter === 'incomplete' && done) return false;
@@ -6328,8 +6342,10 @@ function openItemModal(source, key) {
   // 콘솔에 보안 경고가 뜬다. 아이콘이 없을 때는 속성 자체를 제거한다.
   if (item.iconLink) iconEl.src = item.iconLink; else iconEl.removeAttribute('src');
   iconEl.style.display = item.iconLink ? '' : 'none';
-  document.getElementById('modal-name').textContent = item.name;
-  document.getElementById('modal-short').textContent = item.shortName ? `(${item.shortName})` : '';
+  const hasKoItemName = item.nameKo && item.nameKo !== item.name;
+  document.getElementById('modal-name').textContent = hasKoItemName ? item.nameKo : item.name;
+  const shortParts = [hasKoItemName ? item.name : null, item.shortName ? `(${item.shortName})` : null].filter(Boolean);
+  document.getElementById('modal-short').textContent = shortParts.join(' ');
 
   let body = '';
 
