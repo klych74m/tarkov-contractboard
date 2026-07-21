@@ -6866,12 +6866,24 @@ function _showCacheBanner(ageMs) {
 
 // ── API 에러 화면 + 자동 재시도 카운트다운 ────────────────────────────────────
 function _showApiError(err) {
-  const msg = escapeHtml(err?.message || String(err));
-  const html = `<div class="error-box">
-    <h3>⚠ 로딩 실패</h3><p>${msg}</p>
-    <p class="retry-countdown-text" style="font-size:12px;margin-top:8px;color:var(--muted)">30초 후 자동 재시도...</p>
-    <button class="btn-retry" onclick="location.reload()">지금 재시도</button>
-  </div>`;
+  const raw = err?.message || String(err);
+  // 503 / 502 / 네트워크 오류 → tarkov.dev 서버 문제로 안내
+  const isServerDown = /503|502|504|Service Unavailable|Failed to fetch|NetworkError/i.test(raw);
+  const html = isServerDown
+    ? `<div class="error-box">
+        <h3>⚠ tarkov.dev 서버 점검 중</h3>
+        <p style="margin-top:6px">데이터를 제공하는 <strong>tarkov.dev API</strong>가 현재 응답하지 않습니다.<br>
+        앱 자체의 문제가 아니며, 서버가 복구되면 자동으로 로드됩니다.</p>
+        <p style="margin-top:8px;font-size:11px;color:var(--muted)">내 진행 상황 데이터는 안전하게 저장되어 있습니다.</p>
+        <p class="retry-countdown-text" style="font-size:12px;margin-top:10px;color:var(--muted)">30초 후 자동 재시도...</p>
+        <button class="btn-retry" onclick="location.reload()">지금 재시도</button>
+      </div>`
+    : `<div class="error-box">
+        <h3>⚠ 로딩 실패</h3>
+        <p>${escapeHtml(raw)}</p>
+        <p class="retry-countdown-text" style="font-size:12px;margin-top:8px;color:var(--muted)">30초 후 자동 재시도...</p>
+        <button class="btn-retry" onclick="location.reload()">지금 재시도</button>
+      </div>`;
   ['items','quests'].forEach(k => {
     document.getElementById('loader-'+k).style.display = 'none';
     document.getElementById('err-'+k).style.display = 'block';
