@@ -859,6 +859,13 @@
 const STORAGE_KEY = 'tarkov_tracker_v2';
 const API_CACHE_KEY = 'tarkov_api_cache_v1';
 const API_CACHE_TTL_MS = 12 * 60 * 60 * 1000; // 12시간
+
+// ── 정적 초기 데이터 번들 ──────────────────────────────────────────────────────
+// tarkov.dev API 완전 다운 + localStorage 캐시 없을 때 최후 폴백.
+// generate-static-bundle.ps1 로 생성한 JSON을 아래에 붙여넣으면 됨.
+// null 이면 정적 번들 비활성화(에러 화면 표시).
+// eslint-disable-next-line prefer-const
+let STATIC_FALLBACK_DATA = null; // ← API 복구 후 데이터로 교체
 let state = { counts: {}, questDone: {}, questCompletedAt: {}, questFailed: {}, traderLevels: {}, traderStandingAdj: {}, hideoutLevels: {}, playerLevel: 1, prestigeLevel: 0, scavKarma: 0, storyObj: {}, storyEnding: null, storyChoices: {}, collapsedSections: {}, manualXP: 0, faction: 'bear', edition: 'standard', excludeStart: true, gameMode: 'pve', theme: 'dark', onboarded: false };
 
 // 저장된(또는 가져온) 데이터를 정식 state 형태로 정규화 — loadState()와 importData()가 공유
@@ -6808,12 +6815,8 @@ function _saveApiCache(data) {
 
 // ── API 캐시 로드 ──────────────────────────────────────────────────────────────
 function _loadApiCache() {
-  try {
-    const raw = localStorage.getItem(API_CACHE_KEY);
-    if (!raw) return null;
-    const c = JSON.parse(raw);
-    const ageMs = Date.now() - (c.ts || 0);
-    if (ageMs > API_CACHE_TTL_MS) return null;
+  // ─ 공통 재구성 로직 ─
+  function _reconstruct(c, fromBundle) {
     koItemMap = c.koItemMap || {};
     presetToBaseWeaponId = c.presetMap || {};
     const startRewardItemIds = new Set();
@@ -6823,7 +6826,8 @@ function _loadApiCache() {
       }
     }
     return {
-      ageMs,
+      ageMs: Date.now() - (c.ts || 0),
+      fromBundle,
       data: {
         regularItemsData:       { tasks: c.regularEnTasks || [] },
         pveItemsData:           { tasks: c.pveEnTasks     || [] },
@@ -6836,30 +6840,53 @@ function _loadApiCache() {
         categoryCraftItemsData: (c.food || c.drink) ? { food: c.food||[], drink: c.drink||[] } : null,
       }
     };
-  } catch(e) {
-    console.warn('[캐시] 로드 실패:', e.message);
-    return null;
   }
+
+  // 1순위: localStorage 캐시 (12시간 이내)
+  try {
+    const raw = localStorage.getItem(API_CACHE_KEY);
+    if (raw) {
+      const c = JSON.parse(raw);
+      if (Date.now() - (c.ts || 0) <= API_CACHE_TTL_MS) {
+        return _reconstruct(c, false);
+      }
+    }
+  } catch(e) {
+    console.warn('[캐시] localStorage 로드 실패:', e.message);
+  }
+
+  // 2순위: 정적 번들 데이터 (항상 유효 — 버전 업데이트 필요)
+  if (STATIC_FALLBACK_DATA) {
+    console.info('[캐시] 정적 번들 데이터로 폴백');
+    return _reconstruct(STATIC_FALLBACK_DATA, true);
+  }
+
+  return null;
 }
 
 // ── 캐시 데이터 사용 중 배너 표시 ────────────────────────────────────────────
-function _showCacheBanner(ageMs) {
+function _showCacheBanner(ageMs, fromBundle) {
   let banner = document.getElementById('api-cache-banner');
   if (!banner) {
     banner = document.createElement('div');
     banner.id = 'api-cache-banner';
     document.querySelector('header')?.insertAdjacentElement('afterend', banner);
   }
-  const h = Math.floor(ageMs / 3600000);
-  const m = Math.floor((ageMs % 3600000) / 60000);
-  const ageText = h > 0 ? `${h}시간${m > 0 ? ` ${m}분` : ''} 전` : `${m || 1}분 전`;
   banner.style.cssText = 'background:#2a1a00;border-bottom:2px solid #c8820a;color:#c8820a;padding:6px 20px;font-size:12px;display:flex;align-items:center;gap:12px;font-family:Rajdhani,sans-serif;letter-spacing:.5px;flex-shrink:0';
-  banner.innerHTML = `<span>⚠ tarkov.dev 연결 실패 — ${ageText} 저장된 데이터로 표시 중 (제작법이 비활성화될 수 있음)</span>`
+  let msg;
+  if (fromBundle) {
+    msg = '⚠ tarkov.dev 연결 실패 — 앱 내장 데이터로 표시 중 (최신 퀘스트·패치가 반영되지 않을 수 있음)';
+  } else {
+    const h = Math.floor(ageMs / 3600000);
+    const m = Math.floor((ageMs % 3600000) / 60000);
+    const ageText = h > 0 ? `${h}시간${m > 0 ? ` ${m}분` : ''} 전` : `${m || 1}분 전`;
+    msg = `⚠ tarkov.dev 연결 실패 — ${ageText} 저장된 데이터로 표시 중`;
+  }
+  banner.innerHTML = `<span>${msg}</span>`
     + `<button onclick="location.reload()" style="background:none;border:1px solid #c8820a;color:#c8820a;padding:3px 10px;border-radius:3px;cursor:pointer;font-family:inherit;font-size:11px;letter-spacing:.5px;flex-shrink:0">새로고침</button>`;
   const freshEl = document.getElementById('data-freshness');
   if (freshEl) {
-    const d = new Date(Date.now() - ageMs);
-    freshEl.textContent = `💾 ${d.toLocaleString('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})} 캐시`;
+    freshEl.textContent = fromBundle ? '📦 내장 데이터' : `💾 ${new Date(Date.now()-ageMs).toLocaleString('ko-KR',{month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})} 캐시`;
     freshEl.style.color = '#c8820a';
   }
 }
@@ -6937,6 +6964,7 @@ async function init() {
   // ── 1단계: 데이터 로드 (실패 시 캐시 폴백) ──
   let _fetchedData = null;
   let _dataFromCache = false;
+  let _dataFromBundle = false;
   let _cacheAgeMs = 0;
   try {
     _fetchedData = await fetchAllData();
@@ -6944,10 +6972,11 @@ async function init() {
   } catch(_fetchErr) {
     const _cached = _loadApiCache();
     if (_cached) {
-      _fetchedData = _cached.data;
-      _cacheAgeMs  = _cached.ageMs;
-      _dataFromCache = true;
-      console.info(`[캐시] ${Math.round(_cacheAgeMs / 60000)}분 전 데이터로 폴백`);
+      _fetchedData    = _cached.data;
+      _cacheAgeMs     = _cached.ageMs;
+      _dataFromCache  = true;
+      _dataFromBundle = _cached.fromBundle || false;
+      console.info(_dataFromBundle ? '[캐시] 정적 번들 데이터 사용' : `[캐시] ${Math.round(_cacheAgeMs / 60000)}분 전 데이터로 폴백`);
     } else {
       _showApiError(_fetchErr);
       return;
@@ -7035,7 +7064,7 @@ async function init() {
     renderQuestTab('active-quests');
     renderQuestTab('all-quests');
     updateDataFreshness();
-    if (_dataFromCache) _showCacheBanner(_cacheAgeMs);
+    if (_dataFromCache) _showCacheBanner(_cacheAgeMs, _dataFromBundle);
 
   } catch(e) {
     _showApiError(e);
