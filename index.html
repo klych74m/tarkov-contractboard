@@ -918,7 +918,7 @@ function updateDataFreshness() {
   if (!el) return;
   const timeStr = new Date().toLocaleString('ko-KR', { year:'numeric', month:'2-digit', day:'2-digit', hour:'2-digit', minute:'2-digit' });
   el.textContent = `🔄 ${timeStr} 기준`;
-  el.title = 'tarkov.dev API에서 데이터를 새로 불러온 시각';
+  el.title = 'json.tarkov.dev API에서 데이터를 새로 불러온 시각';
 }
 
 // ── 데이터 내보내기/불러오기 (백업) ──
@@ -973,7 +973,7 @@ function escapeHtml(value) {
 // ══════════════════════════════════════════════════════
 //  DATA
 // ══════════════════════════════════════════════════════
-const GQL = 'https://api.tarkov.dev/graphql';
+const JSON_API_BASE = 'https://json.tarkov.dev';
 let allData = { all: [], quests: [], hideout: [], kappa: [], questList: [], questById: new Map(), questDependents: new Map(), questChoiceGroups: new Map(), questChoiceGroupByQuest: new Map(), startRewardItemIds: new Set(), _rawItemTasks: [], _rawHideoutStations: [], _rawQuestList: [], _rawRegularQuestList: [], _rawPveQuestList: [], _rawRegularItemTasks: [], _rawPveItemTasks: [] };
 let currentMain = 'items';
 let currentItemTab = 'all';
@@ -993,202 +993,334 @@ let craftsByItemId = {}; // itemId → craft[]
 let craftItemMeta = {}; // itemId → { name, shortName, iconLink }
 let craftableItemsByCategory = {}; // 'Food'|'Drink' → 제작 가능한 해당 카테고리 아이템[]
 
-async function gql(query, _retries = 1) {
+async function jsonFetch(path, _retries = 1) {
   let res;
   try {
-    res = await fetch(GQL, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({query}) });
+    res = await fetch(`${JSON_API_BASE}/${path}`, { headers: { 'Accept': 'application/json' } });
   } catch(networkErr) {
-    // 네트워크 오류(오프라인, DNS 실패 등) — 재시도 1회
     if (_retries > 0) {
-      console.warn(`tarkov.dev 네트워크 오류, 2초 후 재시도... (${networkErr.message})`);
+      console.warn(`json.tarkov.dev 네트워크 오류, 2초 후 재시도... (${networkErr.message})`);
       document.querySelectorAll('.loader-text').forEach(el => { el.textContent = '서버 재연결 중...'; });
       await new Promise(r => setTimeout(r, 2000));
-      return gql(query, _retries - 1);
+      return jsonFetch(path, _retries - 1);
     }
     throw networkErr;
   }
   if (!res.ok) {
-    // HTTP 오류(5xx 등) — 재시도 1회
     if (_retries > 0) {
-      console.warn(`tarkov.dev API HTTP ${res.status}, 2초 후 재시도...`);
+      console.warn(`json.tarkov.dev HTTP ${res.status}, 2초 후 재시도... (${path})`);
       document.querySelectorAll('.loader-text').forEach(el => { el.textContent = '서버 재연결 중...'; });
       await new Promise(r => setTimeout(r, 2000));
-      return gql(query, _retries - 1);
+      return jsonFetch(path, _retries - 1);
     }
     throw new Error(`API ${res.status}`);
   }
   const j = await res.json();
-  if (j.errors) {
-    // tarkov.dev API가 특정 항목 하나(예: PVE 전용 퀘스트의 experience 필드)에서만 서버 오류를
-    // 내는 경우가 있는데, 이때도 나머지 항목은 data에 정상적으로 채워져서 온다. data가 비어있지
-    // 않으면 그 항목 하나가 null로 빠진 것만 감수하고 계속 쓴다(완전히 비어있을 때만 진짜 실패).
-    console.warn('tarkov.dev GraphQL partial error:', j.errors[0]?.message, j.errors);
-    if (!j.data) {
-      // data 자체가 없는 완전 실패 — 재시도 1회
-      if (_retries > 0) {
-        console.warn('tarkov.dev GraphQL data:null, 2초 후 재시도...');
-        document.querySelectorAll('.loader-text').forEach(el => { el.textContent = '서버 재연결 중...'; });
-        await new Promise(r => setTimeout(r, 2000));
-        return gql(query, _retries - 1);
-      }
-      throw new Error(j.errors[0].message);
-    }
-  }
+  if (!j.data) throw new Error(`json.tarkov.dev: ${path} — data 없음`);
   return j.data;
 }
 
 async function fetchAllData() {
-  // EN이 완전한 퀘스트 목록의 기준. KO는 번역 오버레이용으로만 사용.
-  const FULL_FIELDS = `
-    id name wikiLink kappaRequired experience factionName
-    minPlayerLevel availableDelaySecondsMin availableDelaySecondsMax
-    requiredPrestige { id name prestigeLevel }
-    trader { name imageLink normalizedName }
-    taskRequirements { task { id name } status }
-    traderRequirements { trader { name normalizedName } level }
-    objectives {
-      id description type optional maps { name }
-      ... on TaskObjectiveItem { type item { id name shortName iconLink } count foundInRaid zones { id } requiredKeys { id name shortName } }
-      ... on TaskObjectiveShoot { count }
-      ... on TaskObjectiveSkill { skillLevel { name level } }
-      ... on TaskObjectiveBasic { zones { id } requiredKeys { id name shortName } }
-      ... on TaskObjectiveMark { zones { id } requiredKeys { id name shortName } }
-    }
-    neededKeys { keys { id name shortName iconLink } map { name normalizedName } }
-    startRewards { items { item { id name } count } traderStanding { trader { name } standing } }
-    finishRewards { items { item { name iconLink } count } traderStanding { trader { name normalizedName imageLink } standing } offerUnlock { trader { name } } }`;
-  // KO 쿼리는 번역 텍스트만 가져옴 (experience 등 오류 유발 필드 제외)
-  const KO_TRANS_FIELDS = `id name wikiLink objectives { id description }`;
-
-  const [regularEnData, pveEnData, regularKoData, pveKoData, hideoutData, tradersLoyaltyData, craftsData, gunPresetsData, categoryCraftItemsData, koItemsData] = await Promise.all([
-    gql(`{ tasks(lang: en, gameMode: regular) { ${FULL_FIELDS} }}`),
-    gql(`{ tasks(lang: en, gameMode: pve)     { ${FULL_FIELDS} }}`),
-    gql(`{ tasks(lang: ko, gameMode: regular) { ${KO_TRANS_FIELDS} }}`),
-    gql(`{ tasks(lang: ko, gameMode: pve)     { ${KO_TRANS_FIELDS} }}`),
-    gql(`{ hideoutStations(lang: en) {
-      name normalizedName imageLink levels {
-        id level constructionTime
-        itemRequirements { item { id name shortName iconLink } count attributes { name value } }
-        stationLevelRequirements { station { name } level }
-        traderRequirements { trader { name normalizedName } requirementType value }
-        skillRequirements { name skill { name } level }
-      }
-    }}`),
-    gql(`{ traders(lang: en) { normalizedName currency { shortName } levels { level requiredPlayerLevel requiredReputation requiredCommerce } } }`),
-    gql(`{ crafts { station { name normalizedName } level duration requiredItems { item { id name shortName iconLink } count } rewardItems { item { id name shortName iconLink } count } } }`),
-    // 퀘스트 시작 시 지급되는 "완성형 프리셋" 무기를 objectives의 "베이스" 무기 ID와 매칭하기 위한 맵
-    gql(`{ items(type: gun) { id properties { ... on ItemPropertiesWeapon { defaultPreset { id } presets { id } } } } }`),
-    // "FIR Food/Drink류 아이템 제출" 같은 카테고리 조건에서, 하이드아웃 제작으로 대체 가능한 항목 목록용
-    gql(`{ food: items(categoryNames: ["Food"]) { id name shortName iconLink craftsFor { station { name } level } }
-           drink: items(categoryNames: ["Drink"]) { id name shortName iconLink craftsFor { station { name } level } } }`),
-    // 아이템 한국어 이름 맵 구축용
-    gql(`{ items(lang: ko) { id name } }`)
+  // json.tarkov.dev REST API (GraphQL api.tarkov.dev 대체)
+  // 구조: /regular/tasks → data.tasks.{id: taskObj}
+  //        /regular/tasks_en → data.{localeKey: enString}
+  //        /regular/tasks_ko → data.{localeKey: koString}
+  //        /regular/traders → data.{id: traderObj}
+  //        /regular/items → data.items.{id: itemObj}
+  //        /regular/hideout → data.{id: stationObj}
+  //        /regular/maps_en → data.{"{mapId} Name": mapName}
+  const [
+    regTasksData, regTasksEn, regTasksKo,
+    pveTasksData, pveTasksEn, pveTasksKo,
+    tradersData, tradersEn,
+    hideoutRaw, hideoutEn,
+    itemsData, itemsEn, itemsKo,
+    mapsEn
+  ] = await Promise.all([
+    jsonFetch('regular/tasks'),
+    jsonFetch('regular/tasks_en'),
+    jsonFetch('regular/tasks_ko'),
+    jsonFetch('pve/tasks'),
+    jsonFetch('pve/tasks_en'),
+    jsonFetch('pve/tasks_ko'),
+    jsonFetch('regular/traders'),
+    jsonFetch('regular/traders_en'),
+    jsonFetch('regular/hideout'),
+    jsonFetch('regular/hideout_en'),
+    jsonFetch('regular/items'),
+    jsonFetch('regular/items_en'),
+    jsonFetch('regular/items_ko'),
+    jsonFetch('regular/maps_en')
   ]);
 
-  // tarkov.dev가 특정 항목 하나의 필드 리졸브에 실패하면 그 항목만 null로 빠진 채 나머지는
-  // 정상으로 채워서 보내는 경우가 있다(예: PVE 전용 퀘스트 하나의 experience 필드). 그 null
-  // 항목 하나 때문에 전체 데이터를 못 쓰게 되는 일을 막기 위해 걸러낸다.
-  for (const d of [regularEnData, pveEnData, regularKoData, pveKoData]) {
-    if (Array.isArray(d?.tasks)) d.tasks = d.tasks.filter(Boolean);
-  }
-
+  // ── 아이템 조회 테이블 ──────────────────────────────────────────────────────
+  const rawItems = itemsData.items || itemsData;
+  const itemsById = {};
   koItemMap = {};
-  for (const it of (koItemsData?.items || [])) {
-    // tarkov.dev의 아이템 한국어 API가 다수 항목에서 깨진 인코딩을 반환함 (U+FFFD 포함).
-    // 깨진 이름은 제외하고 온전한 번역만 저장한다.
-    if (it.id && it.name && !it.name.includes('�') && !it.name.includes('\x08')) koItemMap[it.id] = it.name.trim();
-  }
-
-  presetToBaseWeaponId = {};
-  for (const it of (gunPresetsData?.items || [])) {
-    if (it.properties?.defaultPreset?.id) presetToBaseWeaponId[it.properties.defaultPreset.id] = it.id;
-    for (const p of (it.properties?.presets || [])) {
-      if (p?.id) presetToBaseWeaponId[p.id] = it.id;
+  presetToBaseWeaponId = {}; // 총기 프리셋 매핑 (JSON API에서는 별도 미구현)
+  for (const [id, it] of Object.entries(rawItems)) {
+    if (!it || !it.id) continue;
+    itemsById[id] = it;
+    const koName = itemsKo[it.name];
+    if (koName && !koName.includes('�') && !koName.includes('\x08')) {
+      koItemMap[id] = koName.trim();
     }
   }
 
-  // EN 데이터가 기준. KO 번역(이름·목표 설명·wikiLink)을 오버레이로 적용.
-  // koNameMap: id → KO 이름 (regular+pve 합산 — taskRequirements 조회용)
-  const koNameMap = {};
-  for (const t of [...(regularKoData.tasks || []), ...(pveKoData.tasks || [])]) {
-    if (t.name) koNameMap[t.id] = t.name;
+  const getItemObj = (itemId) => {
+    const it = itemsById[itemId];
+    if (!it) return { id: itemId, name: itemId, shortName: itemId, iconLink: null };
+    return {
+      id: it.id || itemId,
+      name: itemsEn[it.name] || it.normalizedName || itemId,
+      shortName: itemsEn[it.shortName] || (it.shortName || '').replace(/\s*(Name|ShortName)$/, '') || itemId,
+      iconLink: it.iconLink || null
+    };
+  };
+
+  // ── 상인 조회 테이블 ──────────────────────────────────────────────────────
+  const tradersById = {};
+  for (const [id, t] of Object.entries(tradersData)) {
+    if (t && t.id) tradersById[id] = t;
   }
 
-  function applyKoTranslations(enTasks, koTasks) {
-    const koMap = {};
-    for (const t of koTasks) koMap[t.id] = t;
-    const missing = [];
-    for (const t of enTasks) {
-      t.nameEn = t.name;
-      const ko = koMap[t.id];
-      const koName = ko?.name;
-      const hasKoApi = koName && koName !== t.name;
-      const koOverride = !hasKoApi && QUEST_NAME_KO[t.name];
-      if (hasKoApi) {
-        t.nameDisplay = `${koName} (${t.name})`;
-      } else if (koOverride) {
-        t.nameDisplay = `${koOverride} (${t.name})`;
-      } else {
-        t.nameDisplay = t.name;
-        missing.push({ id: t.id, name: t.name, trader: t.trader?.name });
-      }
-      t.wikiLink = ko?.wikiLink || t.wikiLink || null;
-      // KO 목표 설명 병합
-      if (ko?.objectives) {
-        const koObjMap = {};
-        for (const obj of ko.objectives) koObjMap[obj.id] = obj;
-        for (const obj of (t.objectives || [])) {
-          if (koObjMap[obj.id]?.description) obj.description = koObjMap[obj.id].description;
+  const getTraderObj = (traderId) => {
+    const t = tradersById[traderId];
+    if (!t) return { name: traderId, normalizedName: traderId, imageLink: null };
+    const name = tradersEn[t.name] || t.normalizedName;
+    return { name, normalizedName: t.normalizedName, imageLink: t.imageLink || null };
+  };
+
+  // ── 지도 이름 조회 ──────────────────────────────────────────────────────────
+  const getMapName = (mapId) => mapsEn[`${mapId} Name`] || mapId;
+
+  // ── 퀘스트 적용: id → {enName, nameDisplay} (taskRequirements 2차 해석용) ──
+  const taskRefMap = {};
+
+  const adaptTasks = (rawTasksObj, enTrans, koTrans) => {
+    const result = [];
+    for (const [, task] of Object.entries(rawTasksObj)) {
+      if (!task || !task.id) continue;
+
+      const enName = enTrans[task.name] || task.name;
+      const koName = koTrans[task.name];
+      const hasKo = koName && koName !== enName;
+      const koOverride = !hasKo && QUEST_NAME_KO[enName];
+
+      const nameDisplay = hasKo
+        ? `${koName} (${enName})`
+        : koOverride
+          ? `${koOverride} (${enName})`
+          : enName;
+
+      taskRefMap[task.id] = { enName, nameDisplay };
+
+      // 목표(objectives)
+      const objectives = (task.objectives || []).map(obj => {
+        // description 필드가 목표 ID 자체이므로 번역 테이블에서 조회
+        const descEn = enTrans[obj.description] || obj.description;
+        const descKo = koTrans[obj.description];
+        const desc = OBJECTIVE_DESC_OVERRIDES[obj.id] || descKo || descEn;
+
+        const adapted = {
+          id: obj.id,
+          description: desc,
+          type: obj.type || 'basic',
+          optional: obj.optional || false,
+          count: obj.count || 0,
+          foundInRaid: obj.foundInRaid || false,
+          maps: (obj.maps || []).map(mid => ({ name: getMapName(mid) })),
+          zones: obj.zones || [],
+          requiredKeys: (obj.requiredKeys || []).map(group =>
+            Array.isArray(group)
+              ? group.map(k => typeof k === 'string' ? getItemObj(k) : k)
+              : [typeof group === 'string' ? getItemObj(group) : group]
+          ),
+          skillLevel: null
+        };
+
+        // 아이템 제출 목표: items는 수락 가능한 아이템 ID 배열
+        if (obj.items && obj.items.length > 0) {
+          adapted.item = getItemObj(obj.items[0]);
         }
-      }
-      // 목표 설명 수동 보정
-      for (const obj of (t.objectives || [])) {
-        if (OBJECTIVE_DESC_OVERRIDES[obj.id]) obj.description = OBJECTIVE_DESC_OVERRIDES[obj.id];
-      }
-      // taskRequirements: KO 이름 적용
-      for (const req of (t.taskRequirements || [])) {
-        req.task.nameEn = req.task.name;
-        const reqKoName = koNameMap[req.task.id];
-        const reqHasKo = reqKoName && reqKoName !== req.task.name;
-        const reqKoOverride = !reqHasKo && QUEST_NAME_KO[req.task.name];
-        if (reqHasKo) {
-          req.task.nameDisplay = `${reqKoName} (${req.task.name})`;
-        } else if (reqKoOverride) {
-          req.task.nameDisplay = `${reqKoOverride} (${req.task.name})`;
-        } else {
-          req.task.nameDisplay = req.task.name;
+
+        // 스킬 목표
+        if (obj.skillLevel) {
+          const sl = obj.skillLevel;
+          if (typeof sl === 'object') {
+            adapted.skillLevel = {
+              name: enTrans[sl.skill] || sl.skill || sl.name || '',
+              level: sl.level || 0
+            };
+          }
+        }
+
+        return adapted;
+      });
+
+      // neededKeys
+      const neededKeys = (task.neededKeys || []).map(nk => ({
+        keys: (nk.keys || []).map(k => typeof k === 'string' ? getItemObj(k) : k),
+        map: nk.map ? { name: getMapName(nk.map), normalizedName: nk.map } : null
+      }));
+
+      // traderRequirements: level 타입만 앱에서 사용
+      const traderRequirements = (task.traderRequirements || [])
+        .filter(r => r.requirementType === 'level')
+        .map(req => ({
+          trader: getTraderObj(req.trader),
+          level: req.value || 0
+        }));
+
+      // taskRequirements (이름은 2차 패스에서 채움)
+      const taskRequirements = (task.taskRequirements || []).map(req => ({
+        task: { id: req.task, name: req.task, nameEn: req.task, nameDisplay: req.task },
+        status: Array.isArray(req.status) ? req.status : [req.status || 'complete']
+      }));
+
+      // 보상
+      const finishRewards = {
+        items: (task.finishRewards?.items || []).map(r => ({
+          item: getItemObj(r.item), count: r.count || 1
+        })),
+        traderStanding: (task.finishRewards?.traderStanding || []).map(ts => ({
+          trader: getTraderObj(ts.trader), standing: ts.standing || 0
+        })),
+        offerUnlock: (task.finishRewards?.offerUnlock || []).map(o => ({
+          trader: getTraderObj(o.trader)
+        }))
+      };
+      const startRewards = {
+        items: (task.startRewards?.items || []).map(r => ({
+          item: { id: r.item, name: itemsEn[itemsById[r.item]?.name] || r.item },
+          count: r.count || 1
+        })),
+        traderStanding: (task.startRewards?.traderStanding || []).map(ts => ({
+          trader: { name: getTraderObj(ts.trader).name }, standing: ts.standing || 0
+        }))
+      };
+
+      result.push({
+        id: task.id,
+        name: enName,
+        nameEn: enName,
+        nameDisplay,
+        wikiLink: task.wikiLink || null,
+        kappaRequired: task.kappaRequired || false,
+        lightkeeperRequired: task.lightkeeperRequired || false,
+        experience: task.experience || 0,
+        factionName: task.factionName || 'Any',
+        minPlayerLevel: task.minPlayerLevel || 0,
+        availableDelaySecondsMin: task.availableDelaySecondsMin || 0,
+        availableDelaySecondsMax: task.availableDelaySecondsMax || 0,
+        trader: getTraderObj(task.trader),
+        taskRequirements,
+        traderRequirements,
+        objectives,
+        neededKeys,
+        startRewards,
+        finishRewards,
+        requiredPrestige: task.requiredPrestige
+          ? (Array.isArray(task.requiredPrestige) ? task.requiredPrestige : [task.requiredPrestige])
+          : [],
+        taskImageLink: task.taskImageLink || null,
+        normalizedName: task.normalizedName
+      });
+    }
+    return result;
+  };
+
+  const regularEnTasks = adaptTasks(regTasksData.tasks || {}, regTasksEn, regTasksKo);
+  const pveEnTasks     = adaptTasks(pveTasksData.tasks || {}, pveTasksEn, pveTasksKo);
+
+  // 2차 패스: taskRequirements의 퀘스트 이름 해석 (모든 퀘스트 처리 후 가능)
+  for (const tasks of [regularEnTasks, pveEnTasks]) {
+    for (const task of tasks) {
+      for (const req of task.taskRequirements) {
+        const ref = taskRefMap[req.task.id];
+        if (ref) {
+          req.task.name      = ref.enName;
+          req.task.nameEn    = ref.enName;
+          req.task.nameDisplay = ref.nameDisplay;
         }
       }
     }
-    return missing;
   }
 
-  const regularMissing = applyKoTranslations(regularEnData.tasks, regularKoData.tasks);
-  const pveMissing = applyKoTranslations(pveEnData.tasks, pveKoData.tasks);
-  // 중복 제거 후 콘솔 리포트
-  const allMissingKo = [...new Map([...regularMissing, ...pveMissing].map(m => [m.id, m])).values()];
-  if (allMissingKo.length > 0) {
-    console.info(`[KO 번역 없음] ${allMissingKo.length}개 퀘스트 — 영문명으로 표시됨:`);
-    for (const m of allMissingKo) console.info(`  ${m.trader || '?'} | ${m.name}`);
+  // KO 번역 없는 퀘스트 콘솔 리포트
+  const missingKo = [...new Map(
+    [...regularEnTasks, ...pveEnTasks]
+      .filter(t => t.nameDisplay === t.nameEn)
+      .map(t => [t.id, { id: t.id, name: t.nameEn, trader: t.trader?.name }])
+  ).values()];
+  if (missingKo.length > 0) {
+    console.info(`[KO 번역 없음] ${missingKo.length}개 퀘스트 — 영문명으로 표시됨:`);
+    for (const m of missingKo) console.info(`  ${m.trader || '?'} | ${m.name}`);
   }
+
+  // ── 하이드아웃 ──────────────────────────────────────────────────────────────
+  const hideoutStations = Object.values(hideoutRaw).filter(s => s && s.id).map(station => ({
+    name: hideoutEn[station.name] || station.normalizedName,
+    normalizedName: station.normalizedName,
+    imageLink: station.imageLink || null,
+    levels: (station.levels || []).map(lv => ({
+      id: lv.id,
+      level: lv.level,
+      constructionTime: lv.constructionTime || 0,
+      itemRequirements: (lv.itemRequirements || []).map(req => ({
+        item: getItemObj(req.item),
+        count: req.count,
+        attributes: req.attributes
+          ? Object.entries(req.attributes).map(([n, v]) => ({ name: n, value: String(v) }))
+          : []
+      })),
+      stationLevelRequirements: (lv.stationLevelRequirements || []).map(req => {
+        const stn = hideoutRaw[req.station];
+        const stnName = stn ? (hideoutEn[stn.name] || stn.normalizedName) : String(req.station);
+        return { station: { name: stnName }, level: req.level };
+      }),
+      traderRequirements: (lv.traderRequirements || []).map(req => ({
+        trader: getTraderObj(req.trader),
+        requirementType: req.requirementType || 'level',
+        value: req.value || 0
+      })),
+      skillRequirements: (lv.skillRequirements || []).map(req => ({
+        name: req.id || req.skill,
+        skill: { name: hideoutEn[req.skill] || req.skill || '' },
+        level: req.level || 0
+      }))
+    }))
+  }));
+
+  // ── 상인 우호도 ─────────────────────────────────────────────────────────────
+  const adaptedTraders = Object.values(tradersData).filter(t => t && t.id).map(t => ({
+    normalizedName: t.normalizedName,
+    currency: { shortName: t.currency || 'RUB' },
+    levels: (t.levels || []).map(l => ({
+      level: l.level,
+      requiredPlayerLevel: l.requiredPlayerLevel || 0,
+      requiredReputation: l.requiredReputation || 0,
+      requiredCommerce: l.requiredCommerce || 0
+    }))
+  }));
 
   const startRewardItemIds = new Set();
-  for (const t of regularEnData.tasks) {
+  for (const t of regularEnTasks) {
     for (const si of (t.startRewards?.items || [])) {
       if (si.item?.id) startRewardItemIds.add(si.item.id);
     }
   }
 
   return {
-    regularItemsData: regularEnData,
-    pveItemsData: pveEnData,
-    regularQuestsData: regularEnData,
-    pveQuestsData: pveEnData,
-    hideoutData,
+    regularItemsData:  { tasks: regularEnTasks },
+    pveItemsData:      { tasks: pveEnTasks },
+    regularQuestsData: { tasks: regularEnTasks },
+    pveQuestsData:     { tasks: pveEnTasks },
+    hideoutData:       { hideoutStations },
     startRewardItemIds,
-    tradersLoyaltyData,
-    craftsData,
-    categoryCraftItemsData
+    tradersLoyaltyData: { traders: adaptedTraders },
+    craftsData: null,
+    categoryCraftItemsData: null
   };
 }
 
