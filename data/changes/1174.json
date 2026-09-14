@@ -1,0 +1,13 @@
+{
+  "id": 1174,
+  "version": "1.1.0.1.46777",
+  "date": "Wednesday, 19 August 2026 - 09:09 AM EDT",
+  "files": [
+    {
+      "name": "client/locale/en/response.json",
+      "diff_text": "['data']\n+    (New) ['6a7dd6ba7379960c1f8e0225 0']: Your belongings have been returned, the ones you lost on {date} at {time}. Be more careful next time. Tarkov doesnt forgive mistakes."
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1174",
+  "change_count": 1
+}

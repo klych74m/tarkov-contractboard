@@ -1,0 +1,13 @@
+{
+  "id": 1153,
+  "version": "1.1.0.0.46624",
+  "date": "Tuesday, 04 August 2026 - 04:43 AM EDT",
+  "files": [
+    {
+      "name": "client/trading/api/traderSettings/response.json",
+      "diff_text": "['data']\n    ['Therapist']\n        ['items_sell']\n            ['1']\n                ['id_list']\n-                    (Removed) ['25']: eTG-change regenerative stimulant injector\n-                    (Removed) ['26']: Item case"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1153",
+  "change_count": 2
+}

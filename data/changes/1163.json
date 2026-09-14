@@ -1,0 +1,13 @@
+{
+  "id": 1163,
+  "version": "1.1.0.0.46657",
+  "date": "Friday, 07 August 2026 - 05:17 AM EDT",
+  "files": [
+    {
+      "name": "client/locale/en/response.json",
+      "diff_text": "['data']\n    ['bundle.6a6346b2964f57808d4971fc.name']\n-    (Old) BEAR Winged Infantry\n+    (New) BEAR Watch\n    ['bundle.6a6346b2964f57808d4971fc.subtitle']\n-    (Old) Based on real RUAF unit attire\n+    (New) Based on Russian internal troops attire\n    ['bundle.6a6346b2964f57808d4971fc.description']\n-    (Old) A combat outfit set for BEAR characters, inspired by the legendary branch of the Russian Armed Forces. Ideal for combat operations behind enemy lines.\n-        \n-        ● The set includes:\n-           Upper: BEAR Winged Infantry\n-           Lower: BEAR Winged Infantry\n-        ● Better value than purchasing gear items separately\n-        ● The set is designed for BEAR characters. Owners of The Unheard Edition or The Unheard Steam Edition gain access to the set for both PMC factions.\n-        ● Customization items are purely cosmetic.\n+    (New) A combat outfit set for BEAR characters, inspired by the legendary branch of the Russian Armed Forces. Ideal for combat operations behind enemy lines.\n+        \n+        ● The set includes:\n+           Upper: BEAR Watch\n+           Lower: BEAR Watch\n+        ● Better value than purchasing gear items separately\n+        ● The set is designed for BEAR characters. Owners of The Unheard Edition or The Unheard Steam Edition gain access to the set for both PMC factions.\n+        ● Customization items are purely cosmetic."
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1163",
+  "change_count": 3
+}

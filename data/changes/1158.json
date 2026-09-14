@@ -1,0 +1,13 @@
+{
+  "id": 1158,
+  "version": "1.1.0.0.46657",
+  "date": "Wednesday, 05 August 2026 - 12:09 PM EDT",
+  "files": [
+    {
+      "name": "client/items/response.json",
+      "diff_text": "['data']\n    ['Therapist's message']\n        ['_props']\n            ['QuestStashMaxCount']\n-            (Old) 0\n+            (New) 1"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1158",
+  "change_count": 1
+}

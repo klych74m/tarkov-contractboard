@@ -25,3 +25,10 @@
 /What_You_Seek_image.png
 /What_You_Seek_poster_image.png
 /What_You_Seek_poster_image.webp
+
+# scripts/reconcile_quests_wiki.py가 받아둔 위키·API 원본 캐시 (다시 받으면 되는 약 3MB)
+/data/quest_audit/cache/
+
+# scripts/scrape_changes.py 실행 시 생기는 파이썬 캐시 (커밋 불필요)
+__pycache__/
+*.pyc

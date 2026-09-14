@@ -1,0 +1,13 @@
+{
+  "id": 1165,
+  "version": "1.1.0.0.46657",
+  "date": "Friday, 07 August 2026 - 11:51 AM EDT",
+  "files": [
+    {
+      "name": "client/items/response.json",
+      "diff_text": "['data']\n    ['5.8x42mm DBP191']\n        ['_props']\n            ['PenetrationPower']\n-            (Old) 32\n+            (New) 39 (+21.88%)\n    ['5.8x42mm DBX95']\n        ['_props']\n            ['ammoRec']\n-            (Old) 5\n+            (New) -5 (-200.00%)\n            ['ammoAccr']\n-            (Old) 3\n+            (New) -3 (-200.00%)"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1165",
+  "change_count": 3
+}

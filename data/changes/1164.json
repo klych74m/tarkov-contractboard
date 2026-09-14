@@ -1,0 +1,13 @@
+{
+  "id": 1164,
+  "version": "1.1.0.0.46657",
+  "date": "Friday, 07 August 2026 - 09:17 AM EDT",
+  "files": [
+    {
+      "name": "client/items/response.json",
+      "diff_text": "['data']\n    ['AR-15 High Standard M4SS Stock']\n        ['_props']\n            ['Recoil']\n-            (Old) -21\n+            (New) -20.5 (+2.38%)\n    ['AR-15 LMT SOPMOD stock']\n        ['_props']\n            ['Ergonomics']\n-            (Old) 5\n+            (New) 7 (+40.00%)\n    ['AR-15 Colt M16A1 Type 7 stock']\n        ['_props']\n            ['Ergonomics']\n-            (Old) 4\n+            (New) 3 (-25.00%)\n    ['AR-15 Colt N1 Stock']\n        ['_props']\n            ['Recoil']\n-            (Old) -21\n+            (New) -20.5 (+2.38%)\n    ['AR-15 KAC SASS stock (Taupe)']\n        ['_props']\n            ['Ergonomics']\n-            (Old) 3\n+            (New) 2 (-33.33%)\n    ['5.8x42mm DBP191']\n        ['_props']\n            ['Damage']\n-            (Old) 56\n+            (New) 53 (-5.36%)\n            ['ammoRec']\n-            (Old) -5\n+            (New) -3 (+40.00%)\n            ['ammoAccr']\n-            (Old) 3\n+            (New) 0 (-100.00%)\n            ['ArmorDamage']\n-            (Old) 46\n+            (New) 43 (-6.52%)\n    ['AR-15 LMT SOPMOD stock (FDE)']\n        ['_props']\n            ['Ergonomics']\n-            (Old) 5\n+            (New) 7 (+40.00%)\n    ['5.8x42mm DBX95']\n        ['_props']\n            ['ammoRec']\n-            (Old) 0\n+            (New) 5\n            ['ammoAccr']\n-            (Old) 0\n+            (New) 3\n            ['PenetrationPower']\n-            (Old) 29\n+            (New) 33 (+13.79%)\n    ['5.8x42mm DVC12']\n        ['_props']\n            ['ammoRec']\n-            (Old) 5\n+            (New) 12 (+140.00%)\n            ['ammoAccr']\n-            (Old) 0\n+            (New) -5\n            ['ArmorDamage']\n-            (Old) 55\n+            (New) 60 (+9.09%)\n            ['PenetrationPower']\n-            (Old) 49\n+            (New) 52 (+6.12%)\n    ['5.8x42mm DVX12']\n        ['_props']\n            ['Damage']\n-            (Old) 50\n+            (New) 48 (-4.00%)\n            ['ammoRec']\n-            (Old) 5\n+            (New) 9 (+80.00%)\n            ['ammoAccr']\n-            (Old) 0\n+            (New) -8\n            ['ArmorDamage']\n-            (Old) 52\n+            (New) 54 (+3.85%)\n            ['PenetrationPower']\n-            (Old) 46\n+            (New) 47 (+2.17%)"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1164",
+  "change_count": 22
+}

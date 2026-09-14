@@ -1,0 +1,13 @@
+{
+  "id": 1154,
+  "version": "1.1.0.0.46624",
+  "date": "Tuesday, 04 August 2026 - 05:00 AM EDT",
+  "files": [
+    {
+      "name": "client/trading/api/traderSettings/response.json",
+      "diff_text": "['data']\n    ['Jaeger']\n        ['loyaltyLevels']\n            ['3']\n                ['insurance_price_coef']\n-                (Old) 4\n+                (New) 39"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1154",
+  "change_count": 1
+}

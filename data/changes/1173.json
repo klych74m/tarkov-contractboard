@@ -1,0 +1,17 @@
+{
+  "id": 1173,
+  "version": "1.1.0.1.46777",
+  "date": "Thursday, 13 August 2026 - 02:17 PM EDT",
+  "files": [
+    {
+      "name": "client/items/response.json",
+      "diff_text": "['data']\n    ['673c7b00cbf4b984b5099181']\n        ['_props']\n            ['Slots']\n                ['1 (Poster_Security_2)']\n                    ['_props']\n                        ['filters']\n                            ['0']\n                                ['Filter']\n+                                    (New) ['48']: Streets of Tarkov poster\n+                                    (New) ['50']: Beware the Bear poster\n+                                    (New) ['51']: BURN poster\n+                                    (New) ['52']: Going Dark poster\n                ['2 (Poster_Generator_1)']\n                    ['_props']\n                        ['filters']\n                            ['0']\n                                ['Filter']\n+                                    (New) ['48']: Streets of Tarkov poster\n+                                    (New) ['50']: Beware the Bear poster\n+                                    (New) ['51']: BURN poster\n+                                    (New) ['52']: Going Dark poster\n                ['3 (Poster_Generator_2)']\n                    ['_props']\n                        ['filters']\n                            ['0']\n                                ['Filter']\n+                                    (New) ['48']: Streets of Tarkov poster\n+                                    (New) ['50']: Beware the Bear poster\n+                                    (New) ['51']: BURN poster\n+                                    (New) ['52']: Going Dark poster"
+    },
+    {
+      "name": "client/locale/en/response.json",
+      "diff_text": "['data']\n    ['UI/BattlePass/DocsLimit']\n-    (Old) Limit:\n+    (New) Available limit:\n    ['UI/BattlePass/DocsTooltip{0}{1}{2}{3}{4}{5}']\n-    (Old) Documents are exchanged\n-        for rewards.\n-        \n-        Acquisition of the documents is counted across\n-        all game modes, but each game mode has its\n-        own limit.\n-        \n-        Limit shows the daily number\n-        of documents available to the player in raid:\n-         • {0} — {1}\n-         • {2} — {3}\n-         • {4} — {5}\n-        \n+    (New) Documents are exchanged\n+        for rewards.\n+        \n+        Acquisition of the documents is counted across\n+        all game modes, but each game mode has its\n+        own limit.\n+        \n+        Available limit shows the daily number\n+        of documents available to the player in raid:\n+         • {0} — {1}\n+         • {2} — {3}\n+         • {4} — {5}\n+        "
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1173",
+  "change_count": 14
+}

@@ -1,0 +1,13 @@
+{
+  "id": 1182,
+  "version": "1.1.0.1.46911",
+  "date": "Thursday, 03 September 2026 - 06:41 AM EDT",
+  "files": [
+    {
+      "name": "client/settings/response.json",
+      "diff_text": "['data']\n    ['config']\n        ['NotifierLobbyPercentage']\n-        (Old) 90\n+        (New) 100 (+11.11%)"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1182",
+  "change_count": 1
+}

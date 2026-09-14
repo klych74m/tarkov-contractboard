@@ -1,0 +1,17 @@
+{
+  "id": 1175,
+  "version": "1.1.0.1.46777",
+  "date": "Wednesday, 19 August 2026 - 03:26 PM EDT",
+  "files": [
+    {
+      "name": "client/items/response.json",
+      "diff_text": "['data']\n    ['Default Inventory']\n        ['_props']\n            ['Slots']\n                ['12 (Dogtag)']\n                    ['_props']\n                        ['filters']\n                            ['0']\n                                ['Filter']\n+                                    (New) ['36']: Marked dogtag BEAR\n+                                    (New) ['37']: Marked dogtag BEAR\n+                                    (New) ['38']: Marked dogtag BEAR\n+                                    (New) ['39']: Marked dogtag BEAR\n+                                    (New) ['40']: Double dogtag BEAR\n+                                    (New) ['41']: Marked dogtag USEC\n+                                    (New) ['42']: Marked dogtag USEC\n+                                    (New) ['43']: Marked dogtag USEC\n+                                    (New) ['44']: Marked dogtag USEC\n+                                    (New) ['45']: Double dogtag USEC"
+    },
+    {
+      "name": "client/locale/en/response.json",
+      "diff_text": "['data']\n    ['67f8e1a2b3c4d5e6f7890abc name']\n-    (Old) Classified documents\n-        \n-        Classified information that somehow survived against all odds.\n-        \n-        A unique document that can be used in place of any other document required for the Battle Pass.\n-        \n-        Available from the Expansion Hub.\n+    (New) Classified documents\n+        \n+        Classified information that somehow survived against all odds.\n+        \n+        A unique document that can be used in place of any other document required for the Battle Pass.\n+        \n+        Cannot be used for Black Division gear crate exchange.\n+        \n+        Classified Documents can be used in any EFT Battle Pass.\n+        \n+        Available from the Expansion Hub."
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1175",
+  "change_count": 11
+}

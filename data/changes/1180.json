@@ -1,0 +1,21 @@
+{
+  "id": 1180,
+  "version": "1.1.0.1.46911",
+  "date": "Tuesday, 01 September 2026 - 02:15 PM EDT",
+  "files": [
+    {
+      "name": "client/items/response.json",
+      "diff_text": "['data']\n+    (New) ['Testing area blueprint flash drive']: {\n+          \"_id\": \"Testing area blueprint flash drive\",\n+          \"_name\": \"item_flash_card_slider_ref\",\n+          \"_type\": \"Item\",\n+          \"_props\": {\n+            \"Name\": \"flashdrive\",\n+            \"Width\": 1,\n+            \"Height\": 1,\n+            \"Prefab\": {\n+              \"path\": \"assets/content/items/infosubject/item_flash_card_slider.bundle\",\n+              \"rcid\": \"\"\n+            },\n+            \"Weight\": 0.1,\n+            \"ItemSound\": \"generic\",\n+            \"QuestItem\": true,\n+            \"RarityPvE\": \"Not_exist\",\n+            \"ShortName\": \"flashdrive\",\n+            \"UsePrefab\": {\n+              \"path\": \"\",\n+              \"rcid\": \"\"\n+            },\n+            \"RepairCost\": 0,\n+            \"Unlootable\": false,\n+            \"Description\": \"flashdrive\",\n+            \"ExamineTime\": 1,\n+            \"ExtraSizeUp\": 0,\n+            \"IsUnbuyable\": false,\n+            \"IsUngivable\": false,\n+            \"RepairSpeed\": 0,\n+            \"DiscardLimit\": -1,\n+            \"HideEntrails\": false,\n+            \"IsUnsaleable\": false,\n+            \"LeftHandItem\": false,\n+            \"StackMaxSize\": 1,\n+            \"ExtraSizeDown\": 0,\n+            \"ExtraSizeLeft\": 0,\n+            \"IsUnremovable\": false,\n+            \"ExtraSizeRight\": 0,\n+            \"LootExperience\": 30,\n+            \"NotShownInSlot\": false,\n+            \"BackgroundColor\": \"yellow\",\n+            \"DiscardingBlock\": false,\n+            \"IsUndiscardable\": false,\n+            \"CanSellOnRagfair\": true,\n+            \"ConflictingItems\": [],\n+            \"ExamineExperience\": 10,\n+            \"ExaminedByDefault\": false,\n+            \"ExtraSizeForceAdd\": false,\n+            \"InsuranceDisabled\": false,\n+            \"IsSpecialSlotOnly\": false,\n+            \"StackObjectsCount\": 1,\n+            \"IsLockedafterEquip\": false,\n+            \"MergesWithChildren\": false,\n+            \"QuestStashMaxCount\": 0,\n+            \"UnlootableFromSide\": [],\n+            \"UnlootableFromSlot\": \"FirstPrimaryWeapon\",\n+            \"CanRequireOnRagfair\": false,\n+            \"RagfairLevelToTrade\": 0,\n+            \"AnimationVariantsNumber\": 0,\n+            \"IsSecretExitRequirement\": false,\n+            \"RagFairCommissionModifier\": 1,\n+            \"IsAlwaysAvailableForInsurance\": false,\n+            \"IsNotDeletableFromQuestStashAfterQuestComplete\": false\n+          },\n+          \"_proto\": \"Broken GPhone smartphone\",\n+          \"_parent\": \"Info\"\n+        }"
+    },
+    {
+      "name": "client/settings/response.json",
+      "diff_text": "['data']\n    ['config']\n        ['NotifierLobbyPercentage']\n-        (Old) 30\n+        (New) 70 (+133.33%)"
+    },
+    {
+      "name": "client/locale/en/response.json",
+      "diff_text": "['data']\n+    (New) ['6a91840a740be0cff50e0310 name']: Preliminary Survey\n+    (New) ['6a919148d1f99fb50b0f3113 Name']: Testing area blueprint flash drive\n+    (New) ['6a919148d1f99fb50b0f3113 ShortName']: Test area\n+    (New) ['6a919148d1f99fb50b0f3113 Description']: This Sliderkey flash drive may contain layouts and zoning plans for the area of the laboratory where various tests were planned. The real question is why Ref might need the Labs plans..."
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1180",
+  "change_count": 6
+}

@@ -1,0 +1,13 @@
+{
+  "id": 1162,
+  "version": "1.1.0.0.46657",
+  "date": "Thursday, 06 August 2026 - 04:34 PM EDT",
+  "files": [
+    {
+      "name": "client/globals/response.json",
+      "diff_text": "['data']\n    ['config']\n        ['RestrictionsInRaid']\n            ['252 (Financial documents)']\n                ['MaxInRaid']\n-                (Old) 10\n+                (New) 3 (-70.00%)\n            ['253 (PMC personnel files)']\n                ['MaxInRaid']\n-                (Old) 10\n+                (New) 3 (-70.00%)\n            ['254 (Project documentation)']\n                ['MaxInRaid']\n-                (Old) 10\n+                (New) 3 (-70.00%)\n            ['255 (Blueprints and technical documentation)']\n                ['MaxInRaid']\n-                (Old) 10\n+                (New) 3 (-70.00%)\n            ['256 (Test documentation)']\n                ['MaxInRaid']\n-                (Old) 10\n+                (New) 3 (-70.00%)\n            ['257 (User documentation)']\n                ['MaxInRaid']\n-                (Old) 10\n+                (New) 3 (-70.00%)\n            ['258 (Medical documents)']\n                ['MaxInRaid']\n-                (Old) 10\n+                (New) 3 (-70.00%)\n            ['259 (Technical documentation)']\n                ['MaxInRaid']\n-                (Old) 10\n+                (New) 3 (-70.00%)"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1162",
+  "change_count": 8
+}

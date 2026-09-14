@@ -1,0 +1,13 @@
+{
+  "id": 1152,
+  "version": "1.1.0.0.46608",
+  "date": "Monday, 03 August 2026 - 01:46 PM EDT",
+  "files": [
+    {
+      "name": "client/locale/en/response.json",
+      "diff_text": "['data']\n+    (New) ['UI/Season/AvailableRewards']: Claim Seasonal rewards"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1152",
+  "change_count": 1
+}

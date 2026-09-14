@@ -1,0 +1,13 @@
+{
+  "id": 1169,
+  "version": "1.1.0.0.46657",
+  "date": "Monday, 10 August 2026 - 06:43 AM EDT",
+  "files": [
+    {
+      "name": "client/locale/en/response.json",
+      "diff_text": "['data']\n+    (New) ['SeasonWidget/Timer']: Timer\n+    (New) ['SeasonWidget/Progress']: Progress\n+    (New) ['UI/TimeLeft/DHM{0}{1}{2}']: {0}d {1}h {2}m\n+    (New) ['CharacterSelection/Locked']: Locked\n+    (New) ['CharacterSelection/AvailableForPurchase']: Available for purchase\n    ['6658a0ca4de4820934746dd2 Name']\n-    (Old) Wastelander\n+    (New) BEAR Wastelander\n    ['6a4f82d2c871d92f960543c6 name']\n-    (Old) \n+    (New) [KORD BREACH] For Humanity, for the Chosen\n    ['6a4f82e11b7350af050b2e1c name']\n-    (Old) \n+    (New) [KORD BREACH] Historical Perspectives\n    ['offer.6a63406253099ed87f52dd89.name']\n-    (Old) USEC Corsair upper\n+    (New) USEC Corsair Upper\n    ['offer.6a6342cb0c9b1cb867f470ac.name']\n-    (Old) USEC Corsair lower\n+    (New) USEC Corsair Lower\n    ['6750713a65b30e16220465d6 Description']\n-    (Old) Tactical jacket\n+    (New) Sherpa jacket\n    ['bundle.6a63456333e78899494ac198.description']\n-    (Old) Tactical set for USEC fighters. Made from lightweight fabric with high vapor permeability. Thanks to its color scheme, it’s ideal for operations in dry, hot desert climates.\n-        \n-        ● The set includes:\n-           Upper: USEC Corsair\n-           Lower: USEC Corsair\n-        ● Better value than purchasing gear items separately\n-        ● The set is designed for USEC characters. Owners of The Unheard Edition or The Unheard Steam Edition gain access to the set for both PMC factions.\n-        ● Customization items are purely cosmetic.\n+    (New) Tactical set for USEC fighters. Made from lightweight fabric with high vapor permeability. Thanks to its color scheme, it’s ideal for operations in dry, hot desert climates.\n+        \n+        ● The set includes:\n+           Upper: USEC Corsair\n+           Lower: USEC Corsair\n+        ● Better value than purchasing gear items separately\n+        ● This set is intended for USEC characters. Owners of The Unheard Edition or The Unheard Steam Edition can equip it on any faction.\n+        ● Customization items are purely cosmetic and do not affect any gameplay mechanics."
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1169",
+  "change_count": 12
+}
