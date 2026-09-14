@@ -932,7 +932,6 @@
   .tl-next b{font-weight:600}
   .tl-next b.ok{color:var(--accent2)}
   .tl-next b.no{color:var(--danger)}
-  /* 온보딩의 최근 업데이트 */
   /* ── 사용법 투어 ── */
   #tour-root[hidden],#tour-hint[hidden]{display:none}
   #tour-block{position:fixed;inset:0;z-index:10049}
@@ -946,8 +945,6 @@
   #tour-bubble .tour-spacer{flex:1}
   #tour-hint{position:fixed;right:18px;bottom:18px;z-index:450;display:flex;align-items:center;gap:8px;max-width:calc(100vw - 36px);background:var(--surface);border:1px solid var(--accent);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--text);box-shadow:0 6px 20px rgba(0,0,0,.45)}
   @media (max-width:700px){#tour-hint{left:12px;right:12px;bottom:12px;flex-wrap:wrap}}
-  .onboarding-updates{margin:0 0 14px;padding-left:18px;font-size:12px;line-height:1.65;color:var(--text)}
-  .onboarding-updates b{color:var(--accent)}
   /* 키보드 포커스 표시 */
   [role="button"]:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
@@ -13645,20 +13642,6 @@ function renderLogSyncDone(data) {
       <p class="onboarding-p">모든 진행 상황은 브라우저에 자동 저장됩니다. 다른 기기로 옮기거나 백업하려면 상단 <b>📥 내보내기 / 📤 불러오기</b>를 사용하세요. 이 안내는 헤더의 <b>❓ 도움말</b> 버튼으로 언제든 다시 볼 수 있어요.</p>
 
       <p class="onboarding-p">헤더의 <b>🎯 사용법</b> 버튼을 누르면 지금 보고 있는 탭의 사용법을 단계별로 안내합니다. 각 탭을 처음 열 때도 한 번 물어봅니다.</p>
-
-      <div class="modal-section-title">최근 업데이트</div>
-      <ul class="onboarding-updates">
-        <li><b>2026-09-14</b> 퀘스트 해금 순서·요구조건(레벨·상인 우호도·선행 퀘스트)을 EFT 위키 기준으로 전면 정리 — tarkov.dev 반영이 느린 부분까지 위키에 맞춤</li>
-        <li><b>2026-09-14</b> 투어: 등대 지도 해금 비용을 메카닉에게 2만 달러 → 8천 달러로 수정(9/8 패치 반영)</li>
-        <li><b>2026-09-14</b> 사용법 투어 추가 — 첫 방문 시 "기본 설정 + 사용법 투어", 헤더 🎯 사용법 버튼으로 탭별 안내, 탭을 처음 열 때 사용법 안내 제안</li>
-        <li><b>2026-09-14</b> 터미널 맵: 자물쇠·스폰 위치가 지도 가운데로 몰려 찍히던 좌표 오류 수정, tarkov.dev 저장소의 상세 2D 지도(re3mr, 보기 전용) 추가 — "기본 지도로 보기" 버튼으로 전환</li>
-        <li><b>2026-09-14</b> 맵: 층을 고르면 그 층의 퀘스트 위치만 표시하고, 오른쪽 목록에 층별 위치 수와 층 이동 버튼 표시. 층 판정을 tarkov.dev 층 데이터로 교체(세관·그라운드 제로·인터체인지에서 지상 위치가 윗층으로 잘못 잡히던 문제 수정), 삼림 벙커는 위키 기준 지하로 표시</li>
-        <li><b>2026-09-14</b> 9/8 패치 신규 퀘스트 23개 임시 반영 — 등대지기 접근 체인 "To the Light"와 등대 개편 퀘스트(tarkov.dev 반영 전까지 위키 기준으로 표시, "위키 기준" 배지)</li>
-        <li><b>2026-09-14</b> 아이템 트래커에서 여러 곳에 설치하는 퀘스트 아이템 수량이 1곳분만 잡히던 문제 수정(예: WI-FI 카메라), 상인과 대화해야 받는 퀘스트에 "대화 필요" 배지, 레이드 준비에 보유/필요 수량, 로그 동기화 폴더 기억·새 기록만 반영, tarkov.dev 접속 장애 시 오래된 캐시나 앱 내장 데이터로 표시</li>
-        <li><b>2026-09-11</b> 시즌 1 퀘스트 해금 조건 보정 — 상인 우호도 중심으로 바뀐 조건을 위키와 대조해 반영, 시즌 PVP 전용 퀘스트 목록 적용(아레나 퀘스트 제외), 상인 우호도에 플레이어 레벨 조건 반영, 잠긴 퀘스트에 부족한 조건 표시, 상인 레벨 창에 다음 우호도 조건 표시</li>
-        <li><b>2026-09-11</b> 9/8 패치 반영 — 쇄빙선 접근 방법(수다크-투다크 정비 키트), 등대지기 해금 조건</li>
-        <li><b>2026-08</b> 시즌 PVP 하이드아웃 FIR 조건 면제, 레이드 준비 탭(시즌 특성 효과·착용/무기 조건 카드), KORD 시즌 업적, 퀘스트 목표의 착용·무기 조건 표시</li>
-      </ul>
 
       <div class="scan-actions">
         <button class="filter-btn active" onclick="closeOnboarding();startFullTour()">🎯 기본 설정 + 사용법 투어</button>
