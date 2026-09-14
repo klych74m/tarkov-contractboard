@@ -32,6 +32,7 @@ PVE, PVP, 시즌 PVP 진행 상황은 각각 따로 저장됩니다.
 - 퀘스트, 아이템, 하이드아웃, 상인, 지도 좌표는 [tarkov.dev](https://tarkov.dev) 데이터를 씁니다.
 - 스토리, 선택지는 [Escape from Tarkov Wiki](https://escapefromtarkov.fandom.com/wiki/Escape_from_Tarkov_Wiki)를 참고했습니다.
 - 퀘스트 해금 순서랑 요구 조건은 위키 기준으로 맞췄습니다. tarkov.dev 쪽은 패치 반영이 늦을 때가 있어서요.
+- 맵 탭 지도(SVG)는 [Tarkov-Item-Helper](https://github.com/Zeliper/Tarkov-Item-Helper)와 [Tarkov-Helper](https://github.com/SIGDrone/Tarkov-Helper)에서 가져왔습니다. (MIT License)
 - 터미널 상세 지도는 tarkov-dev 저장소에 있는 이미지입니다. (Map by re3mr.com, CC BY-NC-SA 4.0)
 
 tarkov.dev가 안 열릴 때도 볼 수 있게 마지막으로 받은 데이터를 index.html 안에 같이 넣어뒀습니다. 파일이 좀 큰 건 그래서 그렇습니다.

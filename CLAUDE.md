@@ -41,7 +41,10 @@
 
 **검색·조사 출처 제한**: 게임 정보를 조사·검증할 때는 위 세 출처(tarkov.dev API, `https://escapefromtarkov.fandom.com/wiki/Escape_from_Tarkov_Wiki` 산하 위키 문서, tarkov-changes.com 스크래핑 파이프라인이 쌓은 `data/changes/`)만 사용한다. 그 외 어떤 웹페이지·블로그·커뮤니티 글도 검색하거나 참조하지 않는다(WebSearch/WebFetch로 타사 사이트를 조회하는 것도 금지 — tarkov-changes.com 자체도 예외 없이 직접 WebFetch/WebSearch 금지, 반드시 자동화 파이프라인이 쌓은 `data/changes/`를 통해서만 참조).
 
-**지도(맵) 이미지 출처 원칙**: 지도 관련 작업(맵 배경 이미지, 좌표 변환, 지형 시각화 등)은 반드시 tarkov.dev의 데이터(`the-hideout/tarkov-dev` 저장소의 MIT 라이선스 2D 맵 이미지 `public/maps/{name}-2d.jpg` 등)만 가져와서 작업한다. "Where am I" 류를 포함한 제3자 팬메이드 툴·사이트의 지도 이미지·데이터는 출처가 불분명하거나 또 다른 제3자(tarkov-market.com 등)의 자산을 재배포하는 경우가 많아 저작권 문제가 있으므로 절대 사용하지 않는다.
+**지도(맵) 이미지 출처 원칙**: 지도 관련 작업(맵 배경 이미지, 좌표 변환, 지형 시각화 등)은 아래 출처만 사용한다.
+   - **tarkov.dev** — `the-hideout/tarkov-dev` 저장소의 2D 맵 이미지(`public/maps/{name}-2d.jpg` 등)와 `src/data/maps.json`(좌표·층 구간). 이미지마다 라이선스가 다르니 확인한다(예: `terminal-2d.jpg`는 re3mr.com CC BY-NC-SA 4.0, 출처 표시 필수).
+   - **맵 탭 배경·층 레이어 SVG(`maps/*.svg` 12개)** — [Zeliper/Tarkov-Item-Helper](https://github.com/Zeliper/Tarkov-Item-Helper)(`TarkovHelper/Assets/DB/Maps/`, 터미널 제외 11개)와 그 포크 [SIGDrone/Tarkov-Helper](https://github.com/SIGDrone/Tarkov-Helper)(같은 경로, 터미널 포함 12개). 두 저장소 모두 README에 MIT License를 명시해 사용이 허용된다(2026-09-14 사용자 확인, 파일이 바이트 단위로 동일함도 확인). index.html `MAP_DEFS`의 좌표 변환값(transform)과 SVG 층 레이어 id도 같은 저장소의 `map_configs.json` 기준이다(터미널 transform만 tarkov.dev `maps.json`으로 다시 계산). README.md 데이터 항목의 출처 표시를 유지하고, SVG를 새로 받거나 갱신할 때도 이 두 저장소에서만 가져온다.
+   - 그 밖의 제3자 팬메이드 툴·사이트("Where am I" 류 등)의 지도 이미지·데이터는 출처가 불분명하거나 또 다른 제3자(tarkov-market.com 등)의 자산을 재배포하는 경우가 많아 저작권 문제가 있으므로 사용하지 않는다.
 
 ## 용어 통일 원칙
 
