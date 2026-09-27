@@ -1,0 +1,17 @@
+{
+  "id": 1189,
+  "version": "1.1.5.1.47510",
+  "date": "Saturday, 26 September 2026 - 09:48 AM EDT",
+  "files": [
+    {
+      "name": "client/items/response.json",
+      "diff_text": "['data']\n    ['Airdrop common supply crate']\n        ['_props']\n            ['Grids']\n                ['0 (main)']\n                    ['_props']\n                        ['cellsV']\n-                        (Old) 12\n+                        (New) 20 (+66.67%)\n                        ['maxCount']\n-                        (Old) 43\n+                        (New) 60 (+39.53%)\n                        ['minCount']\n-                        (Old) 18\n+                        (New) 40 (+122.22%)"
+    },
+    {
+      "name": "client/locations/response.json",
+      "diff_text": "['data']\n    ['locations']\n        ['Lighthouse']\n            ['AirdropParameters']\n                ['0']\n                    ['PlaneAirdropEnd']\n-                    (Old) 1,500\n+                    (New) 2,100 (+40.00%)\n                    ['PlaneAirdropMax']\n-                    (Old) 5\n+                    (New) 10 (+100.00%)\n                    ['PlaneAirdropChance']\n-                    (Old) 0.2\n+                    (New) 0.85 (+325.00%)\n                    ['PlaneAirdropStartMax']\n-                    (Old) 900\n+                    (New) 180 (-80.00%)\n                    ['PlaneAirdropStartMin']\n-                    (Old) 300\n+                    (New) 30 (-90.00%)\n                    ['UnsuccessfulTryPenalty']\n-                    (Old) 600\n+                    (New) 180 (-70.00%)\n                    ['PlaneAirdropCooldownMax']\n-                    (Old) 800\n+                    (New) 600 (-25.00%)\n                    ['PlaneAirdropCooldownMin']\n-                    (Old) 700\n+                    (New) 480 (-31.43%)\n                    ['AirdropPointDeactivateDistance']\n-                    (Old) 50\n+                    (New) 10 (-80.00%)"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1189",
+  "change_count": 12
+}
