@@ -1,0 +1,13 @@
+{
+  "id": 1225,
+  "version": "1.1.5.1.47510",
+  "date": "Friday, 02 October 2026 - 06:09 AM EDT",
+  "files": [
+    {
+      "name": "client/globals/response.json",
+      "diff_text": "['data']\n    ['config']\n        ['SkillsSettings']\n            ['SkillProgressRate']\n-            (Old) 0.4\n+            (New) 0.65 (+62.50%)\n        ['SkillFatiguePerPoint']\n-        (Old) 0.6\n+        (New) 0.45 (-25.00%)\n        ['SkillPointsBeforeFatigue']\n-        (Old) 2\n+        (New) 3 (+50.00%)"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1225",
+  "change_count": 3
+}
