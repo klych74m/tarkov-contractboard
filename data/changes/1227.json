@@ -1,0 +1,17 @@
+{
+  "id": 1227,
+  "version": "1.2.0.0.47888",
+  "date": "Thursday, 08 October 2026 - 09:17 AM EDT",
+  "files": [
+    {
+      "name": "client/locations/response.json",
+      "diff_text": "['data']\n    ['locations']\n        ['Interchange']\n            ['secretExits']\n                ['0 (interchange_secret_extraction_quest)']\n                    ['Name']\n-                    (Old) ex_interchange_secret_basement\n+                    (New) interchange_secret_extraction_quest"
+    },
+    {
+      "name": "client/locale/en/response.json",
+      "diff_text": "['data']\n+    (New) ['ex_customs_scav_crossroads']: Crossroads\n    ['ex_customs_scav_gasstation']\n-    (Old) Old Gas Station Gate\n+    (New) Old Gas Station\n    ['ex_customs_scav_milbase_cp']\n-    (Old) Scav Checkpoint\n+    (New) Reserve Checkpoint\n    ['ex_customs_pmc_rail_milbase']\n-    (Old) Railroad to Milbase\n+    (New) Railroad to Reserve\n    ['ex_customs_scav_rail_milbase']\n-    (Old) Railroad to Military Base\n+    (New) Railroad to Reserve\n    ['6aad1e7719972e8871aa9b04 name']\n-    (Old) Walls Basic\n+    (New) Boot Camp\n    ['6aad1f66fb4e2e3f90c8062c name']\n-    (Old) Floor Basic\n+    (New) Boot Camp\n    ['6aad1fbafc7891bd90c8c817 name']\n-    (Old) Ceiling Basic\n+    (New) Boot Camp\n    ['CharacterSelection/AvailableForPurchase']\n-    (Old) Available for purchase\n+    (New) Purchase"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1227",
+  "change_count": 10
+}
