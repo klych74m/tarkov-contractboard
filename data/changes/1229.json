@@ -1,0 +1,13 @@
+{
+  "id": 1229,
+  "version": "1.2.0.0.47965",
+  "date": "Friday, 09 October 2026 - 11:09 AM EDT",
+  "files": [
+    {
+      "name": "client/locations/response.json",
+      "diff_text": "['data']\n    ['locations']\n        ['Customs']\n            ['BossLocationSpawn']\n                ['Partisan']\n                    ['BossChance']\n-                    (Old) 15\n+                    (New) 25 (+66.67%)\n        ['Woods']\n            ['BossLocationSpawn']\n                ['Partisan']\n                    ['BossChance']\n-                    (Old) 15\n+                    (New) 25 (+66.67%)\n        ['Lighthouse']\n            ['BossLocationSpawn']\n                ['Partisan']\n                    ['BossChance']\n-                    (Old) 15\n+                    (New) 25 (+66.67%)\n        ['Shoreline']\n            ['BossLocationSpawn']\n                ['Partisan']\n                    ['BossChance']\n-                    (Old) 15\n+                    (New) 25 (+66.67%)"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1229",
+  "change_count": 4
+}
