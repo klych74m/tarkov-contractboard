@@ -1,0 +1,13 @@
+{
+  "id": 1230,
+  "version": "1.2.0.0.47965",
+  "date": "Friday, 09 October 2026 - 12:17 PM EDT",
+  "files": [
+    {
+      "name": "client/globals/response.json",
+      "diff_text": "['data']\n    ['config']\n        ['PDTSettings']\n+            (New) ['OperatorTotalInGameMinHours']: 40\n+            (New) ['CandidateTotalInGameMaxHours']: 40"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1230",
+  "change_count": 2
+}
