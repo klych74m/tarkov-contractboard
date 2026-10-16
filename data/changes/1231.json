@@ -1,0 +1,13 @@
+{
+  "id": 1231,
+  "version": "1.2.0.0.47965",
+  "date": "Thursday, 15 October 2026 - 08:09 AM EDT",
+  "files": [
+    {
+      "name": "client/locale/en/response.json",
+      "diff_text": "['data']\n+    (New) ['discount.6acfb145bafe2a0e5bbae24e.name']: "
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1231",
+  "change_count": 1
+}
