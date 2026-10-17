@@ -1,0 +1,13 @@
+{
+  "id": 1234,
+  "version": "1.2.5.0.48146",
+  "date": "Friday, 16 October 2026 - 02:17 PM EDT",
+  "files": [
+    {
+      "name": "client/trading/api/traderSettings/response.json",
+      "diff_text": "['data']\n    ['Therapist']\n        ['items_sell']\n            ['2']\n                ['id_list']\n+                    (New) ['16']: TerraGroup Labs access keycard"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1234",
+  "change_count": 1
+}
