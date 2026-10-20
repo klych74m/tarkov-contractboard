@@ -1,0 +1,13 @@
+{
+  "id": 1235,
+  "version": "1.2.5.0.48146",
+  "date": "Monday, 19 October 2026 - 08:51 AM EDT",
+  "files": [
+    {
+      "name": "client/achievement/list/response.json",
+      "diff_text": "['data']\n    ['elements']\n        ['PMC's Best Friend']\n            ['conditions']\n                ['availableForFinish']\n                    ['0']\n                        ['counter']\n                            ['conditions']\n                                ['1']\n                                    ['exitName']\n-                                    (Old) Interchange Cooperation\n+                                    (New) ex_interchange_coop_basement\n                                ['0']\n                                    ['status']\n+                                        (New) ['1']: Runner"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1235",
+  "change_count": 2
+}
