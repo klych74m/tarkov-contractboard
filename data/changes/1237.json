@@ -1,0 +1,21 @@
+{
+  "id": 1237,
+  "version": "1.2.5.0.48146",
+  "date": "Tuesday, 20 October 2026 - 05:34 AM EDT",
+  "files": [
+    {
+      "name": "client/globals/response.json",
+      "diff_text": "['data']\n    ['bot_presets']\n        ['41']\n            ['VisibleAngle']\n-            (Old) 180\n+            (New) 120 (-33.33%)\n            ['ScatteringPerMeter']\n-            (Old) 0.065\n+            (New) 0.085 (+30.77%)\n            ['SCATTERING_DIST_MODIF']\n-            (Old) 0.5\n+            (New) 0.7 (+40.00%)\n            ['VISIBILITY_CHANGE_SPEED']\n-            (Old) 3\n+            (New) 2 (-33.33%)\n        ['42']\n            ['VisibleAngle']\n-            (Old) 180\n+            (New) 120 (-33.33%)\n            ['ScatteringPerMeter']\n-            (Old) 0.065\n+            (New) 0.085 (+30.77%)\n            ['SCATTERING_DIST_MODIF']\n-            (Old) 0.5\n+            (New) 0.7 (+40.00%)\n            ['VISIBILITY_CHANGE_SPEED']\n-            (Old) 3\n+            (New) 2 (-33.33%)"
+    },
+    {
+      "name": "client/locations/response.json",
+      "diff_text": "['data']\n    ['locations']\n        ['Labs']\n            ['BossLocationSpawn']\n                ['bossScourgeEventLab']\n                    ['SpawnMode']\n-                        (Removed) ['1']: pve"
+    },
+    {
+      "name": "client/locale/en/response.json",
+      "diff_text": "['data']\n+    (New) ['6ad61d4b93495b6d53062150 name']: Scourging\n+    (New) ['6ad61d4b93495b6d53062150 description']: Figure out what Ref was searching for in The Lab and complete the Scourge Incursion event task line\n+    (New) ['6ad61d4b93495b6d53062150 successMessage']: "
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1237",
+  "change_count": 12
+}

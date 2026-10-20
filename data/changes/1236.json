@@ -1,0 +1,13 @@
+{
+  "id": 1236,
+  "version": "1.2.5.0.48146",
+  "date": "Tuesday, 20 October 2026 - 05:09 AM EDT",
+  "files": [
+    {
+      "name": "client/achievement/list/response.json",
+      "diff_text": "['data']\n    ['elements']\n+        (New) ['6ad61d4b93495b6d53062150']: {\n+              \"id\": \"6ad61d4b93495b6d53062150\",\n+              \"side\": \"All\",\n+              \"index\": 99999,\n+              \"hidden\": false,\n+              \"prefab\": \"\",\n+              \"rarity\": \"Legendary\",\n+              \"rewards\": [],\n+              \"imageUrl\": \"/files/achievement/6ad61c6d85b42a1f05069429.png\",\n+              \"assetPath\": \"\",\n+              \"conditions\": {\n+                \"fail\": [],\n+                \"availableForFinish\": [\n+                  {\n+                    \"id\": \"6ad61cfec3a33b7d98fa17db\",\n+                    \"index\": 0,\n+                    \"props\": {\n+                      \"index\": 0,\n+                      \"dialogId\": null,\n+                      \"parentId\": \"\",\n+                      \"entryPoint\": null,\n+                      \"fromTraderId\": null,\n+                      \"dynamicLocale\": false,\n+                      \"globalQuestCounterId\": \"\",\n+                      \"visibilityConditions\": []\n+                    },\n+                    \"dialogId\": null,\n+                    \"parentId\": \"\",\n+                    \"entryPoint\": null,\n+                    \"questNoteId\": null,\n+                    \"fromTraderId\": null,\n+                    \"conditionType\": \"Block\",\n+                    \"dynamicLocale\": false,\n+                    \"globalQuestCounterId\": \"\",\n+                    \"visibilityConditions\": []\n+                  }\n+                ]\n+              },\n+              \"showProgress\": false,\n+              \"showConditions\": false,\n+              \"instantComplete\": false,\n+              \"progressBarEnabled\": false,\n+              \"showNotificationsInGame\": false\n+            }"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1236",
+  "change_count": 1
+}
