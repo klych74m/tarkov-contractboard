@@ -1,0 +1,17 @@
+{
+  "id": 1239,
+  "version": "1.2.5.0.48146",
+  "date": "Tuesday, 27 October 2026 - 08:43 AM EDT",
+  "files": [
+    {
+      "name": "client/items/response.json",
+      "diff_text": "['data']\n    ['Precursor container']\n        ['_props']\n            ['RarityPvE']\n-            (Old) Superrare\n+            (New) Not_exist\n    ['TerraGroup employee's suitcase']\n        ['_props']\n            ['RarityPvE']\n-            (Old) Superrare\n+            (New) Not_exist\n    ['TerraGroup employee's package']\n        ['_props']\n            ['RarityPvE']\n-            (Old) Superrare\n+            (New) Not_exist"
+    },
+    {
+      "name": "client/locations/response.json",
+      "diff_text": "['data']\n    ['locations']\n        ['Labs']\n            ['BossLocationSpawn']\n-                (Removed) ['bossScourgeEventLab']: {\n-                      \"Time\": -1,\n-                      \"Delay\": 0,\n-                      \"BossName\": \"bossScourgeEventLab\",\n-                      \"BossZone\": \"BotZoneArmory,BotZoneGreenOffice\",\n-                      \"Supports\": null,\n-                      \"SpawnMode\": [\n-                        \"pvp-season\",\n-                        \"regular\"\n-                      ],\n-                      \"TriggerId\": \"\",\n-                      \"BossChance\": 100,\n-                      \"BossPlayer\": false,\n-                      \"TriggerName\": \"\",\n-                      \"BossDifficult\": \"normal\",\n-                      \"IgnoreMaxBots\": false,\n-                      \"BossEscortType\": \"followerScourgeEventLab\",\n-                      \"RandomTimeSpawn\": false,\n-                      \"ShowOnTarkovMap\": true,\n-                      \"BossEscortAmount\": \"4,4,4\",\n-                      \"ShowOnTarkovMapPvE\": true,\n-                      \"BossEscortDifficult\": \"normal\"\n-                    }"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1239",
+  "change_count": 4
+}
