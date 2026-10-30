@@ -1,0 +1,13 @@
+{
+  "id": 1242,
+  "version": "1.3.0.0.48484",
+  "date": "Thursday, 29 October 2026 - 02:35 PM EDT",
+  "files": [
+    {
+      "name": "client/locale/en/response.json",
+      "diff_text": "['data']\n    ['halloween/InfectionPanel/InfectionYellow']\n-    (Old) Medium biohazard level\n+    (New) Low biohazard level"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1242",
+  "change_count": 1
+}
