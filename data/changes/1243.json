@@ -1,0 +1,13 @@
+{
+  "id": 1243,
+  "version": "1.3.0.0.48484",
+  "date": "Friday, 30 October 2026 - 04:58 AM EDT",
+  "files": [
+    {
+      "name": "client/locale/en/response.json",
+      "diff_text": "['data']\n    ['bundle.6ae07db7d4fbff8476ec54e3.name']\n-    (Old) \n+    (New) USEC Autumn Gear Bundle\n    ['bundle.6ae084065aa61a5c40884eb9.name']\n-    (Old) \n+    (New) BEAR Autumn Gear Bundle\n    ['bundle.6ae057c060db0a509b7d8f59.subtitle']\n-    (Old) \n+    (New) American dream - Tarkov style\n    ['bundle.6ae07db7d4fbff8476ec54e3.additionalSubtitleLabel']\n-    (Old) \n+    (New) Save 870 TC\n    ['bundle.6ae084065aa61a5c40884eb9.additionalSubtitleLabel']\n-    (Old) \n+    (New) Save 870 TC"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1243",
+  "change_count": 5
+}
