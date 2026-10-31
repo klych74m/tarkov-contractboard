@@ -1,0 +1,13 @@
+{
+  "id": 1247,
+  "version": "1.3.0.0.48484",
+  "date": "Friday, 30 October 2026 - 10:41 AM EDT",
+  "files": [
+    {
+      "name": "client/locations/response.json",
+      "diff_text": "['data']\n    ['locations']\n        ['Infected Lab']\n            ['maxItemCountInLocation']\n                ['6 (Blood sample)']\n                    ['Value']\n-                    (Old) 4\n+                    (New) 8 (+100.00%)\n        ['Infected Factory']\n            ['maxItemCountInLocation']\n                ['6 (Blood sample)']\n                    ['Value']\n-                    (Old) 3\n+                    (New) 6 (+100.00%)"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1247",
+  "change_count": 2
+}
