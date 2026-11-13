@@ -1,0 +1,17 @@
+{
+  "id": 1254,
+  "version": "1.3.0.1.48558",
+  "date": "Thursday, 12 November 2026 - 05:22 AM EST",
+  "files": [
+    {
+      "name": "client/globals/response.json",
+      "diff_text": "['data']\n    ['LocationInfection']\n        ['Woods']\n-        (Old) 6\n+        (New) 10 (+66.67%)\n        ['bigmap']\n-        (Old) 6\n+        (New) 10 (+66.67%)\n        ['Sandbox']\n-        (Old) 6\n+        (New) 10 (+66.67%)\n        ['factory4']\n-        (Old) 6\n+        (New) 5 (-16.67%)\n        ['Shoreline']\n-        (Old) 6\n+        (New) 10 (+66.67%)\n        ['Lighthouse']\n-        (Old) 6\n+        (New) 10 (+66.67%)\n        ['RezervBase']\n-        (Old) 6\n+        (New) 10 (+66.67%)\n        ['Interchange']\n-        (Old) 6\n+        (New) 5 (-16.67%)\n        ['TarkovStreets']\n-        (Old) 6\n+        (New) 10 (+66.67%)"
+    },
+    {
+      "name": "client/locations/response.json",
+      "diff_text": "['data']\n    ['locations']\n        ['Customs']\n            ['BotLocationModifier']\n                ['AdditionalHostilitySettings']\n                    ['5']\n                        ['AlwaysEnemies']\n+                            (New) ['21']: assault\n+                            (New) ['22']: assaultGroup"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1254",
+  "change_count": 11
+}

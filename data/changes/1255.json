@@ -1,0 +1,13 @@
+{
+  "id": 1255,
+  "version": "1.3.0.1.48558",
+  "date": "Thursday, 12 November 2026 - 09:50 AM EST",
+  "files": [
+    {
+      "name": "client/locale/en/response.json",
+      "diff_text": "['data']\n+    (New) ['QuestCondition/Elimination/Kill/BotRole/bossBoar']: Kaban\n+    (New) ['QuestCondition/Elimination/Kill/BotRole/bossWedge']: Wedge\n+    (New) ['QuestCondition/Elimination/Kill/BotRole/bossKolontay']: Kollontay\n+    (New) ['QuestCondition/Elimination/Kill/BotRole/bossWedgeLab']: Wedge\n+    (New) ['QuestCondition/Elimination/Kill/BotRole/bossBullyBlackDiv']: Black\n+        Division\n+    (New) ['QuestCondition/Elimination/Kill/BotRole/bossScourgeEventLab']: Scourge"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1255",
+  "change_count": 6
+}
