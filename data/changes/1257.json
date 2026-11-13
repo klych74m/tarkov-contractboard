@@ -1,0 +1,13 @@
+{
+  "id": 1257,
+  "version": "1.3.0.1.48558",
+  "date": "Thursday, 12 November 2026 - 01:06 PM EST",
+  "files": [
+    {
+      "name": "client/locations/response.json",
+      "diff_text": "['data']\n    ['locations']\n        ['Icebreaker']\n            ['maxItemCountInLocation']\n+                (New) ['15 (Medical documents)']: {\n+                      \"Value\": 7,\n+                      \"TemplateId\": \"Medical documents\"\n+                    }"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1257",
+  "change_count": 1
+}
