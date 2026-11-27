@@ -1,0 +1,13 @@
+{
+  "id": 1263,
+  "version": "1.3.5.0.48914",
+  "date": "Friday, 27 November 2026 - 03:28 AM EST",
+  "files": [
+    {
+      "name": "client/locale/en/response.json",
+      "diff_text": "['data']\n    ['buffer_zone_timer']\n-    (Old) Lightkeeper visit time is limited\n+    (New) Lightkeeper visit time\n+         is limited"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1263",
+  "change_count": 1
+}
