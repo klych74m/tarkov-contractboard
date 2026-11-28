@@ -1,0 +1,13 @@
+{
+  "id": 1265,
+  "version": "1.3.5.0.48914",
+  "date": "Friday, 27 November 2026 - 08:20 AM EST",
+  "files": [
+    {
+      "name": "client/locale/en/response.json",
+      "diff_text": "['data']\n    ['6b07f9e7e2feba7cd10b87b7']\n-    (Old) \n+    (New) 9×18mm Makarov\n    ['6b07fa5de3ac1614440bb579']\n-    (Old) \n+    (New) 7.62×25mm Tokarev\n    ['6b07fa70ac146f0f300aecd9']\n-    (Old) \n+    (New) 9×19mm\n    ['6b07fa8ec4bb54705d0731f7']\n-    (Old) \n+    (New) 9×21mm Gyurza\n    ['6b07fa9d899462a935079bdb']\n-    (Old) \n+    (New) .45 ACP\n    ['6b07fab1e3ac1614440bb57b']\n-    (Old) \n+    (New) .357 Magnum\n    ['6b07fac1ac146f0f300aecdb']\n-    (Old) \n+    (New) .50 AE\n    ['6b07fad33e8677a80d0d062b']\n-    (Old) \n+    (New) 4.6×30mm\n    ['6b07fae4c4bb54705d0731f9']\n-    (Old) \n+    (New) 5.7×28mm\n    ['6b07fafc780ae97b1607ccd9']\n-    (Old) \n+    (New) 5.45×39mm\n    ['6b07fb119c6c0d01350b9239']\n-    (Old) \n+    (New) 5.56×45mm NATO\n    ['6b07fb2305c66dee830ce79a']\n-    (Old) \n+    (New) 5.8×42mm\n    ['6b07fb363a3e0199c30026da']\n-    (Old) \n+    (New) 7.62×39mm\n    ['6b07fb4926a00014cd06b3b9']\n-    (Old) \n+    (New) .300 Blackout\n    ['6b07fb571bc2bebe4409a854']\n-    (Old) \n+    (New) 9×39mm\n    ['6b07fb6e623f88d90700677c']\n-    (Old) \n+    (New) .366 TKM\n    ['6b07fb7dd65b29ec120dad18']\n-    (Old) \n+    (New) 12.7×55mm\n    ['6b07fb8f42f0f62d6a060a98']\n-    (Old) \n+    (New) 6.8×51mm\n    ['6b07fba4e2feba7cd10b87b9']\n-    (Old) \n+    (New) 7.62×51mm NATO\n    ['6b07fbb11bc2bebe4409a856']\n-    (Old) \n+    (New) .308 ME\n    ['6b07fbc1623f88d90700677e']\n-    (Old) \n+    (New) 7.62×54mmR\n    ['6b07fbd7d65b29ec120dad1a']\n-    (Old) \n+    (New) .338 Lapua Magnum\n    ['6b07fbe442f0f62d6a060a9a']\n-    (Old) \n+    (New) 9.3×64mm\n    ['6b07fbf4e2feba7cd10b87bb']\n-    (Old) \n+    (New) .50 BMG\n    ['6b07fc091bc2bebe4409a858']\n-    (Old) \n+    (New) 12/70\n    ['6b07fc18623f88d907006780']\n-    (Old) \n+    (New) 20/70\n    ['6b07fc2ed65b29ec120dad1c']\n-    (Old) \n+    (New) 23×75mm\n    ['6b07fc393e8677a80d0d062d']\n-    (Old) \n+    (New) 26×75mm flares\n    ['6b07fc93ac146f0f300aecdd']\n-    (Old) \n+    (New) 20×1mm"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1265",
+  "change_count": 29
+}

@@ -1,0 +1,13 @@
+{
+  "id": 1266,
+  "version": "1.3.5.0.48914",
+  "date": "Friday, 27 November 2026 - 08:29 AM EST",
+  "files": [
+    {
+      "name": "client/locale/en/response.json",
+      "diff_text": "['data']\n    ['6b07fc2ed65b29ec120dad1c']\n-    (Old) 23×75mm\n+    (New) 26×75mm flares\n    ['6b07fc393e8677a80d0d062d']\n-    (Old) 26×75mm flares\n+    (New) 23×75mm"
+    }
+  ],
+  "source_url": "https://changes.tarkov-changes.com/view/1266",
+  "change_count": 2
+}
